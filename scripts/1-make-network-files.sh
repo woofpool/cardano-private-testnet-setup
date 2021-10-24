@@ -10,6 +10,8 @@ set -o pipefail
 SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 . "${SCRIPT_PATH}"/read-config.shlib; # load the config library functions
 
+exit 0
+
 ROOT="$(config_get ROOT)";
 INIT_SUPPLY="$(config_get INIT_SUPPLY)"
 FEE="$(config_get FEE)"
