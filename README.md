@@ -1,1 +1,1 @@
-# cardano-network-bootstrap
+# cardano-dbsync-private-network

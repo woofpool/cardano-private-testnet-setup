@@ -1,46 +1,20 @@
 #!/usr/bin/env bash
 
 set -e
-# Unoffiical bash strict mode.
-# See: http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -u
 set -o pipefail
 
+# This script sets up a cluster that starts out in Byron
+# The script generates all the files needed for the setup
 
-# This script sets up a cluster that starts out in Byron, and can transition to Mary.
-#
-# The script generates all the files needed for the setup, and prints commands
-# to be run manually (to start the nodes, post transactions, etc.).
-#
-# There are three ways of triggering the transition to Shelley:
-# 1. Trigger transition at protocol version 2.0.0 (as on mainnet)
-#    The system starts at 0.0.0, and we can only increase it by 1 in the major
-#    version, so this does require to
-#    a) post an update proposal and votes to transition to 1.0.0
-#    b) wait for the protocol to change (end of the epoch, or end of the last
-#      epoch if it's posted near the end of the epoch)
-#    c) change configuration.yaml to have 'LastKnownBlockVersion-Major: 2',
-#      and restart the nodes
-#    d) post an update proposal and votes to transition to 2.0.0
-#    This is what will happen on the mainnet, so it's vital to test this, but
-#    it does contain some manual steps.
-# 2. Trigger transition at protocol version 2.0.0
-#    For testing purposes, we can also modify the system to do the transition to
-#    Shelley at protocol version 1.0.0, by uncommenting the line containing
-#    'TestShelleyHardForkAtVersion' below. Then, we just need to execute step a)
-#    above in order to trigger the transition.
-#    This is still close to the procedure on the mainnet, and requires less
-#    manual steps.
-# 3. Schedule transition in the configuration
-#    To do this, uncomment the line containing 'TestShelleyHardForkAtEpoch'
-#    below. It's good for a quick test, and does not rely on posting update
-#    proposals to the chain.
-#    This is quite convenient, but it does not test that we can do the
-#    transition by posting update proposals to the network. For even more convenience
-#    if you want to start a node in Shelley, Allegra or Mary from epoch 0, supply the script
-#    with a shelley, allegra or mary string argument. E.g mkfiles.sh mary.
+SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+. "${SCRIPT_PATH}"/read-config.shlib; # load the config library functions
 
-ROOT=example
+ROOT="$(config_get ROOT)";
+INIT_SUPPLY="$(config_get INIT_SUPPLY)"
+FEE="$(config_get FEE)"
+NETWORK_MAGIC="$(config_get NETWORK_MAGIC)"
+SECURITY_PARAM="$(config_get SECURITY_PARAM)"
 
 BFT_NODES="node-bft1 node-bft2"
 BFT_NODES_N="1 2"
@@ -50,15 +24,10 @@ POOL_NODES="node-pool1"
 
 ALL_NODES="${BFT_NODES} ${POOL_NODES}"
 
-INIT_SUPPLY=1005000000
-FEE=1000000
 FUNDS_PER_GENESIS_ADDRESS=$((${INIT_SUPPLY} / ${NUM_BFT_NODES}))
 FUNDS_PER_BYRON_ADDRESS=$((${FUNDS_PER_GENESIS_ADDRESS} - ${FEE}))
 # We need to allow for a fee to transfer the funds out of the genesis.
 # We don't care too much, 1 ada is more than enough.
-
-NETWORK_MAGIC=42
-SECURITY_PARAM=10
 
 OS=$(uname -s) DATE=
 case $OS in
@@ -74,7 +43,7 @@ if ! mkdir "${ROOT}"; then
 fi
 
 # copy and tweak the configuration
-cp configuration/defaults/byron/configuration.yaml ${ROOT}/
+cp "${SCRIPT_PATH}"/../configuration/byron-mainnet-node-config.yaml ${ROOT}/configuration.yaml
 sed -i ${ROOT}/configuration.yaml \
     -e 's/Protocol: RealPBFT/Protocol: Cardano/' \
     -e '/Protocol/ aPBftSignatureThreshold: 0.6' \
@@ -606,48 +575,3 @@ echo ""
 # These are needed for cardano-submit-api
 echo "EnableLogMetrics: False" >> ${ROOT}/configuration.yaml
 echo "EnableLogging: True" >> ${ROOT}/configuration.yaml
-
-
-if [ $# -eq 0 ]; then
-  echo "Default yaml configuration applied."
-
-elif [ "$1" = "alonzo" ]; then
-  echo "TestShelleyHardForkAtEpoch: 0" >> ${ROOT}/configuration.yaml
-  echo "TestAllegraHardForkAtEpoch: 0" >> ${ROOT}/configuration.yaml
-  echo "TestMaryHardForkAtEpoch: 0" >> ${ROOT}/configuration.yaml
-  echo "TestAlonzoHardForkAtEpoch: 0" >> ${ROOT}/configuration.yaml
-  echo "TestEnableDevelopmentHardForkEras: True" >> ${ROOT}/configuration.yaml
-  echo "TestEnableDevelopmentNetworkProtocols: True" >> ${ROOT}/configuration.yaml
-
-  sed -i ${ROOT}/configuration.yaml \
-      -e 's/LastKnownBlockVersion-Major: 1/LastKnownBlockVersion-Major: 5/'
-
-  # Copy the cost model
-  mkdir ${ROOT}/shelley/alonzo
-  cp configuration/cardano/alonzo/shelley_qa_cost-model.json ${ROOT}/shelley/alonzo/costmodel.json
-  echo "Nodes will start in Alonzo era from epoch 0"
-
-elif [ "$1" = "mary" ]; then
-  echo "TestShelleyHardForkAtEpoch: 0"  >> ${ROOT}/configuration.yaml
-  echo "TestAllegraHardForkAtEpoch: 0"  >> ${ROOT}/configuration.yaml
-  echo "TestMaryHardForkAtEpoch: 0"  >> ${ROOT}/configuration.yaml
-  sed -i ${ROOT}/configuration.yaml \
-      -e 's/LastKnownBlockVersion-Major: 1/LastKnownBlockVersion-Major: 4/'
-  echo "Nodes will start in Mary era from epoch 0"
-
-elif [ "$1" = "allegra" ]; then
-  echo "TestShelleyHardForkAtEpoch: 0"  >> ${ROOT}/configuration.yaml
-  echo "TestAllegraHardForkAtEpoch: 0"  >> ${ROOT}/configuration.yaml
-  sed -i ${ROOT}/configuration.yaml \
-      -e 's/LastKnownBlockVersion-Major: 1/LastKnownBlockVersion-Major: 3/'
-  echo "Nodes will start in Allegra era from epoch 0"
-
-elif [ "$1" = "shelley" ]; then
-  echo "TestShelleyHardForkAtEpoch: 0"  >> ${ROOT}/configuration.yaml
-  sed -i ${ROOT}/configuration.yaml \
-      -e 's/LastKnownBlockVersion-Major: 1/LastKnownBlockVersion-Major: 2/'
-  echo "Nodes will start in Shelley era from epoch 0"
-
-else
-  echo "Default yaml configuration applied."
-fi
