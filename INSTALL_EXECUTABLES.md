@@ -1,11 +1,17 @@
 # Install Cardano Executables 
 
-- This guide assumes you are running a recent version of linux
-- This guide covers installing `cardano-node`, `cardano-cli`, `cardano-db-sync`, and `cardano-db-sync-extended` into `~/.local/bin`
-- If necessary, edit your `~/.bashrc` to modify the PATH variable so that the executables can be found on your system path
+---
+
+### Summary
+This guide covers installing `cardano-node`, `cardano-cli`, `cardano-db-sync`, and `cardano-db-sync-extended` into `~/.local/bin`
+
+If necessary, edit your `~/.bashrc` to modify the PATH variable so that the executables can be found on your system path
   ```shell
   export PATH="~/.local/bin:$PATH"  
   ```
+
+#### Assumptions
+- This guide assumes you are running a recent version of linux
  
 ## Install latest Cardano node and Cardano CLI executables
 
@@ -22,7 +28,7 @@ Please see the following IOHK instructions to install from haskell source code.
 
 ## Install latest Cardano db-sync executables 
 
-These instructions will compile and install the db-sync executables from source
+These instructions will compile and install `cardano-db-sync` and `cardano-db-sync-extended` from haskell source code
 
 - Verify you have Haskell tools installed including cabal and ghc, and they are set to appropriate version. If necessary,
   please visit the link in the first section to install `cardano-node` and `cardano-cli`,
@@ -54,7 +60,7 @@ These instructions will compile and install the db-sync executables from source
   sudo make install  
   ```
 - Set the predefined Linux environment variables defining the path to linked libraries and package configs.
-  When building the `cardano-db-sync` executables, it will link in the libsodium library and package config.
+  When building the dependencies needed by `cardano-db-sync` executables, it will link in the libsodium- library and its package config.
   If you like, you may append these lines to your `.bashrc` file to set these variables automatically,
   when you open a bash terminal.
   ```shell

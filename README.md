@@ -1,6 +1,13 @@
 # cardano-dbsync-private-network
 
-This project provides instructions and BASH shell scripts to bootstrap a private Cardano network and connect a `cardano-dbsync` process to it. A private Cardano network provides a controlled environment to execute transactions and use SQL queries to view the resulting data.
+---
+
+### Summary
+This project provides instructions and shell scripts to bootstrap a private Cardano network and connect a `cardano-dbsync` process to it. 
+A private Cardano network provides a controlled environment to execute transactions and use SQL queries to view the resulting data.
+*Not only could this be useful for local development, but it is also a great way to learn about what data gets stored on the Cardano blockchain.*
+
+#### Key Details
 - The private network consists of three block-producing node processes.
 - The `cardano-dbsync` process syncs blockchain data to a highly normalized database schema. This enables blockchain data to be queried with SQL. 
 - The scripts used by this project to create the private Cardano network are taken from the `cardano-node` project and have been modified as needed.

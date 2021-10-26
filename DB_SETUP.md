@@ -1,17 +1,23 @@
 # Install PostgreSQL and create database used by cardano-db-sync
 
-- This guide assumes you are running a recent version of linux
-- The `cardano-db-sync` and `cardano-db-sync-extended` programs write
-blockchain data to a Postgres database according to a specific schema
-- This document will set up the PostgreSQL database and the schema used by the db-sync programs  
+---
+
+### Summary
+
+This document explains how to install PostgreSQL and create the database used by the db-sync executables
+
+#### Assumptions
+- This guide assumes you are running a recent version of linux. 
+  Specifically, these directions apply to Ubuntu (Debian). If you are using a different linux variant, please adjust as needed
+   
 
 ## Install PostgreSQL
-
-- These directions apply to Ubuntu (Debian variant). If you are using a different linux variant, please adjust as needed
+ 
 - Update/upgrade your package indexes
   ```shell
   sudo apt-get update
-  sudo apt-get upgrade  
+  sudo apt-get upgrade
+  # reboot as necessary  
   ```
 - Install postgres and the -contrib package that adds some additional utilities and functionality
   ```shell
@@ -27,21 +33,25 @@ blockchain data to a Postgres database according to a specific schema
 
 ## Create new Postgres user (AKA role) for your own linux user account
 
-- We will be using a BASH shell script, `postgresql-setup.sh` from the `cardano-db-sync` project to create/drop the database and run migrations.
-- We want to run this script using our own user account.  Our user must be a superuser in order to create/drop databases, etc.
+- We will be using a shell script, `postgresql-setup.sh` from the `cardano-db-sync` project to create the database.
+- We want to run this `postgresql-setup.sh` script using the linux user account you are logged in as. Use `whoami` to see your account name.
 - Upon installation, Postgres is set up to use `ident authentication`, 
   meaning that it associates Postgres roles with a matching Unix/Linux system account. 
   If a role exists within Postgres, a Unix/Linux username with the same name is able to sign in as that role.
   - [Postgresql Ident Authentication](https://www.postgresql.org/docs/current/auth-ident.html)  
-  
----
-- Create a user for your local linux user account and give it superuser role
+    
+- Create a user for your local linux user account and give it superuser role.   Our user must be a superuser in order to create/drop databases, etc.
   ```shell
   sudo -u postgres createuser --interactive
   
   # enter your linux user account
-  Enter name of role to add: <your_linux_user_account>
+  Enter name of role to add: <your_linux_user_account_name>
   Shall the new role be a superuser? (y/n) y
+  ```
+- Verify your local account got created
+  ```shell
+  sudo -u <your_linux_user_account_name> psql
+  \conninfo
   ```
 
 ## Create the db-sync database
