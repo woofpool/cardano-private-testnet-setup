@@ -17,7 +17,7 @@ This project provides instructions and BASH shell scripts to bootstrap a private
     * The `cardano-db-sync` process uses a connection to a Postgres database installed with specific schema designed to work with `cardano-dbsync` process.
     * Please refer to the [DB Setup guide](DB_SETUP.md) for instructions.
 
-3. **Use scripts to setup & run private Cardano network and connect DB Sync process**
+3. **Use scripts to set up & run private Cardano network and connect DB Sync process**
 
     * Use scripts to bootstrap the Cardano private network and attach the `cardano-dbsync` process to it to sync blockchain data to SQL database.
     * Please refer to the [Use Scripts guide](USE_SCRIPTS.md) for instructions. 
