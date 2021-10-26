@@ -12,10 +12,10 @@ This project provides instructions and BASH shell scripts to bootstrap a private
     * Before running shell scripts to bootstrap a private Cardano network, install these executables: `cardano-node`, `cardano-cli`, `cardano-db-sync`, `cardano-db-sync-extended`
     * Please refer to the [Install Executables guide](INSTALL_EXECUTABLES.md) for instructions.
 
-2. **Set up Postgres database connection and schema** 
+2. **Install PostgreSQL and create database used by db-sync** 
 
-    * The `cardano-db-sync` process uses a connection to a Postgres database installed with specific schema designed to work with `cardano-dbsync` process.
-    * Please refer to the [DB Setup guide](DB_SETUP.md) for instructions.
+    * The `cardano-db-sync` process uses a connection to a Postgres database.
+    * Please refer to the [DB Setup guide](DB_SETUP.md) for instructions to set up.
 
 3. **Use scripts to set up & run private Cardano network and connect DB Sync process**
 

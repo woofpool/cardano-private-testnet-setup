@@ -49,8 +49,11 @@ blockchain data to a Postgres database according to a specific schema
 - Modify the postgres connection file [here](./postgres-config/pgpass-privatenet) as necessary. The defaults should probably work for you.
 - Open terminal and set up environment variable with path to the postgres connection file above
   ```shell
+  # navigate to this projects root folder
+  cd <path/to/this/project>
+
   # set the variable with path to this project
-  export PGPASSFILE=<path_to_this_project>/postgres-config/pgpass-privatenet  
+  export PGPASSFILE=postgres-config/pgpass-privatenet  
   ```
 - Run the cardano-db-sync script to create the database and install the schema
   ```shell

@@ -8,7 +8,7 @@ set -o pipefail
 # The script generates all the files needed for the setup
 
 SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-. "${SCRIPT_PATH}"/read-config.shlib; # load the config library functions
+. "${SCRIPT_PATH}"/config-read.shlib; # load the config library functions
 
 exit 0
 
