@@ -1,25 +1,25 @@
 # cardano-dbsync-private-network
 
-This project provides instructions and BASH shell scripts to bootstrap a private Cardano network and connect `cardano-dbsync` process to it. 
-- The private network consists of three block-producing nodes.
+This project provides instructions and BASH shell scripts to bootstrap a private Cardano network and connect a `cardano-dbsync` process to it. A private Cardano network provides a controlled environment to execute transactions and use SQL queries to view the resulting data.
+- The private network consists of three block-producing node processes.
 - The `cardano-dbsync` process syncs blockchain data to a highly normalized database schema. This enables blockchain data to be queried with SQL. 
 - The scripts used by this project to create the private Cardano network are taken from the `cardano-node` project and have been modified as needed.
     - Please find original script files in the IOHK git repository: [cardano-node/scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts) 
 
 ## Usage Instructions
-1. **Install required executables**
+1. **Install required Cardano executables**
 
-    * Before running shell scripts to bootstrap the network, some required binary executables must be installed.
-    * Please refer to the [Install Required guide](INSTALL_REQUIRED.md) for instructions.
+    * Before running shell scripts to bootstrap a private Cardano network, install these executables: `cardano-node`, `cardano-cli`, `cardano-db-sync`
+    * Please refer to the [Install Executables guide](INSTALL_EXECUTABLES.md) for instructions.
 
 2. **Set up Postgres database connection and schema** 
 
     * The `cardano-db-sync` process uses a connection to a Postgres database installed with specific schema designed to work with `cardano-dbsync` process.
     * Please refer to the [DB Setup guide](DB_SETUP.md) for instructions.
 
-3. **Run scripts to setup & run private Cardano network and connect DB Sync process**
+3. **Use scripts to setup & run private Cardano network and connect DB Sync process**
 
-    * Run scripts to bootstrap the Cardano private network and attach the `cardano-dbsync` process to it to sync blockchain data to SQL database.
+    * Use scripts to bootstrap the Cardano private network and attach the `cardano-dbsync` process to it to sync blockchain data to SQL database.
     * Please refer to the [Use Scripts guide](USE_SCRIPTS.md) for instructions. 
 
 ## Contributors
