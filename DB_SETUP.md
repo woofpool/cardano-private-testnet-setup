@@ -1,17 +1,15 @@
-# Install PostgreSQL and create database used by cardano-db-sync
+# Install PostgreSQL and create user
 
 ---
 
-### Summary
-
-This document explains how to install PostgreSQL and create the database used by the db-sync executables
+This document explains how to install PostgreSQL and create a Postgres user
 
 #### Assumptions
 - This guide assumes you are running a recent version of linux. 
   Specifically, these directions apply to Ubuntu (Debian). If you are using a different linux variant, please adjust as needed
    
 
-## Install PostgreSQL
+## 1. Install PostgreSQL
  
 - Update/upgrade your package indexes
   ```shell
@@ -19,9 +17,9 @@ This document explains how to install PostgreSQL and create the database used by
   sudo apt-get upgrade
   # reboot as necessary  
   ```
-- Install postgres packages including libpq-dev, which is needed for building `cardano-db-sync`
+- Install postgreSQL packages
   ```shell
-  sudo apt-get install libpq-dev postgresql postgresql-contrib
+  sudo apt-get install postgresql postgresql-contrib
   ```
 - Verify postgres is installed by starting a postgres sql session in the terminal
   ```shell
@@ -34,7 +32,7 @@ This document explains how to install PostgreSQL and create the database used by
   \q
   ```
 
-## Create new Postgres role for your linux user account
+## 2. Create new Postgres role for your linux user account
 
 - Upon installation, Postgres is set up to use `ident authentication`, 
   meaning that it associates Postgres roles with a matching Unix/Linux system account. 
@@ -64,28 +62,3 @@ This document explains how to install PostgreSQL and create the database used by
   # to exit the session 
   \q
   ```
-
-## Create the db-sync database
-
-- Modify the postgres connection file [here](postgres-conn/pgpass-privatenet) as necessary. The defaults should probably work for you.
-- Open terminal and set up environment variable with path to the postgres connection file above
-  ```shell
-  # navigate to this projects root folder
-  cd <path/to/cardano-dbsync-private-network>
-
-  # set the variable with path to the postgres connection file
-  # this connection file defines a database name of `privatenet`
-  export PGPASSFILE=postgres-conn/pgpass-privatenet
-  ```
-- Run the cardano-db-sync script to create the database and install the schema
-  ```shell
-  # navigate to your cardano-db-sync project source directory
-  cd $HOME/src/cardano-db-sync
-  
-  # run the setup script to create database
-  ./scripts/postgresql-setup.sh --createdb
-  
-  # output
-  # verify you see "All good!" or correct any errors as necessary
-  ```
-- **Note**: Installing the schema for the database we just created will be done automatically, when we run the cardano-db-sync process

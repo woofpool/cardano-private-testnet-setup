@@ -2,7 +2,6 @@
 
 ---
 
-### Summary
 This guide covers installing `cardano-node`, `cardano-cli`, `cardano-db-sync`, and `cardano-db-sync-extended` into `$HOME/.local/bin`
 
 If necessary, edit your `$HOME/.bashrc` to modify the PATH variable so that the executables can be found on your system path
@@ -14,7 +13,7 @@ If necessary, edit your `$HOME/.bashrc` to modify the PATH variable so that the 
 - This guide assumes you are running a Debian/Ubuntu linux OS.
   If you are using a different flavor of Linux, you will need to use the correct package manager for your platform
  
-## Install package dependencies and Haskell tooling
+## 1. Install package dependencies and Haskell tooling
 
 - Install package dependencies of tools
   ```shell
@@ -54,7 +53,7 @@ If necessary, edit your `$HOME/.bashrc` to modify the PATH variable so that the 
   ghc --version
   ```
 
-## Install Libsodium library dependency from IOHK github
+## 2. Install Libsodium library dependency from IOHK github
 
 [Libsodium](https://doc.libsodium.org/) contains cryptographic tools for encryption, decryption, signatures,
 password hashing, and more.
@@ -95,7 +94,7 @@ to support the latest Cardano node software.
   source .bashrc
   ```
 
-## Install latest Cardano node and Cardano CLI executables
+## 3. Install latest Cardano node and Cardano CLI executables
 
 - Clone the IOHK cardano-node repo
   ```shell
@@ -126,7 +125,7 @@ to support the latest Cardano node software.
   
   # when this document was written, the current version for each is 1.30.1 on linux-x86_64
   ```
-## Install latest Cardano db-sync executables 
+## 4. Install latest Cardano db-sync executables 
 
 - Clone the IOHK cardano-db-sync repo
   ```shell
@@ -138,11 +137,11 @@ to support the latest Cardano node software.
   git fetch --tags --all
   git checkout $(curl -s https://api.github.com/repos/input-output-hk/cardano-db-sync/releases/latest | jq -r .tag_name)
   ```
-- Update dependencies and build the cardano-db-sync project.  This can take 20 minutes+
+- Fetch postgres `libpg-dev` package, update dependencies and build the cardano-db-sync project.  This can take 20 minutes+
   
-  **Note**: Building `cardano-db-sync` project, depends on finding the `libpq-dev` package.
-  This is installed when you follow the [DB installation instructions](./DB_SETUP.md).
+  **Note**: Building `cardano-db-sync` project from source, depends on finding the postgres `libpq-dev` package on the host OS.
   ```shell
+  sudo apt-get install libpq-dev
   cabal update
   cabal build all
   ```

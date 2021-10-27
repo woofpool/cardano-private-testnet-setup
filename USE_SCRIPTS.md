@@ -1,25 +1,27 @@
 # Use scripts to start network and connect db-sync
 
-- Now, we get to the fun part.  We are ready to create & start a private Cardano network,
-which will run three block producer nodes. Then, we connect the db-sync process to it, so that
-activity occurring on the network gets stored in a SQL database.   
-- As mentioned in the [project readme](./README.md), the scripts to create the private 
-  Cardano network are taken from the `cardano-node` project and have been modified as needed.
-  - Please find original script files in the IOHK git repository: [cardano-node/scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts)
 ---
 
-## Clone this project
+**Now, we get to the fun part!**  We are ready to create & start a private Cardano network,
+which will run three block producer nodes. Then, we set up a database for cardano-db-sync and connect the db-sync process to one of the cardano nodes, so that
+it can synchronize to the activity occurring on the network and write data to its database.
+
+As mentioned in the [project readme](./README.md), the scripts to create the private 
+  Cardano network are from the `cardano-node` project and have been modified as needed.
+  - Please find original script files in the IOHK git repository: [cardano-node/scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts)
+
+**Note**: The instructions below require opening several terminal windows/tabs.  You might prefer creating a `tmux` session
+and create window panes in your session to make it easier to see everything in the same terminal window.
+
+## 1. Clone this project
 
   ```shell
-  # navigate to working directory, e.g. $HOME/src directory
+  # navigate to working source directory
   cd $HOME/src
   git clone https://github.com/woofpool/cardano-dbsync-private-network  
   ```
 
-## Make the network files and start the network
-
-**Note**: The remaining instructions below require opening several terminal windows/tabs.  You might prefer creating a `tmux` session 
-and create window panes in your session to make it easier to see everything in the same terminal window.
+## 2. Make the network files and start the network
 
 - Adjust the [config.cfg file](./scripts/config.cfg) as desired. By default, the ROOT directory is set to `private-network`
 - In **terminal #1**, run the `mkfiles` script to set up the network files
@@ -46,7 +48,7 @@ and create window panes in your session to make it easier to see everything in t
   # It's possible you will see some forge errors, but they may go away, once all the nodes have connected to one another   
   ```
 
-## Apply updates to the network to advance the network protocol to latest era and protocol version
+## 3. Apply updates to the network to advance the network protocol to latest era and protocol version
 
 At the time of this writing, the current era is `alonzo` and protocol version `6`. 
 We will run update scripts one by one to advance the network to the current era/protocol version.
@@ -128,7 +130,24 @@ We will run update scripts one by one to advance the network to the current era/
 to advance the protocol updates to Alonzo era and protocol V6. These are the current era and protocol
 at the time of this writing.
 
-## Connect the db-sync process to your private network
+## 4. Create the db-sync database
+
+- Modify the postgres connection file [here](postgres-conn/pgpass-privatenet) as necessary. The defaults should probably work for you.
+- Open terminal and set up environment variable with path to the postgres connection file above
+  ```shell
+  export PGPASSFILE=$HOME/src/cardano-dbsync-private-network/postgres-conn/pgpass-privatenet
+  
+  # run the cardano-db-sync setup script to create database
+  $HOME/src/cardano-db-sync/scripts/postgresql-setup.sh --createdb
+  
+  # output
+  # verify you see "All good!" or correct any errors as necessary
+  ```
+- **Note**: Installing the schema for the database we just created will be done automatically, when we run the cardano-db-sync process
+
+## 5. Connect the db-sync process to your private network
+
+The schema migration scripts in the cardano-db-sync process will run automatically.
 
 - In **terminal 3**, start db sync process
   ```shell
@@ -142,7 +161,6 @@ at the time of this writing.
   # verify the output does not show any errors   
   ```
 
-## Create a transaction and query the database
-  
+## 6. Create a transaction and query the database
   
   
