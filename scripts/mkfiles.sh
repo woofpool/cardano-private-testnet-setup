@@ -41,7 +41,7 @@ if ! mkdir "${ROOT}"; then
 fi
 
 # copy and tweak the configuration
-cp ../templates/byron-node-config-template.yaml ${ROOT}/configuration.yaml
+cp "${SCRIPT_PATH}"/../templates/byron-node-config-template.yaml ${ROOT}/configuration.yaml
 sed -i ${ROOT}/configuration.yaml \
     -e 's/Protocol: RealPBFT/Protocol: Cardano/' \
     -e '/Protocol/ aPBftSignatureThreshold: 0.6' \
