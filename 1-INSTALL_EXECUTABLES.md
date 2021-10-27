@@ -3,9 +3,9 @@
 ---
 This guide covers installing `cardano-node`, `cardano-cli`, `cardano-db-sync`, and `cardano-db-sync-extended` into `$HOME/.local/bin`
 
-If necessary, edit your `$HOME/.bashrc` to modify the PATH variable so that the executables can be found on your system path
+If necessary, edit your `~/.bashrc` to modify the PATH variable so that the executables can be found on your system path
   ```shell
-  export PATH="$HOME/.local/bin:$PATH"  
+  export PATH="~/.local/bin:$PATH"  
   ```
 
 #### Assumptions
@@ -32,7 +32,7 @@ If necessary, edit your `$HOME/.bashrc` to modify the PATH variable so that the 
   # and did not choose to install Haskell Language Server (HLS) or stack
 
   # source the bash start script to apply updates to PATH
-  cd $HOME
+  cd ~
   source .bashrc
   
   # get the latest updates to GHCUp tool
@@ -60,10 +60,10 @@ password hashing, and more.
 IOHK maintains a fork of the libsodium library and we need to use a particular SHA commit of this fork
 to support the latest Cardano node software.
 
-- Create a working directory, e.g. `$HOME/src`
+- Create a working directory, e.g. `~/src`
   ```shell
-  mkdir -p $HOME/src
-  cd $HOME/src    
+  mkdir -p ~/src
+  cd ~/src    
   ```
 - Install libsodium shared library and package config if necessary
   ```shell
@@ -89,7 +89,7 @@ to support the latest Cardano node software.
   export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
   
   # source the bash start script to apply updates to environment variables
-  cd $HOME
+  cd ~
   source .bashrc
   ```
 
@@ -97,7 +97,7 @@ to support the latest Cardano node software.
 
 - Clone the IOHK cardano-node repo
   ```shell
-  cd $HOME/src 
+  cd ~/src 
   git clone https://github.com/input-output-hk/cardano-node.git
   cd cardano-node
   
@@ -114,8 +114,8 @@ to support the latest Cardano node software.
   ```
 - Copy cardano-cli and cardano-node files to local user default path location
   ```shell
-  sudo cp $(find dist-newstyle/build -type f -name "cardano-cli") $HOME/.local/bin/cardano-cli
-  sudo cp $(find dist-newstyle/build -type f -name "cardano-node") $HOME/.local/bin/cardano-node
+  sudo cp $(find dist-newstyle/build -type f -name "cardano-cli") ~/.local/bin/cardano-cli
+  sudo cp $(find dist-newstyle/build -type f -name "cardano-node") ~/.local/bin/cardano-node
   ```
 - Verify the versions
   ```shell
@@ -128,7 +128,7 @@ to support the latest Cardano node software.
 
 - Clone the IOHK cardano-db-sync repo
   ```shell
-  cd $HOME/src
+  cd ~/src
   git clone https://github.com/input-output-hk/cardano-db-sync
   cd cardano-db-sync  
 
@@ -146,8 +146,8 @@ to support the latest Cardano node software.
   ```
 - Copy db-sync executables to local user default path location
   ```shell
-  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync") $HOME/.local/bin/cardano-db-sync
-  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync-extended") $HOME/.local/bin/cardano-db-sync-extended  
+  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync") ~/.local/bin/cardano-db-sync
+  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync-extended") ~/.local/bin/cardano-db-sync-extended  
   ```
 - Verify the versions of the db-sync executables
   ```shell

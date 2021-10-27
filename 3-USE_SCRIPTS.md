@@ -17,7 +17,7 @@ and create window panes in your session to make it easier to see everything in t
 
   ```shell
   # navigate to working source directory
-  cd $HOME/src
+  cd ~/src
   git clone https://github.com/woofpool/cardano-dbsync-private-network  
   ```
 
@@ -27,7 +27,7 @@ and create window panes in your session to make it easier to see everything in t
 - In **terminal #1**, run the `mkfiles` script to set up the network files
   ```shell
   # navigate to project root folder
-  cd $HOME/src/cardano-dbsync-private-network
+  cd ~/src/cardano-dbsync-private-network
   
   # for convenience, lets export environment variable to store the name of the ROOT property set in the scripts/config.cfg
   export ROOT=private-network  # change value as necessary
@@ -43,9 +43,8 @@ and create window panes in your session to make it easier to see everything in t
   # run generated script to start all three nodes
   ./$ROOT/run/all.sh
   
-  # output
-  # verify the output does not show any errors
-  # It's possible you will see some forge errors, but they may go away, once all the nodes have connected to one another   
+  # The output may show some Forge errors, but should go away once all the nodes are
+  # synched to each other  
   ```
 
 ## 3. Apply updates to the network to advance the network protocol to latest era and protocol version
@@ -56,74 +55,78 @@ We will run update scripts one by one to advance the network to the current era/
 - Open **terminal #2** and run the `update-1` script
   ```shell
   # navigate to project root folder
-  cd $HOME/src/cardano-dbsync-private-network
+  cd ~/src/cardano-dbsync-private-network
   
   # run script file
-  ./scripts/update-1.sh
-  
-  # output
-  # verify the script completed successfully 
+  ./scripts/update-1.sh  
   ```
-- In **terminal #2**, wait for 1 to 2 epochs to make sure the update to protocol V1 is completed.
+- In **terminal #2**, wait for at least the next epoch to make sure the update to protocol V1 is completed.
   ```shell
+  # set environment variables
+  export ROOT=private-network
+  export CARDANO_NODE_SOCKET_PATH=$ROOT/node-bft1/node.sock
+  
   # run query to find out the current epoch
   cardano-cli query tip --testnet-magic 42
   
-  # run query to get network protocol info
-  cardano-cli query protocol-parameters --testnet-magic 42
+  # the query should return something like this 
+  {
+    "epoch": 2,
+    "hash": "587799cb34f2c68a04c29204e120418351f4b449aa5286c9b4ac3244f30a7933",
+    "slot": 200,
+    "block": 197,
+    "era": "Byron",
+    "syncProgress": "100.00"
+  }
   ```
 - In **terminal 2**, run the `update-2` script  
   ```shell
-  # run script file
   ./scripts/update-2.sh
-    
-  # output
-  # verify the script completed successfully 
+  
+  # verify the update script worked
   ```
 - Switch to **terminal 1** and restart the nodes
   ```shell
-  # Use Ctrl + c to stop the script process
-  
-  # run the script again to start up the nodes
-  ./$ROOT/run/all.sh
-  
-  # output
-  # verify the output does not show any errors
-  # It's possible you will see some forge errors, but they may go away, once all the nodes have connected to one another   
+  # Use ctrl+c to stop the script process  
+  # and run the script again to start up the nodes
+  ./$ROOT/run/all.sh  
   ```
-- In **terminal 2**, wait for 1 to 2 epochs to make sure the update to protocol V2 is completed.
+- In **terminal 2**, wait for a new epoch to make sure the update to protocol V2 is completed.
   ```shell
   # run query to find out the current epoch
   cardano-cli query tip --testnet-magic 42
   
-  # run query to get network protocol info
-  cardano-cli query protocol-parameters --testnet-magic 42
+  # you should see something like this
+  {
+    "epoch": 3,
+    "hash": "d485e25f1287572ae75dbd35727ecd792595d88b66ac6e2144cbdf6dd1dab200",
+    "slot": 302,
+    "block": 290,
+    "era": "Byron",
+    "syncProgress": "100.00"
+  }
   ```
 - In **terminal 2**, run the v3 update script
-  ```shell
-  # run script file and pass the current epoch number
-  ./scripts/update-2.sh <current_epoch>
-    
-  # output
-  # verify the script completed successfully 
+  ```shell  
+  ./scripts/update-3.sh <current_epoch>
+  
+  # verify the script update ran successfully
+  # if you see something like the following, it means you need to wait for another epoch
+  Command failed: transaction submit  Error: Error while submitting tx: ShelleyTxValidationError ShelleyBasedEraShelley (ApplyTxError [UtxowFailure (UtxoFailure (UpdateFailure (PPUpdateWrongEpoch (EpochNo 3) (EpochNo 3) VoteForNextEpoch)))])    
   ```
 - Switch to **terminal 1** and restart the nodes
   ```shell
-  # Use Ctrl + c to stop the script process
+  # Use ctrl+c to stop the script process
   
   # run the script again to start up the nodes
-  ./$ROOT/run/all.sh
-  
-  # output
-  # verify the output does not show any errors
-  # It's possible you will see some forge errors, but they may go away, once all the nodes have connected to one another   
+  ./$ROOT/run/all.sh  
   ```
-- In **terminal 2**, wait for 1 to 2 epochs to make sure the update to protocol V3 is completed.
+- In **terminal 2**, wait for at least the next epoch to make sure the update to protocol V3 is completed.
   ```shell
   # run query to find out the current epoch
   cardano-cli query tip --testnet-magic 42
   
-  # run query to get network protocol info
+  # Starting in the Shelley era, we can also run query to get network protocol info
   cardano-cli query protocol-parameters --testnet-magic 42
   ```
 - Repeat the same process as you did for `update-3` for each of `update-4`, `update-5`, and `update-6`
@@ -135,10 +138,10 @@ at the time of this writing.
 - Modify the postgres connection file [here](postgres-conn/pgpass-privatenet) as necessary. The defaults should probably work for you.
 - Open terminal and set up environment variable with path to the postgres connection file above
   ```shell
-  export PGPASSFILE=$HOME/src/cardano-dbsync-private-network/postgres-conn/pgpass-privatenet
+  export PGPASSFILE=~/src/cardano-dbsync-private-network/postgres-conn/pgpass-privatenet
   
   # run the cardano-db-sync setup script to create database
-  $HOME/src/cardano-db-sync/scripts/postgresql-setup.sh --createdb
+  ~/src/cardano-db-sync/scripts/postgresql-setup.sh --createdb
   
   # output
   # verify you see "All good!" or correct any errors as necessary
@@ -152,7 +155,7 @@ The schema migration scripts in the cardano-db-sync process will run automatical
 - In **terminal 3**, start db sync process
   ```shell
   # navigate to project root folder
-  cd $HOME/src/cardano-dbsync-private-network
+  cd ~/src/cardano-dbsync-private-network
   
   # run script file
   ./scripts/db-sync-start.sh
