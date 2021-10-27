@@ -19,26 +19,27 @@ This document explains how to install PostgreSQL and create the database used by
   sudo apt-get upgrade
   # reboot as necessary  
   ```
-- Install postgres and the -contrib package that adds some additional utilities and functionality
+- Install postgres packages including libpq-dev, which is needed for building `cardano-db-sync`
   ```shell
-  sudo apt-get install postgresql postgresql-contrib
+  sudo apt-get install libpq-dev postgresql postgresql-contrib
   ```
 - Verify postgres is installed by starting a postgres sql session in the terminal
   ```shell
   sudo -u postgres psql
   
-  # exit the session 
+  # you should see prompt
+  # postgres=#
+  
+  # to exit the session 
   \q
   ```
 
-## Create new Postgres user (AKA role) for your own linux user account
+## Create new Postgres role for your linux user account
 
-- We will be using a shell script, `postgresql-setup.sh` from the `cardano-db-sync` project to create the database.
-- We want to run this `postgresql-setup.sh` script using the linux user account you are logged in as. Use `whoami` to see your account name.
 - Upon installation, Postgres is set up to use `ident authentication`, 
   meaning that it associates Postgres roles with a matching Unix/Linux system account. 
   If a role exists within Postgres, a Unix/Linux username with the same name is able to sign in as that role.
-  - [Postgresql Ident Authentication](https://www.postgresql.org/docs/current/auth-ident.html)  
+  - Additional background documentation: [Postgresql Ident Authentication](https://www.postgresql.org/docs/current/auth-ident.html)  
     
 - Create a user for your local linux user account and give it superuser role.   Our user must be a superuser in order to create/drop databases, etc.
   ```shell
@@ -50,8 +51,18 @@ This document explains how to install PostgreSQL and create the database used by
   ```
 - Verify your local account got created
   ```shell
-  sudo -u <your_linux_user_account_name> psql
-  \conninfo
+  sudo -u postgres psql
+  
+  # you should see prompt
+  # postgres=#
+  
+  # to display users 
+  \du
+  
+  # you should see a role name of your linux account with Superuser role attribute
+  
+  # to exit the session 
+  \q
   ```
 
 ## Create the db-sync database
@@ -60,15 +71,18 @@ This document explains how to install PostgreSQL and create the database used by
 - Open terminal and set up environment variable with path to the postgres connection file above
   ```shell
   # navigate to this projects root folder
-  cd <path/to/this/project>
+  cd <path/to/cardano-dbsync-private-network>
 
-  # set the variable with path to this project
-  export PGPASSFILE=postgres-conn/pgpass-privatenet  
+  # set the variable with path to the postgres connection file
+  # this connection file defines a database name of `privatenet`
+  export PGPASSFILE=postgres-conn/pgpass-privatenet
   ```
 - Run the cardano-db-sync script to create the database and install the schema
   ```shell
   # navigate to your cardano-db-sync project source directory
-  cd /path/to/cardano-db-sync
+  cd $HOME/src/cardano-db-sync
+  
+  # run the setup script to create database
   ./scripts/postgresql-setup.sh --createdb
   
   # output

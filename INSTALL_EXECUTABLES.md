@@ -110,7 +110,8 @@ to support the latest Cardano node software.
   # configure the build options
   cabal configure --with-compiler=ghc-8.10.4
   
-  # build - this can take 20 minutes or more  
+  # update project dependencies and build - this can take 20 minutes or more
+  cabal update
   cabal build all
   ```
 - Copy cardano-cli and cardano-node files to local user default path location

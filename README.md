@@ -5,7 +5,8 @@
 ### Summary
 This project provides instructions and shell scripts to bootstrap a private Cardano network and connect a `cardano-dbsync` process to it. 
 A private Cardano network provides a controlled environment to execute transactions and use SQL queries to view the resulting data.
-*Not only could this be useful for local development, but it is also a great way to learn about what data gets stored on the Cardano blockchain.*
+
+Not only is this controlled environment useful for local Cardano development, but it is also a great way to learn about what data gets stored on the Cardano blockchain.
 
 #### Key Details
 - The private network consists of three block-producing node processes.
@@ -14,15 +15,18 @@ A private Cardano network provides a controlled environment to execute transacti
     - Please find original script files in the IOHK git repository: [cardano-node/scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts) 
 
 ## Usage Instructions
-1. **Install required Cardano executables**
-
-    * Before running shell scripts to bootstrap a private Cardano network, install these executables: `cardano-node`, `cardano-cli`, `cardano-db-sync`, `cardano-db-sync-extended`
-    * Please refer to the [Install Executables guide](INSTALL_EXECUTABLES.md) for instructions.
-
-2. **Install PostgreSQL and create database used by db-sync** 
-
+1. **Install PostgreSQL packages and create database used by db-sync** 
+    
+    * We install the PostgreSQL packages before installing the Cardano executables (Step 2 below) because `cardano-db-sync` has
+      a dependency on the package `libpq-dev`  
     * The `cardano-db-sync` process uses a connection to a Postgres database.
     * Please refer to the [DB Setup guide](DB_SETUP.md) for instructions to set up.
+
+2. **Install Cardano executables**
+
+    * Install the following executables: `cardano-node`, `cardano-cli`, `cardano-db-sync`, `cardano-db-sync-extended`
+    * Please refer to the [Install Executables guide](INSTALL_EXECUTABLES.md) for instructions.
+
 
 3. **Use scripts to set up & run private Cardano network and connect DB Sync process**
 
