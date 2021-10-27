@@ -7,16 +7,11 @@ set -o pipefail
 # This script sets up a cluster that starts out in Byron
 # The script generates all the files needed for the setup
 
-SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-. "${SCRIPT_PATH}"/config-read.shlib; # load the config library functions
-
-exit 0
+. ./config-read.shlib; # load the config library functions
 
 ROOT="$(config_get ROOT)";
 INIT_SUPPLY="$(config_get INIT_SUPPLY)"
 FEE="$(config_get FEE)"
-NETWORK_MAGIC="$(config_get NETWORK_MAGIC)"
-SECURITY_PARAM="$(config_get SECURITY_PARAM)"
 
 BFT_NODES="node-bft1 node-bft2"
 BFT_NODES_N="1 2"
@@ -45,7 +40,7 @@ if ! mkdir "${ROOT}"; then
 fi
 
 # copy and tweak the configuration
-cp "${SCRIPT_PATH}"/../configuration/byron-mainnet-node-config.yaml ${ROOT}/configuration.yaml
+cp ../templates/byron-node-config-template.yaml ${ROOT}/configuration.yaml
 sed -i ${ROOT}/configuration.yaml \
     -e 's/Protocol: RealPBFT/Protocol: Cardano/' \
     -e '/Protocol/ aPBftSignatureThreshold: 0.6' \
@@ -56,18 +51,6 @@ sed -i ${ROOT}/configuration.yaml \
     -e 's/RequiresNoMagic/RequiresMagic/' \
     -e 's/LastKnownBlockVersion-Major: 0/LastKnownBlockVersion-Major: 1/' \
     -e 's/LastKnownBlockVersion-Minor: 2/LastKnownBlockVersion-Minor: 0/'
-# Options for making it easier to trigger the transition to Shelley
-# If neither of those are used, we have to
-# - post an update proposal + votes to go to protocol version 1
-# - after that's activated, change the configuration to have
-#   'LastKnownBlockVersion-Major: 2', and restart the nodes
-# - post another proposal + vote to go to protocol version 2
-
-#uncomment this for an automatic transition after the first epoch
-# echo "TestShelleyHardForkAtEpoch: 1" >> ${ROOT}/configuration.yaml
-#uncomment this to trigger the hardfork with protocol version 1
-#echo "TestShelleyHardForkAtVersion: 1"  >> ${ROOT}/configuration.yaml
-
 
 pushd ${ROOT}
 
@@ -520,60 +503,3 @@ echo "" >> run/all.sh
 echo "wait" >> run/all.sh
 
 chmod a+x run/all.sh
-
-echo
-echo "Alternatively, you can run all the nodes in one go:"
-echo
-echo "$ROOT/run/all.sh"
-
-echo
-echo "In order to do the protocol updates, proceed as follows:"
-echo
-echo "  0. wait for the nodes to start producing blocks"
-echo "  1. invoke ./scripts/byron-to-alonzo/update-1.sh"
-echo "     wait for the next epoch for the update to take effect"
-echo
-echo "  2. invoke ./scripts/byron-to-alonzo/update-2.sh"
-echo "  3. restart the nodes"
-echo "     wait for the next epoch for the update to take effect"
-echo
-echo "  4. invoke ./scripts/byron-to-alonzo/update-3.sh <N>"
-echo "     Here, <N> the current epoch (2 if you're quick)."
-echo "     If you provide the wrong epoch, you will see an error"
-echo "     that will tell you the current epoch, and can run"
-echo "     the script again."
-echo "  5. restart the nodes"
-echo "     wait for the next epoch for the update to take effect"
-echo "  6. invoke ./scripts/byron-to-alonzo/update-4.sh <N>"
-echo "  7. restart the nodes"
-echo
-echo "You can observe the status of the updates by grepping the logs, via"
-echo
-echo "  grep LedgerUpdate ${ROOT}/node-pool1/node.log"
-echo
-echo "When in Shelley (after 3, and before 4), you should be able "
-echo "to look at the protocol parameters, or the ledger state, "
-echo "using commands like"
-echo
-echo "CARDANO_NODE_SOCKET_PATH=${ROOT}/node-bft1/node.sock \\"
-echo "  cardano-cli query protocol-parameters \\"
-echo "  --cardano-mode --testnet-magic 42"
-echo
-echo "This will fail outside of the Shelley era. In particular, "
-echo "after step 3, you will get an error message that tells you "
-echo "that you are in the Allegra era. You must then use the --allegra-era flag:"
-echo
-echo "CARDANO_NODE_SOCKET_PATH=${ROOT}/node-bft1/node.sock \\"
-echo "  cardano-cli query protocol-parameters \\"
-echo "  --cardano-mode --allegra-era --testnet-magic 42"
-echo
-echo "Similarly, use --mary-era in the Mary era."
-popd
-
-# For an automatic transition at epoch 0, specifying mary, allegra or shelley
-# will start the node in the appropriate era.
-echo ""
-
-# These are needed for cardano-submit-api
-echo "EnableLogMetrics: False" >> ${ROOT}/configuration.yaml
-echo "EnableLogging: True" >> ${ROOT}/configuration.yaml

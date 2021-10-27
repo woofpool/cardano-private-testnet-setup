@@ -10,7 +10,8 @@ set -e
 # Also, you need to restart the nodes after running this script in order for the
 # update to be endorsed by the nodes.
 
-ROOT=example
+. ./config-read.shlib; # load the config library functions
+ROOT="$(config_get ROOT)";
 
 pushd ${ROOT}
 

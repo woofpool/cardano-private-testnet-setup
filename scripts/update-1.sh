@@ -7,7 +7,9 @@ set -e
 # - move funds out of the Byron genesis address, so that we can use them later in Shelley
 # - initiate the transition to protocol version 1 (Byron, OBFT)
 
-ROOT=example
+. ./config-read.shlib; # load the config library functions
+ROOT="$(config_get ROOT)";
+
 
 pushd ${ROOT}
 

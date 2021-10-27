@@ -21,8 +21,10 @@ if [ ! "$1" ]; then echo "update-3.sh: expects an <N> epoch argument"; exit; fi
 EPOCH=$1
 VERSION=3
 
-ROOT=example
-COINS_IN_INPUT=1003000000
+. ./config-read.shlib; # load the config library functions
+ROOT="$(config_get ROOT)";
+INIT_SUPPLY="$(config_get INIT_SUPPLY)"
+COINS_IN_INPUT=INIT_SUPPLY
 FEE=1000000
 
 pushd ${ROOT}
