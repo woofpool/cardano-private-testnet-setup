@@ -25,7 +25,7 @@ but it is also a great way to learn about what data gets stored on the Cardano b
 2. **Install PostgreSQL packages and create Postgres user** 
     
     * The `cardano-db-sync` process uses a connection to a PostgreSQL database.
-    * Please refer to the [DB Setup guide](DB_SETUP.md) for instructions to set up.
+    * Please refer to the [Install PosgreSQL](INSTALL_POSTGRESQL.md) for instructions to set up.
 
 3. **Use scripts to set up & run private Cardano network and connect DB Sync process**
 
