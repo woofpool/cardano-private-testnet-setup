@@ -19,7 +19,9 @@ if [ ! "$1" ]; then echo "update-4.sh: expects an <N> epoch argument"; exit; fi
 EPOCH=$1
 VERSION=4
 
-. ./config-read.shlib; # load the config library functions
+SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+. "${SCRIPT_PATH}"/config-read.shlib; # load the config library functions
+
 ROOT="$(config_get ROOT)";
 INIT_SUPPLY="$(config_get INIT_SUPPLY)"
 

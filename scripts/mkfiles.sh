@@ -7,7 +7,8 @@ set -o pipefail
 # This script sets up a cluster that starts out in Byron
 # The script generates all the files needed for the setup
 
-. ./config-read.shlib; # load the config library functions
+SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+. "${SCRIPT_PATH}"/config-read.shlib; # load the config library functions
 
 ROOT="$(config_get ROOT)";
 INIT_SUPPLY="$(config_get INIT_SUPPLY)"
