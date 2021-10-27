@@ -12,7 +12,6 @@ SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 ROOT="$(config_get ROOT)";
 INIT_SUPPLY="$(config_get INIT_SUPPLY)"
-FEE="$(config_get FEE)"
 
 BFT_NODES="node-bft1 node-bft2"
 BFT_NODES_N="1 2"
