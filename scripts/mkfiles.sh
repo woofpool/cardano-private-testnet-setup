@@ -27,6 +27,9 @@ FUNDS_PER_BYRON_ADDRESS=$((${FUNDS_PER_GENESIS_ADDRESS} - ${FEE}))
 # We need to allow for a fee to transfer the funds out of the genesis.
 # We don't care too much, 1 ada is more than enough.
 
+NETWORK_MAGIC=42
+SECURITY_PARAM=10
+
 OS=$(uname -s) DATE=
 case $OS in
   Darwin )       DATE="gdate";;
