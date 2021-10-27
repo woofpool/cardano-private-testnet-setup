@@ -4,5 +4,5 @@ example/
 # generated test network (default value)
 private-network/
 
-# logs folder
+# generated logs folder
 logs/
