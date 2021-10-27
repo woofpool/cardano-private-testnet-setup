@@ -3,11 +3,11 @@
 ---
 
 ### Summary
-This guide covers installing `cardano-node`, `cardano-cli`, `cardano-db-sync`, and `cardano-db-sync-extended` into `~/.local/bin`
+This guide covers installing `cardano-node`, `cardano-cli`, `cardano-db-sync`, and `cardano-db-sync-extended` into `$HOME/.local/bin`
 
-If necessary, edit your `~/.bashrc` to modify the PATH variable so that the executables can be found on your system path
+If necessary, edit your `$HOME/.bashrc` to modify the PATH variable so that the executables can be found on your system path
   ```shell
-  export PATH="~/.local/bin:$PATH"  
+  export PATH="$HOME/.local/bin:$PATH"  
   ```
 
 #### Assumptions
@@ -110,14 +110,14 @@ to support the latest Cardano node software.
   # configure the build options
   cabal configure --with-compiler=ghc-8.10.4
   
-  # update project dependencies and build - this can take 20 minutes or more
+  # update project dependencies and build - this can take 20 minutes+
   cabal update
   cabal build all
   ```
 - Copy cardano-cli and cardano-node files to local user default path location
   ```shell
-  sudo cp $(find $HOME/git/cardano-node/dist-newstyle/build -type f -name "cardano-cli") /usr/local/bin/cardano-cli
-  sudo cp $(find $HOME/git/cardano-node/dist-newstyle/build -type f -name "cardano-node") /usr/local/bin/cardano-node
+  sudo cp $(find dist-newstyle/build -type f -name "cardano-cli") $HOME/.local/bin/cardano-cli
+  sudo cp $(find dist-newstyle/build -type f -name "cardano-node") $HOME/.local/bin/cardano-node
   ```
 - Verify the versions
   ```shell
@@ -138,15 +138,18 @@ to support the latest Cardano node software.
   git fetch --tags --all
   git checkout $(curl -s https://api.github.com/repos/input-output-hk/cardano-db-sync/releases/latest | jq -r .tag_name)
   ```
-- Update dependencies and compile the cardano-db-sync project
+- Update dependencies and build the cardano-db-sync project.  This can take 20 minutes+
+  
+  **Note**: Building `cardano-db-sync` project, depends on finding the `libpq-dev` package.
+  This is installed when you follow the [DB installation instructions](./DB_SETUP.md).
   ```shell
   cabal update
   cabal build all
   ```
 - Copy db-sync executables to local user default path location
   ```shell
-  cp -p $(find ~/cardano-src/cardano-db-sync/dist-newstyle/build -type f -name "cardano-db-sync") ~/.local/bin/cardano-db-sync
-  cp -p $(find ~/cardano-src/cardano-db-sync/dist-newstyle/build -type f -name "cardano-db-sync-extended") ~/.local/bin/cardano-db-sync-extended  
+  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync") $HOME/.local/bin/cardano-db-sync
+  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync-extended") $HOME/.local/bin/cardano-db-sync-extended  
   ```
 - Verify the versions of the db-sync executables
   ```shell

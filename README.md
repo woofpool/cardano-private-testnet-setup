@@ -4,9 +4,10 @@
 
 ### Summary
 This project provides instructions and shell scripts to bootstrap a private Cardano network and connect a `cardano-dbsync` process to it. 
-A private Cardano network provides a controlled environment to execute transactions and use SQL queries to view the resulting data.
 
-Not only is this controlled environment useful for local Cardano development, but it is also a great way to learn about what data gets stored on the Cardano blockchain.
+A private Cardano network provides a controlled environment to execute transactions and use SQL queries to view the resulting data.
+Not only is this controlled environment useful for local Cardano development, 
+but it is also a great way to learn about what data gets stored on the Cardano blockchain.
 
 #### Key Details
 - The private network consists of three block-producing node processes.
@@ -26,8 +27,7 @@ Not only is this controlled environment useful for local Cardano development, bu
 
     * Install the following executables: `cardano-node`, `cardano-cli`, `cardano-db-sync`, `cardano-db-sync-extended`
     * Please refer to the [Install Executables guide](INSTALL_EXECUTABLES.md) for instructions.
-
-
+    
 3. **Use scripts to set up & run private Cardano network and connect DB Sync process**
 
     * Use scripts to bootstrap the Cardano private network and attach the `cardano-dbsync` process to it to sync blockchain data to SQL database.
