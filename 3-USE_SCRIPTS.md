@@ -133,9 +133,14 @@ We will run update scripts one by one to advance the network to the current era/
 to advance the protocol updates to Alonzo era and protocol V6. These are the current era and protocol
 at the time of this writing.
 
-## 4. Create the db-sync database
+## 4. Create the database for cardano-db-sync
 
-- Modify the postgres connection file [here](postgres-conn/pgpass-privatenet) as necessary. The defaults should probably work for you.
+- Modify the postgres connection file [here](postgres-conn/pgpass-privatenet) as necessary.
+    - View more info on [PostgreSQL docs on pgpass file](https://www.postgresql.org/docs/12/libpq-pgpass.html)
+    - The format of the pgpass file String is `host:port:database:user:password` 
+    - the host `/var/run/postgresql` refers to a socket directory, but can also be a standard DNS hostname
+    - the database name is `privatenet`
+    - the user and password are set to `*`, since we are using a unix account role
 - Open terminal and set up environment variable with path to the postgres connection file above
   ```shell
   chmod 600 ~/src/cardano-dbsync-private-network/postgres-conn/pgpass-privatenet
@@ -144,8 +149,16 @@ at the time of this writing.
   # run the cardano-db-sync setup script to create database
   ~/src/cardano-db-sync/scripts/postgresql-setup.sh --createdb
   
-  # output
-  # verify you see "All good!" or correct any errors as necessary
+  # output will show error if the privatenet database is not 
+  # psql: error: FATAL:  database "privatenet" does not exist
+  # All good! 
+  
+  # as an added validation, you can run --check, which includes a check for existence of database 
+  ~/cardano-src/cardano-db-sync/scripts/postgresql-setup.sh --check
+  
+  # sample output
+  Did not find any relations.
+  All good!
   ```
 - **Note**: Installing the schema for the database we just created will be done automatically, when we run the cardano-db-sync process
 

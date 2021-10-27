@@ -11,10 +11,10 @@ export PGPASSFILE=postgres-config/pgpass-privatenet
 export CARDANO_NODE_SOCKET_PATH=${ROOT}/node-bft1/node.sock
 
 # copy the dbsync-config.yaml from template into $ROOT
-# set the NodeConfigFile property to the $ROOT/configuration.yaml file
+cp "${SCRIPT_PATH}"/../templates/db-sync-config-template.yaml ${ROOT}/db-sync-config.yaml
 
 cardano-db-sync \
-    --config ${ROOT}/dbsync-config.yaml \
+    --config ${ROOT}/db-sync-config.yaml \
     --socket-path $CARDANO_NODE_SOCKET_PATH \
     --state-dir ${ROOT}/ledger-state/ \
     --schema-dir ${ROOT}/schema/
