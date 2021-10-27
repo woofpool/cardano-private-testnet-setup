@@ -5,7 +5,7 @@ SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 ROOT="$(config_get ROOT)";
 
-export PGPASSFILE=postgres-config/pgpass-privatenet
+export PGPASSFILE=postgres-conn/pgpass-privatenet
 
 # define socket path to one of the block producers (picking node-bft1 is arbitrary)
 export CARDANO_NODE_SOCKET_PATH=${ROOT}/node-bft1/node.sock
@@ -15,6 +15,6 @@ cp "${SCRIPT_PATH}"/../templates/db-sync-config-template.yaml ${ROOT}/db-sync-co
 
 cardano-db-sync \
     --config ${ROOT}/db-sync-config.yaml \
-    --socket-path $CARDANO_NODE_SOCKET_PATH \
+    --socket-path ${CARDANO_NODE_SOCKET_PATH} \
     --state-dir ${ROOT}/ledger-state/ \
-    --schema-dir ${ROOT}/schema/
+    --schema-dir ${SCHEMA_DIR}

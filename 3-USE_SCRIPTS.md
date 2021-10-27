@@ -164,18 +164,22 @@ at the time of this writing.
 
 ## 5. Connect the db-sync process to your private network
 
-The schema migration scripts in the cardano-db-sync process will run automatically.
-
-- In **terminal 3**, start db sync process
+- The network of three nodes should be running
+- Please modify the `SCHEMA_DIR` environment variable below based on the location of your cloned copy of cardano-db-sync project
+- In **terminal 3**, start the db sync process.  This will install the database schema and sync blockchain data to the Postgres database.
   ```shell
   # navigate to project root folder
   cd ~/src/cardano-dbsync-private-network
+  
+  # set environment variable needed by `./scripts/db-sync-start.sh`
+  export SCHEMA_DIR=~/src/cardano-db-sync/schema
   
   # run script file
   ./scripts/db-sync-start.sh
   
   # output
-  # verify the output does not show any errors   
+  # verify the output does not show any errors
+  # in a steady state, you should see insert statements into slot_leader and block tables   
   ```
 
 ## 6. Create a transaction and query the database
