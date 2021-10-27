@@ -1,14 +1,1 @@
 /var/run/postgresql:5432:privatenet:*:*
-
-# We will set a PGPASSFILE environment variable with the location to this file
-# The postgresql-setup.sh script in the cardano-db-sync project looks up this file based on the PGPASSFILE env. variable
-
-# More information about the pgpass file - https://www.postgresql.org/docs/9.4/libpq-pgpass.html
-
-# What do the tokens mean above
-# Host:Port:Database_Name:User:Password
-# The host can also be a path to the default socket directory
-# 5432 is the default PostgreSQL listening port
-# privatenet is the name of our database.  It can be modified as desired.
-# The user and password are not specified as we are using a Linux system account mapped to a PostgreSQL superuser role
-

@@ -117,7 +117,7 @@ defaultBackends:
 # be specified in the defaults below or overidden on a per-scribe basis here.
 setupScribes:
   - scKind: FileSK
-    scName: "logs/mainnet.log"
+    scName: "logs/privatenet.log"
     scFormat: ScText
 
   - scKind: StdoutSK
@@ -128,7 +128,7 @@ setupScribes:
 # output is sent to if it is not configured to be sent to other scribes.
 defaultScribes:
   - - FileSK
-    - "logs/mainnet.log"
+    - "logs/privatenet.log"
   - - StdoutSK
     - stdout
 
@@ -249,7 +249,7 @@ options:
   # type and its name, separated by "::":
   mapScribes:
     cardano.node.metrics:
-      - "FileSK::logs/mainnet.log"
+      - "FileSK::logs/privatenet.log"
 
   # apply a filter on message severity on messages in a specific named context.
   # this filter is applied additionally to the global 'minSeverity' and thus

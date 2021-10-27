@@ -138,6 +138,7 @@ at the time of this writing.
 - Modify the postgres connection file [here](postgres-conn/pgpass-privatenet) as necessary. The defaults should probably work for you.
 - Open terminal and set up environment variable with path to the postgres connection file above
   ```shell
+  chmod 600 ~/src/cardano-dbsync-private-network/postgres-conn/pgpass-privatenet
   export PGPASSFILE=~/src/cardano-dbsync-private-network/postgres-conn/pgpass-privatenet
   
   # run the cardano-db-sync setup script to create database
