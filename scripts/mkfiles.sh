@@ -507,3 +507,10 @@ echo "" >> run/all.sh
 echo "wait" >> run/all.sh
 
 chmod a+x run/all.sh
+popd
+
+# These are needed for cardano-submit-api
+echo "EnableLogMetrics: False" >> ${ROOT}/configuration.yaml
+echo "EnableLogging: True" >> ${ROOT}/configuration.yaml
+
+echo "Default yaml configuration applied."

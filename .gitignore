@@ -1,2 +1,8 @@
 example/
 .idea/
+
+# generated test network (default value)
+private-network/
+
+# logs folder
+logs/

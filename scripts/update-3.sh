@@ -26,7 +26,7 @@ SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 ROOT="$(config_get ROOT)";
 INIT_SUPPLY="$(config_get INIT_SUPPLY)"
-COINS_IN_INPUT=INIT_SUPPLY
+COINS_IN_INPUT=$((${INIT_SUPPLY} - 2000000))
 FEE=1000000
 
 pushd ${ROOT}

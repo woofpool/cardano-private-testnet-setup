@@ -116,9 +116,9 @@ defaultBackends:
 # The scribe output format can be ScText or ScJson. Log rotation settings can
 # be specified in the defaults below or overidden on a per-scribe basis here.
 setupScribes:
-#  - scKind: FileSK
-#    scName: "logs/mainnet.log"
-#    scFormat: ScText
+  - scKind: FileSK
+    scName: "logs/mainnet.log"
+    scFormat: ScText
 
   - scKind: StdoutSK
     scName: stdout
