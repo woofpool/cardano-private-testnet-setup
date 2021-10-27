@@ -20,17 +20,17 @@ but it is also a great way to learn about what data gets stored on the Cardano b
 1. **Install Cardano executables**
 
     * Install the following executables: `cardano-node`, `cardano-cli`, `cardano-db-sync`, `cardano-db-sync-extended`
-    * Please refer to the [Install Executables guide](INSTALL_EXECUTABLES.md) for instructions.
+    * Please refer to the [Install Executables guide](1-INSTALL_EXECUTABLES.md) for instructions.
     
 2. **Install PostgreSQL packages and create Postgres user** 
     
     * The `cardano-db-sync` process uses a connection to a PostgreSQL database.
-    * Please refer to the [Install PosgreSQL](INSTALL_POSTGRESQL.md) for instructions to set up.
+    * Please refer to the [Install PosgreSQL](2-INSTALL_POSTGRESQL.md) for instructions to set up.
 
 3. **Use scripts to set up & run private Cardano network and connect DB Sync process**
 
     * Use scripts to bootstrap the Cardano private network and attach the `cardano-dbsync` process to it to sync blockchain data to SQL database.
-    * Please refer to the [Use Scripts guide](USE_SCRIPTS.md) for instructions. 
+    * Please refer to the [Use Scripts guide](3-USE_SCRIPTS.md) for instructions. 
 
 ## Contributors
 
