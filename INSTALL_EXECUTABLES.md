@@ -11,38 +11,61 @@ If necessary, edit your `~/.bashrc` to modify the PATH variable so that the exec
   ```
 
 #### Assumptions
-- This guide assumes you are running a recent version of linux
+- This guide assumes you are running a Debian/Ubuntu linux OS.
+  If you are using a different flavor of Linux, you will need to use the correct package manager for your platform
  
-## Install latest Cardano node and Cardano CLI executables
+## Install package dependencies and Haskell tooling
 
-Please see the following IOHK instructions to install from haskell source code.
-- [Install cardano-node and cardano-cli from source](https://iohk.zendesk.com/hc/en-us/articles/900001951646-Building-a-node-from-source)
-- After completing this guide, `cardano-node` and `cardano-cli` executables will be installed in `~/.local/bin`
-- Verify the versions
+- Install package dependencies of tools
   ```shell
-  cardano-node --version
-  cardano-cli --version
+  # update/upgrade your package indexes
+  sudo apt-get update
+  sudo apt-get upgrade  
+  # reboot as necessary
+    
+  sudo apt-get install automake build-essential pkg-config libffi-dev libgmp-dev libssl-dev libtinfo-dev libsystemd-dev zlib1g-dev make g++ tmux git jq wget libncursesw5 libtool autoconf -y  
+  ```
+
+- Install Cabal and GHC using [GHCUp - Haskell language installer](https://www.haskell.org/ghcup/)
+  ```shell
+  # download and run get-ghcup script
+  curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+  # During questions, I chose to (A)ppend the path to ghc to .bashrc
+  # and did not choose to install Haskell Language Server (HLS) or stack
+
+  # source the bash start script to apply updates to PATH
+  cd $HOME
+  source .bashrc
   
-  # when this document was written, the current version for each is 1.30.1 on linux-x86_64
-  ```
+  # get the latest updates to GHCUp tool
+  ghcup upgrade
 
-## Install latest Cardano db-sync executables 
+  # install cabal with GHCUp 
+  ghcup install cabal 3.4.0.0
+  ghcup set cabal 3.4.0.0
 
-These instructions will compile and install `cardano-db-sync` and `cardano-db-sync-extended` from haskell source code
-
-- Verify you have Haskell tools installed including cabal and ghc, and they are set to appropriate version. If necessary,
-  please visit the link in the first section to install `cardano-node` and `cardano-cli`,
-  which includes haskell set-up
-  ```shell
-  # should be version 8.10.4
+  # install GHC with GHCUp
+  ghcup install ghc 8.10.4
+  ghcup set ghc 8.10.4
+  
+  # Update cabal and verify the correct versions were installed successfully.
+  cabal update
+  cabal --version
   ghc --version
-  # should be version 3.4.0.0
-  cabal --version  
   ```
-- Create a working directory, e.g. `~/src` 
+
+## Install Libsodium library dependency from IOHK github
+
+[Libsodium](https://doc.libsodium.org/) contains cryptographic tools for encryption, decryption, signatures,
+password hashing, and more.
+
+IOHK maintains a fork of the libsodium library and we need to use a particular SHA commit of this fork
+to support the latest Cardano node software.
+
+- Create a working directory, e.g. `$HOME/src`
   ```shell
-  mkdir -p ~/src
-  cd ~/src    
+  mkdir -p $HOME/src
+  cd $HOME/src    
   ```
 - Install libsodium shared library and package config if necessary
   ```shell
@@ -60,21 +83,57 @@ These instructions will compile and install `cardano-db-sync` and `cardano-db-sy
   sudo make install  
   ```
 - Set the predefined Linux environment variables defining the path to linked libraries and package configs.
-  When building the dependencies needed by `cardano-db-sync` executables, it will link in the libsodium- library and its package config.
+  When building the Cardano executables, it will link in the libsodium- library and its package config.
   If you like, you may append these lines to your `.bashrc` file to set these variables automatically,
   when you open a bash terminal.
   ```shell
   export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" 
   export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
+  
+  # source the bash start script to apply updates to environment variables
+  cd $HOME
+  source .bashrc
   ```
+
+## Install latest Cardano node and Cardano CLI executables
+
+- Clone the IOHK cardano-node repo
+  ```shell
+  cd $HOME/src 
+  git clone https://github.com/input-output-hk/cardano-node.git
+  cd cardano-node
+  
+  # fetch the list of tags and check out the latest release tag name
+  git fetch --all --recurse-submodules --tags
+  git checkout $(curl -s https://api.github.com/repos/input-output-hk/cardano-node/releases/latest | jq -r .tag_name)
+  
+  # configure the build options
+  cabal configure --with-compiler=ghc-8.10.4
+  
+  # build - this can take 20 minutes or more  
+  cabal build all
+  ```
+- Copy cardano-cli and cardano-node files to local user default path location
+  ```shell
+  sudo cp $(find $HOME/git/cardano-node/dist-newstyle/build -type f -name "cardano-cli") /usr/local/bin/cardano-cli
+  sudo cp $(find $HOME/git/cardano-node/dist-newstyle/build -type f -name "cardano-node") /usr/local/bin/cardano-node
+  ```
+- Verify the versions
+  ```shell
+  cardano-node version
+  cardano-cli version
+  
+  # when this document was written, the current version for each is 1.30.1 on linux-x86_64
+  ```
+## Install latest Cardano db-sync executables 
+
 - Clone the IOHK cardano-db-sync repo
   ```shell
-  cd ~/src
+  cd $HOME/src
   git clone https://github.com/input-output-hk/cardano-db-sync
   cd cardano-db-sync  
-  ```
-- Fetch the list of tags and check out the latest release tag name
-  ```shell
+
+  # fetch the list of tags and check out the latest release tag name  
   git fetch --tags --all
   git checkout $(curl -s https://api.github.com/repos/input-output-hk/cardano-db-sync/releases/latest | jq -r .tag_name)
   ```
