@@ -1,7 +1,5 @@
 # Install PostgreSQL and create user
 
----
-
 This document explains how to install PostgreSQL and create a Postgres user
 
 #### Assumptions

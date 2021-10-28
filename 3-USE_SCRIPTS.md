@@ -1,18 +1,16 @@
 # Use scripts to start network and connect db-sync
 
----
-
 **Now, we get to the fun part!**  We are ready to create & start a private Cardano network,
 which will run three block producer nodes. Then, we set up a database for cardano-db-sync and connect the db-sync process to one of the cardano nodes, so that
 it can synchronize to the activity occurring on the network and write data to its database.
 
-As mentioned in the [project readme](./README.md), the scripts to create the private 
-  Cardano network are from the `cardano-node` project and have been modified as needed.
-  - Please find original script files in the IOHK git repository: [cardano-node/scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts)
-
-**Note**: The instructions below require opening several terminal windows/tabs.  You might prefer creating a `tmux` session
+**Tip**: The instructions below require opening several terminal windows/tabs.  You might prefer creating a `tmux` session
 and create window panes in your session to make it easier to see everything in the same terminal window.
 
+#### Assumptions
+- This guide assumes you are running a recent version of linux.
+  Specifically, these directions apply to Ubuntu (Debian). If you are using a different linux variant, please adjust as needed
+  
 ## 1. Clone this project
 
   ```shell
@@ -50,7 +48,10 @@ and create window panes in your session to make it easier to see everything in t
 ## 3. Apply updates to the network to advance the network protocol to latest era and protocol version
 
 At the time of this writing, the current era is `alonzo` and protocol version `6`. 
-We will run update scripts one by one to advance the network to the current era/protocol version.
+We will run update scripts one by one to advance the network to the `alonzo` era/protocol version `6`.
+
+It will take 15+ minutes to run all the update scripts.  But, after you've run the updates once, you can stop and start the network
+to resume things as long as you don't wipe out the network directory.
 
 - Open **terminal #2** and run the `update-1` script
   ```shell
@@ -135,7 +136,7 @@ at the time of this writing.
 
 ## 4. Create the database for cardano-db-sync
 
-- Modify the postgres connection file [here](postgres-conn/pgpass-privatenet) as necessary.
+- You may modify the postgres connection file [here](postgres-conn/pgpass-privatenet) if desired.
     - View more info on [PostgreSQL docs on pgpass file](https://www.postgresql.org/docs/12/libpq-pgpass.html)
     - The format of the pgpass file String is `host:port:database:user:password` 
     - the host `/var/run/postgresql` refers to a socket directory, but can also be a standard DNS hostname
@@ -143,13 +144,13 @@ at the time of this writing.
     - the user and password are set to `*`, since we are using a unix account role
 - Open terminal and set up environment variable with path to the postgres connection file above
   ```shell
-  chmod 600 ~/src/cardano-dbsync-private-network/postgres-conn/pgpass-privatenet
+  chmod 600 ~/src/cardano-dbsync-private-network/postgres-conn/pgpass-privatenet  # this prevents a warning
   export PGPASSFILE=~/src/cardano-dbsync-private-network/postgres-conn/pgpass-privatenet
   
   # run the cardano-db-sync setup script to create database
   ~/src/cardano-db-sync/scripts/postgresql-setup.sh --createdb
   
-  # output will show error if the privatenet database is not 
+  # sample output - ignore error shown below, when you are creating the database for the first time  
   # psql: error: FATAL:  database "privatenet" does not exist
   # All good! 
   
@@ -160,12 +161,11 @@ at the time of this writing.
   Did not find any relations.
   All good!
   ```
-- **Note**: Installing the schema for the database we just created will be done automatically, when we run the cardano-db-sync process
 
 ## 5. Connect the db-sync process to your private network
 
-- The network of three nodes should be running
-- Please modify the `SCHEMA_DIR` environment variable below based on the location of your cloned copy of cardano-db-sync project
+- Make sure the private network is running
+- If necessary, please modify the `SCHEMA_DIR` environment variable below based on the location of your cloned copy of cardano-db-sync project
 - In **terminal 3**, start the db sync process.  This will install the database schema and sync blockchain data to the Postgres database.
   ```shell
   # navigate to project root folder
@@ -179,9 +179,7 @@ at the time of this writing.
   
   # output
   # verify the output does not show any errors
-  # in a steady state, you should see insert statements into slot_leader and block tables   
+  # in a steady state, you should see logs of SQL insert statements into slot_leader and block tables   
   ```
-
-## 6. Create a transaction and query the database
   
   

@@ -1,7 +1,6 @@
 # Install Cardano Executables
 
----
-This guide covers installing `cardano-node`, `cardano-cli`, `cardano-db-sync`, and `cardano-db-sync-extended` into `$HOME/.local/bin`
+This guide covers installing `cardano-node`, `cardano-cli`, `cardano-db-sync`, and `cardano-db-sync-extended` into `~/.local/bin`
 
 If necessary, edit your `~/.bashrc` to modify the PATH variable so that the executables can be found on your system path
   ```shell

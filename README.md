@@ -13,7 +13,7 @@ but it is also a great way to learn about what data gets stored on the Cardano b
 - The private network consists of three block-producing node processes.
 - The `cardano-dbsync` process syncs blockchain data to a highly normalized database schema. This enables blockchain data to be queried with SQL. 
 - The scripts used by this project to create the private Cardano network are taken from the `cardano-node` project and have been modified as needed.
-    - Please find original script files in the IOHK git repository: [cardano-node/scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts) 
+    - Please find original script files in the IOHK git repository: [cardano-node scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts/byron-to-alonzo) 
 
 ## Usage Instructions
 
