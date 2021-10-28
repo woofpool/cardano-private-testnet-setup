@@ -1,11 +1,12 @@
 # Use scripts to start private testnet and connect db-sync to it
 
 **Now, we get to the fun part!**  We are ready to create & start a private Cardano testnet.
-This testnet will run three block producer nodes. 
-Then, we set up a database for cardano-db-sync and connect the db-sync process to one of the cardano nodes, so that
-it can synchronize to the activity occurring on the testnet and write data to its database.
+The testnet will run three block producer nodes. 
+After starting the testnet and running all protocol updates, we set up a PostgreSQL database for cardano-db-sync.
+Then, we connect the db-sync process to one of the cardano nodes, so that
+it can synchronize to the activity occurring on our testnet and write data to its database.
 
-**Tip**: The instructions below require opening several terminal- windows or tabs.  You might prefer creating a `tmux` session
+**Tip**: The instructions below require opening several terminal- windows or tabs.  You might prefer creating a [`tmux`](https://en.wikipedia.org/wiki/Tmux) session
 and create several window panes in your session to make it easier to see everything in the same terminal window.
 
 #### Assumptions
@@ -87,6 +88,8 @@ to resume things as long as you don't wipe out the network directory.
   ./scripts/update-2.sh
   
   # verify the transactions submitted successfully
+  # If you run the update script too early, you will see error regarding update proposal
+  # Just continue waiting until the next epoch is reached and try running the update again
   ```
 - Switch to **terminal 1** and restart the nodes
   ```shell
@@ -135,6 +138,23 @@ to resume things as long as you don't wipe out the network directory.
 - Repeat the same process as you did for `update-3` for each of `update-4`, `update-5`, and `update-6`
 to advance the protocol updates to Alonzo era and protocol V6. These are the current era and protocol
 at the time of this writing.
+- After completing the full set of updates, verify the era, major protocol version, and utxo balances of user1 address
+  ```shell
+  cardano-cli query tip --testnet-magic 42 | jq '.era'
+  #output
+  "Alonzo"
+  
+  cardano-cli query protocol-parameters --testnet-magic 42 | jq '.protocolVersion.major'
+  #output
+  6
+  
+  cardano-cli query utxo --address $(cat private-testnet/addresses/user1.addr) --testnet-magic 42
+  #output
+                            TxHash                                 TxIx        Amount
+  --------------------------------------------------------------------------------------
+  b0f91ee59eb208284467b1dec0adfa8c57eb1cf7587fb7eb0599e2b8c8e885c9     0        500000000 lovelace + TxOutDatumHashNone
+  b0f91ee59eb208284467b1dec0adfa8c57eb1cf7587fb7eb0599e2b8c8e885c9     1        500000000 lovelace + TxOutDatumHashNone
+  ``` 
 
 ## 4. Create the database for cardano-db-sync
 
@@ -185,5 +205,4 @@ at the time of this writing.
   # verify the output does not show any errors
   # in a steady state, you should see logs of SQL insert statements into slot_leader and block tables   
   ```
-  
   
