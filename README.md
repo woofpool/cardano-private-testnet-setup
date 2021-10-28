@@ -1,17 +1,17 @@
-# cardano-dbsync-private-network
+# cardano-private-testnet-setup
 
 ---
 
 ### Summary
-This project provides instructions and shell scripts to bootstrap a private Cardano network and connect a `cardano-dbsync` process to it. 
+This project provides instructions and shell scripts to bootstrap a private Cardano testnet and connect a `cardano-db-sync` process to it. 
 
-A private Cardano network provides a controlled environment to execute transactions and use SQL queries to view the resulting data.
+A private Cardano testnet provides a controlled environment to execute transactions and use SQL queries to view the resulting data.
 Not only is this controlled environment useful for local Cardano development, 
 but it is also a great way to learn about what data gets stored on the Cardano blockchain.
 
 #### Key Details
-- The private network consists of three block-producing node processes.
-- The `cardano-dbsync` process syncs blockchain data to a highly normalized database schema. This enables blockchain data to be queried with SQL. 
+- The private testnet consists of three block-producing node processes.
+- The `cardano-db-sync` process syncs blockchain data to a highly normalized database schema. This enables blockchain data to be queried with SQL. 
 - The scripts used by this project to create the private Cardano network are taken from the `cardano-node` project and have been modified as needed.
     - Please find original script files in the IOHK git repository: [cardano-node scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts/byron-to-alonzo) 
 
@@ -29,7 +29,7 @@ but it is also a great way to learn about what data gets stored on the Cardano b
 
 3. **Use scripts to set up & run private Cardano network and connect DB Sync process**
 
-    * Use scripts to bootstrap the Cardano private network and attach the `cardano-dbsync` process to it to sync blockchain data to SQL database.
+    * Use scripts to bootstrap the Cardano private network and attach the `cardano-db-sync` process to it to sync blockchain data to SQL database.
     * Please refer to the [Use Scripts guide](3-USE_SCRIPTS.md) for instructions. 
 
 ## Contributors

@@ -16,7 +16,7 @@ and create window panes in your session to make it easier to see everything in t
   ```shell
   # navigate to working source directory
   cd ~/src
-  git clone https://github.com/woofpool/cardano-dbsync-private-network  
+  git clone https://github.com/woofpool/cardano-private-testnet-setup  
   ```
 
 ## 2. Make the network files and start the network
@@ -25,7 +25,7 @@ and create window panes in your session to make it easier to see everything in t
 - In **terminal #1**, run the `mkfiles` script to set up the network files
   ```shell
   # navigate to project root folder
-  cd ~/src/cardano-dbsync-private-network
+  cd ~/src/cardano-private-testnet-setup
   
   # for convenience, lets export environment variable to store the name of the ROOT property set in the scripts/config.cfg
   export ROOT=private-network  # change value as necessary
@@ -56,7 +56,7 @@ to resume things as long as you don't wipe out the network directory.
 - Open **terminal #2** and run the `update-1` script
   ```shell
   # navigate to project root folder
-  cd ~/src/cardano-dbsync-private-network
+  cd ~/src/cardano-private-testnet-setup
   
   # run script file
   ./scripts/update-1.sh  
@@ -144,8 +144,8 @@ at the time of this writing.
     - the user and password are set to `*`, since we are using a unix account role
 - Open terminal and set up environment variable with path to the postgres connection file above
   ```shell
-  chmod 600 ~/src/cardano-dbsync-private-network/postgres-conn/pgpass-privatenet  # this prevents a warning
-  export PGPASSFILE=~/src/cardano-dbsync-private-network/postgres-conn/pgpass-privatenet
+  chmod 600 ~/src/cardano-private-testnet-setup/postgres-conn/pgpass-privatenet  # this prevents a warning
+  export PGPASSFILE=~/src/cardano-private-testnet-setup/postgres-conn/pgpass-privatenet
   
   # run the cardano-db-sync setup script to create database
   ~/src/cardano-db-sync/scripts/postgresql-setup.sh --createdb
@@ -155,7 +155,7 @@ at the time of this writing.
   # All good! 
   
   # as an added validation, you can run --check, which includes a check for existence of database 
-  ~/cardano-src/cardano-db-sync/scripts/postgresql-setup.sh --check
+  ~/src/cardano-db-sync/scripts/postgresql-setup.sh --check
   
   # sample output
   Did not find any relations.
@@ -169,7 +169,7 @@ at the time of this writing.
 - In **terminal 3**, start the db sync process.  This will install the database schema and sync blockchain data to the Postgres database.
   ```shell
   # navigate to project root folder
-  cd ~/src/cardano-dbsync-private-network
+  cd ~/src/cardano-private-testnet-setup
   
   # set environment variable needed by `./scripts/db-sync-start.sh`
   export SCHEMA_DIR=~/src/cardano-db-sync/schema
