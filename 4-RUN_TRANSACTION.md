@@ -1,6 +1,7 @@
 # Run simple transaction
 
-At this point, we have a private testnet running.  Let's run a simple payment transaction and see what the resulting data
+At this point, we have a private testnet running with db-sync process attached to it.
+Let's run a simple payment transaction and see what the resulting data
 looks like in the `cardano-db-sync` schema.
 
 ## 1. Create keys and addresses for another user
@@ -9,7 +10,7 @@ looks like in the `cardano-db-sync` schema.
   ```shell
   cd ~/src/cardano-private-testnet-setup
   
-  export ROOT=private-testnet
+  ROOT=private-testnet
   export CARDANO_NODE_SOCKET_PATH=$ROOT/node-bft1/node.sock
   ADDR=user2
   
@@ -55,7 +56,8 @@ looks like in the `cardano-db-sync` schema.
   b0f91ee59eb208284467b1dec0adfa8c57eb1cf7587fb7eb0599e2b8c8e885c9     1        500000000 lovelace + TxOutDatumHashNone
   
   # set variable to first utxo - TxHash#TxIx
-  TXIN=b0f91ee59eb208284467b1dec0adfa8c57eb1cf7587fb7eb0599e2b8c8e885c9#0
+  # e.g., TXIN=b0f91ee59eb208284467b1dec0adfa8c57eb1cf7587fb7eb0599e2b8c8e885c9#0
+  TXIN=<TxHash>#0
   ```
 - perform transaction to consume user1 UTXO to send 5 ADA to user2 wallet and send change to user1 wallet
   ```shell  
