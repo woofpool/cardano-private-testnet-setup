@@ -1,4 +1,4 @@
-# Use scripts to start private testnet and connect db-sync to it
+# Run scripts to start private testnet and connect db-sync to it
 
 **Now, we get to the fun part!**  We are ready to create & start a private Cardano testnet.
 The testnet will run three block producer nodes. 

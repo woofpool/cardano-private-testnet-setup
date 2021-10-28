@@ -2,18 +2,25 @@
 
 ---
 
-### Summary
-This project provides instructions and shell scripts to bootstrap a private Cardano testnet and connect a `cardano-db-sync` process to it. 
+This project provides instructions and shell scripts to bootstrap a private Cardano testnet and connect a `cardano-db-sync` process to it.
 
-A private Cardano testnet provides a controlled environment to execute transactions and use SQL queries to view the resulting data.
-Not only is this controlled environment useful for local Cardano development, 
-but it is also a great way to learn about what data gets stored on the Cardano blockchain.
+The scripts used by this project to create the private Cardano testnet are taken from the IOHK `cardano-node` project and have been modified as needed.
+You may find the original script files in the IOHK git repository: [cardano-node scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts/byron-to-alonzo).
+In particular, running `cardano-db-sync` to sync to the private testnet required a few changes to the original scripts provided by IOHK.
 
-#### Key Details
+Hopefully, this documentation provides a lot of value for others. I welcome your feedback both good and bad!
+
+### Why is this useful?
+- A private Cardano testnet provides a controlled environment to execute transactions
+- With `cardano-db-sync` connected to your private testnet, you can use SQL queries to view blockchain activity data.
+- You can use this controlled environment for local Cardano development.
+  - Once you have set things up, you can stop the nodes and restart them as you desire, so long as you don't remove the persisted blockchain state.
+- Lastly, it is a great learning experience to set up your own private testnet and learn about the data stored on the blockchain.
+
+### Key Details
 - The private testnet consists of three block-producing node processes.
 - The `cardano-db-sync` process syncs blockchain data to a highly normalized database schema. This enables blockchain data to be queried with SQL. 
-- The scripts used by this project to create the private Cardano network are taken from the `cardano-node` project and have been modified as needed.
-    - Please find original script files in the IOHK git repository: [cardano-node scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts/byron-to-alonzo) 
+ 
 
 ## Usage Instructions
 
@@ -27,14 +34,22 @@ but it is also a great way to learn about what data gets stored on the Cardano b
     * The `cardano-db-sync` process uses a connection to a PostgreSQL database.
     * Please refer to the [Install PosgreSQL](2-INSTALL_POSTGRESQL.md) for instructions to set up.
 
-3. **Use scripts to set up & run private Cardano network and connect DB Sync process**
+3. **Run scripts to set up & run private Cardano network and connect DB Sync process**
 
-    * Use scripts to bootstrap the Cardano private network and attach the `cardano-db-sync` process to it to sync blockchain data to SQL database.
-    * Please refer to the [Use Scripts guide](3-USE_SCRIPTS.md) for instructions. 
+    * Run scripts to bootstrap the Cardano private network and attach the `cardano-db-sync` process to it to sync blockchain data to SQL database.
+    * Please refer to the [Run Scripts guide](3-RUN_SCRIPTS.md) for instructions. 
+
+4. **Run simple transaction and query the db-sync database to see results**
+
+    * Set up a new walllet for user2 and make a payment from user1 to user2. Query the database to confirm the transaction.
+    * Please refer to the [Run transaction guide](4-RUN_TRANSACTION.md) for instructions.
 
 ## Contributors
 
-This project is provided free of charge to the Cardano community. If you want to support its continued development, you can delegate or recommend the Cardano staking pools of our contributors:
+This project is provided free of charge to the Cardano community. The author of this project is a fan of Cardano, as well as a Cardano stake pool operator.
+I am not affiliated with IOHK in any official capacity.  
+
+If you want to support the continued development of this project, you can delegate or recommend my staking pool:
 
 - [**WOOF Cardano Staking Pool**](https://woofpool.github.io/)
 
