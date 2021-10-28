@@ -237,4 +237,7 @@ If not, please follow the [Install PostgreSQL instructions](./2-INSTALL_POSTGRES
   # verify the output does not show any errors
   # in a steady state, you should see logs of SQL insert statements into slot_leader and block tables   
   ```
-  
+
+---
+
+Continue to next guide: [4. Run transaction](./4-RUN_TRANSACTION.md)

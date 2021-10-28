@@ -60,3 +60,7 @@ This document explains how to install PostgreSQL and create a Postgres user
   # to exit the session 
   \q
   ```
+
+---
+
+Continue to next guide: [3. Run scripts](./3-RUN_SCRIPTS.md)

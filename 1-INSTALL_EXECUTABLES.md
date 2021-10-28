@@ -155,3 +155,7 @@ to support the latest Cardano node software.
   
   # when this document was written, the current version for each is 11.0.4 on linux-x86_64
   ```
+
+---
+
+Continue to next guide: [2. Install PostgreSQL instructions](./2-INSTALL_POSTGRESQL.md)
