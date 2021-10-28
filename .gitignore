@@ -2,7 +2,7 @@ example/
 .idea/
 
 # generated test network (default value)
-private-network/
+private-testnet/
 
 # generated logs folder
 logs/

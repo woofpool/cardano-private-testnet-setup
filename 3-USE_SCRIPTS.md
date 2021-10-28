@@ -1,11 +1,12 @@
-# Use scripts to start network and connect db-sync
+# Use scripts to start private testnet and connect db-sync to it
 
-**Now, we get to the fun part!**  We are ready to create & start a private Cardano network,
-which will run three block producer nodes. Then, we set up a database for cardano-db-sync and connect the db-sync process to one of the cardano nodes, so that
-it can synchronize to the activity occurring on the network and write data to its database.
+**Now, we get to the fun part!**  We are ready to create & start a private Cardano testnet.
+This testnet will run three block producer nodes. 
+Then, we set up a database for cardano-db-sync and connect the db-sync process to one of the cardano nodes, so that
+it can synchronize to the activity occurring on the testnet and write data to its database.
 
-**Tip**: The instructions below require opening several terminal windows/tabs.  You might prefer creating a `tmux` session
-and create window panes in your session to make it easier to see everything in the same terminal window.
+**Tip**: The instructions below require opening several terminal- windows or tabs.  You might prefer creating a `tmux` session
+and create several window panes in your session to make it easier to see everything in the same terminal window.
 
 #### Assumptions
 - This guide assumes you are running a recent version of linux.
@@ -16,7 +17,7 @@ and create window panes in your session to make it easier to see everything in t
   ```shell
   # navigate to working source directory
   cd ~/src
-  git clone https://github.com/woofpool/cardano-private-testnet-setup  
+  git clone https://github.com/woofpool/cardano-private-testnet-setup
   ```
 
 ## 2. Make the network files and start the network
@@ -28,7 +29,7 @@ and create window panes in your session to make it easier to see everything in t
   cd ~/src/cardano-private-testnet-setup
   
   # for convenience, lets export environment variable to store the name of the ROOT property set in the scripts/config.cfg
-  export ROOT=private-network  # change value as necessary
+  export ROOT=private-testnet
   
   # run script file (note: it's important to run scripts from the root of the project as script paths are relative to the root)
   ./scripts/mkfiles.sh
@@ -64,7 +65,7 @@ to resume things as long as you don't wipe out the network directory.
 - In **terminal #2**, wait for at least the next epoch to make sure the update to protocol V1 is completed.
   ```shell
   # set environment variables
-  export ROOT=private-network
+  export ROOT=private-testnet
   export CARDANO_NODE_SOCKET_PATH=$ROOT/node-bft1/node.sock
   
   # run query to find out the current epoch
@@ -141,7 +142,7 @@ at the time of this writing.
     - The format of the pgpass file String is `host:port:database:user:password` 
     - the host `/var/run/postgresql` refers to a socket directory, but can also be a standard DNS hostname
     - the database name is `privatenet`
-    - the user and password are set to `*`, since we are using a unix account role
+    - the user and password are set to `*`, since we are using a unix account role to access the database
 - Open terminal and set up environment variable with path to the postgres connection file above
   ```shell
   chmod 600 ~/src/cardano-private-testnet-setup/postgres-conn/pgpass-privatenet  # this prevents a warning
