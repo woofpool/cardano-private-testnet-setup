@@ -27,17 +27,17 @@ Hopefully, this documentation provides a lot of value for others. I welcome your
 1. **Install Cardano executables**
 
     * Install the following executables: `cardano-node`, `cardano-cli`, `cardano-db-sync`, `cardano-db-sync-extended`
-    * Please refer to the [Install Executables guide](1-INSTALL_EXECUTABLES.md) for instructions.
+    * Please refer to the [Install executables guide](1-INSTALL_EXECUTABLES.md) for instructions.
     
 2. **Install PostgreSQL packages and create Postgres user** 
     
     * The `cardano-db-sync` process uses a connection to a PostgreSQL database.
-    * Please refer to the [Install PosgreSQL](2-INSTALL_POSTGRESQL.md) for instructions to set up.
+    * Please refer to the [Install posgreSQL](2-INSTALL_POSTGRESQL.md) for instructions to set up.
 
 3. **Run scripts to set up & run private Cardano network and connect DB Sync process**
 
     * Run scripts to bootstrap the Cardano private network and attach the `cardano-db-sync` process to it to sync blockchain data to SQL database.
-    * Please refer to the [Run Scripts guide](3-RUN_SCRIPTS.md) for instructions. 
+    * Please refer to the [Run scripts guide](3-RUN_SCRIPTS.md) for instructions. 
 
 4. **Run simple transaction and query the db-sync database to see results**
 
