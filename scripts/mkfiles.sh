@@ -37,6 +37,7 @@ case $OS in
 esac
 
 START_TIME="$(${DATE} -d "now + 30 seconds" +%s)"
+START_TIME_UTC=$(${DATE} -d @${START_TIME} --utc +%FT%TZ)
 
 if ! mkdir "${ROOT}"; then
   echo "The ${ROOT} directory already exists, please move or remove it"
@@ -251,8 +252,7 @@ echo "====================================================================="
 
 # Set up our template
 mkdir shelley
-startTimeUtc=$(date --date="+30 seconds" --utc +%FT%TZ)
-cardano-cli genesis create --testnet-magic 42 --start-time $startTimeUtc --genesis-dir shelley
+cardano-cli genesis create --testnet-magic 42 --start-time $START_TIME_UTC --genesis-dir shelley
 
 # Then edit the genesis.spec.json ...
 
@@ -273,7 +273,7 @@ sed -i shelley/genesis.spec.json \
 
 cardano-cli genesis create \
     --testnet-magic 42 \
-    --start-time $startTimeUtc \
+    --start-time $START_TIME_UTC \
     --genesis-dir shelley/ \
     --gen-genesis-keys ${NUM_BFT_NODES} \
     --gen-utxo-keys 1
@@ -435,14 +435,6 @@ done
 echo "Generated stake pool registration certs:"
 ls -1 node-*/registration.cert
 echo "====================================================================="
-
-echo "So you can now do various things:"
-echo " * Start the nodes"
-echo " * Initiate successive protocol updates"
-echo " * Query the node's ledger state"
-echo
-echo "To start the nodes, in separate terminals use the following scripts:"
-echo
 
 mkdir -p run
 
