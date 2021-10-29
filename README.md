@@ -20,7 +20,9 @@ Hopefully, this documentation provides a lot of value for others. I welcome your
 ### Key Details
 - The private testnet consists of three block-producing node processes.
 - The `cardano-db-sync` process syncs blockchain data to a highly normalized database schema. This enables blockchain data to be queried with SQL. 
- 
+
+### Medium article
+For an additional overview of this project, please check out this [medium article](https://medium.com/@extramileit/how-to-set-up-a-private-cardano-testnet-5e5afaa22d0b)
 
 ## Usage Instructions
 
