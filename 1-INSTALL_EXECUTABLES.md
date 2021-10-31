@@ -92,30 +92,44 @@ to support the latest Cardano node software.
   source .bashrc
   ```
 
-## 3. Install latest Cardano node and Cardano CLI executables
+## 3. Install latest release tags of Cardano node and Cardano CLI executables
 
-- Clone the IOHK cardano-node repo
-  ```shell
-  cd ~/src 
-  git clone https://github.com/input-output-hk/cardano-node.git
-  cd cardano-node
+- Download or build the binaries
+    #### Option 1: Download pre-built binaries from IOHK
   
-  # fetch the list of tags and check out the latest release tag name
-  git fetch --all --recurse-submodules --tags
-  git checkout $(curl -s https://api.github.com/repos/input-output-hk/cardano-node/releases/latest | jq -r .tag_name)
-  
-  # configure the build options
-  cabal configure --with-compiler=ghc-8.10.4
-  
-  # update project dependencies and build - this can take 20 minutes+
-  cabal update
-  cabal build all
-  ```
-- Copy cardano-cli and cardano-node files to local user default path location
-  ```shell
-  sudo cp $(find dist-newstyle/build -type f -name "cardano-cli") ~/.local/bin/cardano-cli
-  sudo cp $(find dist-newstyle/build -type f -name "cardano-node") ~/.local/bin/cardano-node
-  ```
+    - Go to the [README page](https://github.com/input-output-hk/cardano-node#linux-executable) of the `cardano-node` project
+      and you will see links to follow, where you can download the latest release binaries.
+    - Copy the binaries to local user path
+      ```shell
+      # extract cardano-cli and cardano-node from the archive
+      # copy them to local path location
+      cp cardano-cli ~/.local/bin/
+      cp cardano-node ~/.local/bin/
+      ```
+
+    #### Option 2: Build your own from Haskell sources using cabal and GHC
+    - Clone the IOHK cardano-node repo
+      ```shell
+      cd ~/src 
+      git clone https://github.com/input-output-hk/cardano-node.git
+      cd cardano-node
+      
+      # fetch the list of tags and check out the latest release tag name
+      git fetch --all --recurse-submodules --tags
+      git checkout $(curl -s https://api.github.com/repos/input-output-hk/cardano-node/releases/latest | jq -r .tag_name)
+      
+      # configure the build options
+      cabal configure --with-compiler=ghc-8.10.4
+      
+      # update project dependencies and build - this can take 20 minutes+
+      cabal update
+      cabal build all
+      ```
+    - Copy cardano-cli and cardano-node files to local user default path location
+      ```shell
+      cp $(find dist-newstyle/build -type f -name "cardano-cli") ~/.local/bin/cardano-cli
+      cp $(find dist-newstyle/build -type f -name "cardano-node") ~/.local/bin/cardano-node
+      ```
 - Verify the versions
   ```shell
   cardano-node version
@@ -123,8 +137,14 @@ to support the latest Cardano node software.
   
   # when this document was written, the current version for each is 1.30.1 on linux-x86_64
   ```
-## 4. Install latest Cardano db-sync executables 
+## 4. Install latest release tags of Cardano db-sync executables 
+**Note**: The author could not find pre-built binaries for cardano-db-sync from IOHK, so the directions below
+are to build them from Haskell sources using cabal and GHC.  If you want to explore other options to build
+or deploy, e.g. using `nix-build` or `docker`, 
+please see the [IOHK cardano-db-sync README](https://github.com/input-output-hk/cardano-db-sync#readme) for more info.
 
+- Be sure you have run [step 1 - Install package dependencies and Haskell tooling](#1.-install-package-dependencies-and-haskell-tooling)
+- Be sure you have run [step 2 - Install Libsodium library dependency from IOHK github](#2.-install-libsodium-library-dependency-from-iohk-github)  
 - Clone the IOHK cardano-db-sync repo
   ```shell
   cd ~/src
@@ -135,7 +155,7 @@ to support the latest Cardano node software.
   git fetch --tags --all
   git checkout $(curl -s https://api.github.com/repos/input-output-hk/cardano-db-sync/releases/latest | jq -r .tag_name)
   ```
-- Fetch postgres `libpg-dev` package, update dependencies and build the cardano-db-sync project.  This can take 20 minutes+
+- Fetch postgres `libpq-dev` package, update dependencies and build the cardano-db-sync project.  This can take 20 minutes+
   
   **Note**: Building `cardano-db-sync` project from source, depends on finding the postgres `libpq-dev` package on the host OS.
   ```shell
