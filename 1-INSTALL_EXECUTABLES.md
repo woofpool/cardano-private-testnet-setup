@@ -143,8 +143,8 @@ are to build them from Haskell sources using cabal and GHC.  If you want to expl
 or deploy, e.g. using `nix-build` or `docker`, 
 please see the [IOHK cardano-db-sync README](https://github.com/input-output-hk/cardano-db-sync#readme) for more info.
 
-- Be sure you have run [step 1 - Install package dependencies and Haskell tooling](#1.-install-package-dependencies-and-haskell-tooling)
-- Be sure you have run [step 2 - Install Libsodium library dependency from IOHK github](#2.-install-libsodium-library-dependency-from-iohk-github)  
+- Be sure you have run [step 1 - Install package dependencies and Haskell tooling](#1-install-package-dependencies-and-haskell-tooling)
+- Be sure you have run [step 2 - Install Libsodium library dependency from IOHK github](#2-install-libsodium-library-dependency-from-iohk-github)  
 - Clone the IOHK cardano-db-sync repo
   ```shell
   cd ~/src
