@@ -8,7 +8,7 @@ looks like in the `cardano-db-sync` schema.
 
 - Create new keys and wallet address for user2
   ```shell
-  cd ~/src/cardano-private-testnet-setup
+  cd $HOME/src/cardano-private-testnet-setup
   
   ROOT=private-testnet
   export CARDANO_NODE_SOCKET_PATH=$ROOT/node-bft1/node.sock

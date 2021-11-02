@@ -19,7 +19,7 @@ and create several window panes in your session to make it easier to see everyth
 
   ```shell
   # navigate to working source directory
-  cd ~/src
+  cd $HOME/src
   git clone https://github.com/woofpool/cardano-private-testnet-setup
   ```
 
@@ -29,7 +29,7 @@ and create several window panes in your session to make it easier to see everyth
 - In **terminal #1**, run the `mkfiles` script to set up the network files
   ```shell
   # navigate to project root folder
-  cd ~/src/cardano-private-testnet-setup
+  cd $HOME/src/cardano-private-testnet-setup
   
   # run script file (note: it's important to run scripts from the root of the project as script paths are relative to the root)
   ./scripts/mkfiles.sh
@@ -62,7 +62,7 @@ you can restart the nodes whenever you like, and your private testnet will be ru
 - Open **terminal #2** and run the `update-1` script
   ```shell
   # navigate to project root folder
-  cd ~/src/cardano-private-testnet-setup
+  cd $HOME/src/cardano-private-testnet-setup
 
   # set variables
   ROOT=private-testnet
@@ -187,29 +187,29 @@ If not, please follow the [Install PostgreSQL instructions](./2-INSTALL_POSTGRES
 - Open terminal and set up environment variable with path to the postgres connection file above
   ```shell
   # change permissions on postgres connection file to prevent warning message
-  chmod 600 ~/src/cardano-private-testnet-setup/postgres-conn/pgpass-privatenet
+  chmod 600 $HOME/src/cardano-private-testnet-setup/postgres-conn/pgpass-privatenet
   
-  export PGPASSFILE=~/src/cardano-private-testnet-setup/postgres-conn/pgpass-privatenet
+  export PGPASSFILE=$HOME/src/cardano-private-testnet-setup/postgres-conn/pgpass-privatenet
   ```
 - In the same terminal, we will run script in the `cardano-db-sync` project to manage the PostgreSQL database.
   The project sources for `cardano-db-sync` should already be on your machine, since you installed the executables. 
   ```shell
   # run the script to create the database
-  ~/src/cardano-db-sync/scripts/postgresql-setup.sh --createdb    
+  $HOME/src/cardano-db-sync/scripts/postgresql-setup.sh --createdb    
   
   # sample output - ignore error shown below, when you are creating the database for the first time  
   # psql: error: FATAL:  database "privatenet" does not exist
   # All good! 
   
   # as an added validation, you can run --check, which includes a check for existence of database 
-  ~/src/cardano-db-sync/scripts/postgresql-setup.sh --check
+  $HOME/src/cardano-db-sync/scripts/postgresql-setup.sh --check
   
   # sample output
   Did not find any relations.
   All good!
   
   # TROUBLESHOOTING: if you run into issues, you can also drop the database, so that you can re-run create database
-  ~/src/cardano-db-sync/scripts/postgresql-setup.sh --dropdb 
+  $HOME/src/cardano-db-sync/scripts/postgresql-setup.sh --dropdb 
   ```
 
 ## 5. Connect the db-sync process to your private network
@@ -219,10 +219,10 @@ If not, please follow the [Install PostgreSQL instructions](./2-INSTALL_POSTGRES
 - In **terminal 3**, start the db sync process.  This will install the database schema and sync blockchain data to the Postgres database.
   ```shell
   # navigate to project root folder
-  cd ~/src/cardano-private-testnet-setup
+  cd $HOME/src/cardano-private-testnet-setup
   
   # set environment variable needed by `./scripts/db-sync-start.sh`
-  export SCHEMA_DIR=~/src/cardano-db-sync/schema
+  export SCHEMA_DIR=$HOME/src/cardano-db-sync/schema
   
   # run script file
   ./scripts/db-sync-start.sh

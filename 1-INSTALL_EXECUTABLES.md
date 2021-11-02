@@ -1,10 +1,10 @@
 # Install Cardano Executables
 
-This guide covers installing `cardano-node`, `cardano-cli`, `cardano-db-sync`, and `cardano-db-sync-extended` into `~/.local/bin`
+This guide covers installing `cardano-node`, `cardano-cli`, `cardano-db-sync`, and `cardano-db-sync-extended` into `$HOME/.local/bin`
 
-If necessary, edit your `~/.bashrc` to modify the PATH variable so that the executables can be found on your system path
+If necessary, edit your `$HOME/.bashrc` to modify the PATH variable so that the executables can be found on your system path
   ```shell
-  export PATH="~/.local/bin:$PATH"  
+  export PATH="$HOME/.local/bin:$PATH"  
   ```
 
 #### Assumptions
@@ -31,7 +31,7 @@ If necessary, edit your `~/.bashrc` to modify the PATH variable so that the exec
   # and did not choose to install Haskell Language Server (HLS) or stack
 
   # source the bash start script to apply updates to PATH
-  cd ~
+  cd $HOME
   source .bashrc
   
   # get the latest updates to GHCUp tool
@@ -59,10 +59,10 @@ password hashing, and more.
 IOHK maintains a fork of the libsodium library and we need to use a particular SHA commit of this fork
 to support the latest Cardano node software.
 
-- Create a working directory, e.g. `~/src`
+- Create a working directory, e.g. `$HOME/src`
   ```shell
-  mkdir -p ~/src
-  cd ~/src    
+  mkdir -p $HOME/src
+  cd $HOME/src    
   ```
 - Install libsodium shared library and package config if necessary
   ```shell
@@ -88,7 +88,7 @@ to support the latest Cardano node software.
   export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
   
   # source the bash start script to apply updates to environment variables
-  cd ~
+  cd $HOME
   source .bashrc
   ```
 
@@ -103,14 +103,14 @@ to support the latest Cardano node software.
       ```shell
       # extract cardano-cli and cardano-node from the archive
       # copy them to local path location
-      cp cardano-cli ~/.local/bin/
-      cp cardano-node ~/.local/bin/
+      cp cardano-cli $HOME/.local/bin/
+      cp cardano-node $HOME/.local/bin/
       ```
 
     #### Option 2: Build your own from Haskell sources using cabal and GHC
     - Clone the IOHK cardano-node repo
       ```shell
-      cd ~/src 
+      cd $HOME/src 
       git clone https://github.com/input-output-hk/cardano-node.git
       cd cardano-node
       
@@ -127,8 +127,8 @@ to support the latest Cardano node software.
       ```
     - Copy cardano-cli and cardano-node files to local user default path location
       ```shell
-      cp $(find dist-newstyle/build -type f -name "cardano-cli") ~/.local/bin/cardano-cli
-      cp $(find dist-newstyle/build -type f -name "cardano-node") ~/.local/bin/cardano-node
+      cp $(find dist-newstyle/build -type f -name "cardano-cli") $HOME/.local/bin/cardano-cli
+      cp $(find dist-newstyle/build -type f -name "cardano-node") $HOME/.local/bin/cardano-node
       ```
 - Verify the versions
   ```shell
@@ -147,7 +147,7 @@ please see the [IOHK cardano-db-sync README](https://github.com/input-output-hk/
 - Be sure you have run [step 2 - Install Libsodium library dependency from IOHK github](#2-install-libsodium-library-dependency-from-iohk-github)  
 - Clone the IOHK cardano-db-sync repo
   ```shell
-  cd ~/src
+  cd $HOME/src
   git clone https://github.com/input-output-hk/cardano-db-sync
   cd cardano-db-sync  
 
@@ -165,8 +165,8 @@ please see the [IOHK cardano-db-sync README](https://github.com/input-output-hk/
   ```
 - Copy db-sync executables to local user default path location
   ```shell
-  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync") ~/.local/bin/cardano-db-sync
-  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync-extended") ~/.local/bin/cardano-db-sync-extended  
+  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync") $HOME/.local/bin/cardano-db-sync
+  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync-extended") $HOME/.local/bin/cardano-db-sync-extended  
   ```
 - Verify the versions of the db-sync executables
   ```shell
