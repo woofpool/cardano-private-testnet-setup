@@ -163,20 +163,14 @@ at the time of this writing.
   b0f91ee59eb208284467b1dec0adfa8c57eb1cf7587fb7eb0599e2b8c8e885c9     0        500000000 lovelace + TxOutDatumHashNone
   b0f91ee59eb208284467b1dec0adfa8c57eb1cf7587fb7eb0599e2b8c8e885c9     1        500000000 lovelace + TxOutDatumHashNone
   ``` 
-- **Troubleshooting**: If you run `cardano-cli query tip` and the blocks are not advancing or the syncProgress is not at 100%,
-  it may mean the processes running the nodes are running into garbage collection/memory issues.  The author is still researching
+- **Troubleshooting**: If you run `cardano-cli query tip` and the blocks are not advancing or the syncProgress percent is decreasing,
+  it may mean the processes running the nodes are running into garbage collection/memory issues. The author is still researching
   the cause of this issue.  In any event, the best remedy is killing the run node processes, deleting the `private-testnet` folder
   and starting over.  This garbage collection issue normally happens early in the update process.
     - If you use Ctrl+c in the window running the `run/all.sh` script, it should kill the processes that started in the background.
       Another approach is to kill the processes directly by doing:
       ```shell
-      # heavy-handed way of killing node processes
-      
-      # list the processes
-      ps -eaf | grep cardano-node | grep -v grep
-      
-      # kill each of the process IDs that were found
-      kill -9 <process_id>
+      for PID in `ps -ef | grep 'cardano-node' | grep -v grep |  awk '{print $2}'`;do kill -TERM $PID; done      
       ```
 
 ## 4. Create the database for cardano-db-sync

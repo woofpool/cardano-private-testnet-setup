@@ -442,7 +442,7 @@ for NODE in ${BFT_NODES}; do
   (
     echo "#!/usr/bin/env bash"
     echo ""
-    echo "cardano-node run \\"
+    echo "cardano-node run +RTS -N4 -A64m -c -RTS \\"
     echo "  --config                          ${ROOT}/configuration.yaml \\"
     echo "  --topology                        ${ROOT}/${NODE}/topology.json \\"
     echo "  --database-path                   ${ROOT}/${NODE}/db \\"
@@ -465,7 +465,7 @@ for NODE in ${POOL_NODES}; do
   (
     echo "#!/usr/bin/env bash"
     echo ""
-    echo "cardano-node run \\"
+    echo "cardano-node run +RTS -N4 -A64m -c -RTS \\"
     echo "  --config                          ${ROOT}/configuration.yaml \\"
     echo "  --topology                        ${ROOT}/${NODE}/topology.json \\"
     echo "  --database-path                   ${ROOT}/${NODE}/db \\"
