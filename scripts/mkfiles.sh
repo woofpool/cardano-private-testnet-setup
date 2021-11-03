@@ -36,6 +36,12 @@ case $OS in
   * )            DATE="date";;
 esac
 
+SED=
+case $OS in
+  Darwin )	 SED="gsed";;
+  * )		 SED="sed";;
+esac 
+
 START_TIME="$(${DATE} -d "now + 30 seconds" +%s)"
 START_TIME_UTC=$(${DATE} -d @${START_TIME} --utc +%FT%TZ)
 
@@ -46,7 +52,7 @@ fi
 
 # copy and tweak the configuration
 cp "${SCRIPT_PATH}"/../templates/byron-node-config-template.yaml ${ROOT}/configuration.yaml
-sed -i ${ROOT}/configuration.yaml \
+$(${SED} -i ${ROOT}/configuration.yaml \
     -e 's/Protocol: RealPBFT/Protocol: Cardano/' \
     -e '/Protocol/ aPBftSignatureThreshold: 0.6' \
     -e 's/minSeverity: Info/minSeverity: Debug/' \
@@ -55,7 +61,7 @@ sed -i ${ROOT}/configuration.yaml \
     -e '/ByronGenesisFile/ aAlonzoGenesisFile: shelley/genesis.alonzo.json' \
     -e 's/RequiresNoMagic/RequiresMagic/' \
     -e 's/LastKnownBlockVersion-Major: 0/LastKnownBlockVersion-Major: 1/' \
-    -e 's/LastKnownBlockVersion-Minor: 2/LastKnownBlockVersion-Minor: 0/'
+    -e 's/LastKnownBlockVersion-Minor: 2/LastKnownBlockVersion-Minor: 0/')
 
 pushd ${ROOT}
 
@@ -259,7 +265,7 @@ cardano-cli genesis create --testnet-magic 42 --start-time $START_TIME_UTC --gen
 # We're going to use really quick epochs (300 seconds), by using short slots 0.2s
 # and K=10, but we'll keep long KES periods so we don't have to bother
 # cycling KES keys
-sed -i shelley/genesis.spec.json \
+$(${SED} -i shelley/genesis.spec.json \
     -e 's/"slotLength": 1/"slotLength": 0.2/' \
     -e 's/"activeSlotsCoeff": 5.0e-2/"activeSlotsCoeff": 0.1/' \
     -e 's/"securityParam": 2160/"securityParam": 10/' \
@@ -267,7 +273,7 @@ sed -i shelley/genesis.spec.json \
     -e 's/"maxLovelaceSupply": 0/"maxLovelaceSupply": 1000000000000/' \
     -e 's/"decentralisationParam": 1.0/"decentralisationParam": 0.7/' \
     -e 's/"major": 0/"major": 2/' \
-    -e 's/"updateQuorum": 5/"updateQuorum": 2/'
+    -e 's/"updateQuorum": 5/"updateQuorum": 2/')
 
 # Now generate for real:
 
