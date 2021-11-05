@@ -444,11 +444,14 @@ echo "====================================================================="
 
 mkdir -p run
 
+# Specify the RTS flags for capturing GHC runtime stats into a file when the program exits
+RTSFLAGS="-N --disable-delayed-os-memory-return -I0.3 -Iw600 -A16m -F1.5 -H2500M -t --machine-readable -Sghc-rts-"
+
 for NODE in ${BFT_NODES}; do
   (
     echo "#!/usr/bin/env bash"
     echo ""
-    echo "cardano-node run +RTS -N4 -A64m -c -RTS \\"
+    echo "cardano-node run +RTS ${RTSFLAGS}${NODE}.log -RTS \\"
     echo "  --config                          ${ROOT}/configuration.yaml \\"
     echo "  --topology                        ${ROOT}/${NODE}/topology.json \\"
     echo "  --database-path                   ${ROOT}/${NODE}/db \\"
@@ -471,7 +474,7 @@ for NODE in ${POOL_NODES}; do
   (
     echo "#!/usr/bin/env bash"
     echo ""
-    echo "cardano-node run +RTS -N4 -A64m -c -RTS \\"
+    echo "cardano-node run +RTS ${RTSFLAGS}${NODE}.log -RTS \\"
     echo "  --config                          ${ROOT}/configuration.yaml \\"
     echo "  --topology                        ${ROOT}/${NODE}/topology.json \\"
     echo "  --database-path                   ${ROOT}/${NODE}/db \\"

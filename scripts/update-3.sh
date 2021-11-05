@@ -107,8 +107,15 @@ cardano-cli transaction sign \
 
 cardano-cli transaction submit --tx-file tx2.tx --testnet-magic 42
 
-sed -i configuration.yaml \
+OS=$(uname -s) SED=
+case $OS in
+  Darwin )       SED="gsed";;
+  * )            SED="sed";;
+esac
+
+$(${SED} -i configuration.yaml \
     -e 's/LastKnownBlockVersion-Major: 2/LastKnownBlockVersion-Major: 3/' \
+)
 
 
 popd

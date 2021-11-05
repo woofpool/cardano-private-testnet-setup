@@ -72,9 +72,15 @@ cardano-cli transaction sign \
 
 cardano-cli transaction submit --tx-file tx5.tx --testnet-magic 42
 
-sed -i configuration.yaml \
-    -e 's/LastKnownBlockVersion-Major: 5/LastKnownBlockVersion-Major: 6/' \
+OS=$(uname -s) SED=
+case $OS in
+  Darwin )       SED="gsed";;
+  * )            SED="sed";;
+esac
 
+$(${SED} -i configuration.yaml \
+    -e 's/LastKnownBlockVersion-Major: 5/LastKnownBlockVersion-Major: 6/' \
+)
 popd
 
 echo "Restart the nodes now to endorse the update."

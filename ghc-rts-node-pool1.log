@@ -1,0 +1,33 @@
+'cardano-node' 'run' '--config' 'private-testnet/configuration.yaml' '--topology' 'private-testnet/node-pool1/topology.json' '--database-path' 'private-testnet/node-pool1/db' '--socket-path' 'private-testnet/node-pool1/node.sock' '--shelley-kes-key' 'private-testnet/node-pool1/shelley/kes.skey' '--shelley-vrf-key' 'private-testnet/node-pool1/shelley/vrf.skey' '--shelley-operational-certificate' 'private-testnet/node-pool1/shelley/node.cert' '--port' '3003' +RTS '-T' '-I0' '-A16m' '-N2' '--disable-delayed-os-memory-return' '-N' '--disable-delayed-os-memory-return' '-I0.3' '-Iw600' '-A16m' '-F1.5' '-H2500M' '-t' '--machine-readable' '-Sghc-rts-node-pool1.log' 
+    Alloc    Copied     Live     GC     GC      TOT      TOT  Page Flts
+    bytes     bytes     bytes   user   elap     user     elap
+ 18641152    370760    724128  0.021  0.495    2.560    0.935    0    0  (Gen:  1)
+209421712     60832    309232  0.004  0.000    2.987  336.120    0    0  (Gen:  1)
+     1464                      0.000  0.000
+
+     228,064,328 bytes allocated in the heap
+         431,592 bytes copied during GC
+         724,128 bytes maximum residency (2 sample(s))
+         254,816 bytes maximum slop
+            1963 MiB total memory in use (0 MB lost due to fragmentation)
+
+                                     Tot time (elapsed)  Avg pause  Max pause
+  Gen  0         0 colls,     0 par    0.000s   0.000s     0.0000s    0.0000s
+  Gen  1         2 colls,     1 par    0.025s   0.496s     0.2478s    0.4952s
+
+  Parallel GC work balance: 59.84% (serial 0%, perfect 100%)
+
+  TASKS: 45 (1 bound, 44 peak workers (44 total), using -N16)
+
+  SPARKS: 0 (0 converted, 0 overflowed, 0 dud, 0 GC'd, 0 fizzled)
+
+  INIT    time    0.002s  (  0.057s elapsed)
+  MUT     time    2.964s  (335.567s elapsed)
+  GC      time    0.025s  (  0.496s elapsed)
+  EXIT    time   -0.003s  (  0.004s elapsed)
+  Total   time    2.988s  (336.124s elapsed)
+
+  Alloc rate    76,945,091 bytes per MUT second
+
+  Productivity  99.2% of total user, 99.8% of total elapsed
+

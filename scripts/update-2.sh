@@ -31,9 +31,17 @@ cardano-cli byron submit-proposal-vote  \
             --testnet-magic 42 \
             --filepath update-vote-1.001
 
-sed -i configuration.yaml \
-    -e 's/LastKnownBlockVersion-Major: 1/LastKnownBlockVersion-Major: 2/' \
 
+OS=$(uname -s) SED=
+case $OS in
+  Darwin )       SED="gsed";;
+  * )            SED="sed";;
+esac
+
+
+$(${SED} -i configuration.yaml \
+    -e 's/LastKnownBlockVersion-Major: 1/LastKnownBlockVersion-Major: 2/' \
+)
 popd
 
-echo "Restart the nodes now to endorse the update."
+

@@ -1,0 +1,33 @@
+'cardano-node' 'run' '--config' 'private-testnet/configuration.yaml' '--topology' 'private-testnet/node-bft1/topology.json' '--database-path' 'private-testnet/node-bft1/db' '--socket-path' 'private-testnet/node-bft1/node.sock' '--shelley-kes-key' 'private-testnet/node-bft1/shelley/kes.skey' '--shelley-vrf-key' 'private-testnet/node-bft1/shelley/vrf.skey' '--shelley-operational-certificate' 'private-testnet/node-bft1/shelley/node.cert' '--port' '3001' '--delegation-certificate' 'private-testnet/node-bft1/byron/delegate.cert' '--signing-key' 'private-testnet/node-bft1/byron/delegate.key' +RTS '-T' '-I0' '-A16m' '-N2' '--disable-delayed-os-memory-return' '-N' '--disable-delayed-os-memory-return' '-I0.3' '-Iw600' '-A16m' '-F1.5' '-H2500M' '-t' '--machine-readable' '-Sghc-rts-node-bft1.log' 
+    Alloc    Copied     Live     GC     GC      TOT      TOT  Page Flts
+    bytes     bytes     bytes   user   elap     user     elap
+ 19707872    374352    745160  0.071  0.497    2.776    0.932    0    0  (Gen:  1)
+212275200     23960    309384  0.004  0.001    3.209  336.231    0    2  (Gen:  1)
+     1328                      0.000  0.000
+
+     231,984,400 bytes allocated in the heap
+         398,312 bytes copied during GC
+         745,160 bytes maximum residency (2 sample(s))
+         246,072 bytes maximum slop
+            1965 MiB total memory in use (0 MB lost due to fragmentation)
+
+                                     Tot time (elapsed)  Avg pause  Max pause
+  Gen  0         0 colls,     0 par    0.000s   0.000s     0.0000s    0.0000s
+  Gen  1         2 colls,     1 par    0.076s   0.498s     0.2489s    0.4968s
+
+  Parallel GC work balance: 79.91% (serial 0%, perfect 100%)
+
+  TASKS: 45 (1 bound, 44 peak workers (44 total), using -N16)
+
+  SPARKS: 0 (0 converted, 0 overflowed, 0 dud, 0 GC'd, 0 fizzled)
+
+  INIT    time    0.002s  (  0.055s elapsed)
+  MUT     time    3.136s  (335.678s elapsed)
+  GC      time    0.076s  (  0.498s elapsed)
+  EXIT    time   -0.003s  (  0.009s elapsed)
+  Total   time    3.210s  (336.240s elapsed)
+
+  Alloc rate    73,985,800 bytes per MUT second
+
+  Productivity  97.7% of total user, 99.8% of total elapsed
+

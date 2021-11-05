@@ -1,0 +1,33 @@
+'cardano-node' 'run' '--config' 'private-testnet/configuration.yaml' '--topology' 'private-testnet/node-pool1/topology.json' '--database-path' 'private-testnet/node-pool1/db' '--socket-path' 'private-testnet/node-pool1/node.sock' '--shelley-kes-key' 'private-testnet/node-pool1/shelley/kes.skey' '--shelley-vrf-key' 'private-testnet/node-pool1/shelley/vrf.skey' '--shelley-operational-certificate' 'private-testnet/node-pool1/shelley/node.cert' '--port' '3003' +RTS '-T' '-I0' '-A16m' '-N2' '--disable-delayed-os-memory-return' '-N8' '--disable-delayed-os-memory-return' '-I0.3' '-Iw600' '-A16m' '-F1.5' '-H2500M' '-T' '-Sghc-rts-1635991719-node-pool1.log' 
+    Alloc    Copied     Live     GC     GC      TOT      TOT  Page Flts
+    bytes     bytes     bytes   user   elap     user     elap
+ 22877392    463728   1269496  0.017  0.532    2.107    0.998    1    0  (Gen:  1)
+104519448     49592    202728  0.007  0.001    2.329  187.558    0    3  (Gen:  1)
+     1208                      0.000  0.000
+
+     127,398,048 bytes allocated in the heap
+         513,320 bytes copied during GC
+       1,269,496 bytes maximum residency (2 sample(s))
+         168,200 bytes maximum slop
+            1958 MiB total memory in use (0 MB lost due to fragmentation)
+
+                                     Tot time (elapsed)  Avg pause  Max pause
+  Gen  0         0 colls,     0 par    0.000s   0.000s     0.0000s    0.0000s
+  Gen  1         2 colls,     1 par    0.024s   0.532s     0.2661s    0.5316s
+
+  Parallel GC work balance: 90.93% (serial 0%, perfect 100%)
+
+  TASKS: 25 (1 bound, 24 peak workers (24 total), using -N8)
+
+  SPARKS: 0 (0 converted, 0 overflowed, 0 dud, 0 GC'd, 0 fizzled)
+
+  INIT    time    0.001s  (  0.032s elapsed)
+  MUT     time    2.311s  (186.994s elapsed)
+  GC      time    0.024s  (  0.532s elapsed)
+  EXIT    time   -0.006s  (  0.010s elapsed)
+  Total   time    2.329s  (187.569s elapsed)
+
+  Alloc rate    55,135,275 bytes per MUT second
+
+  Productivity  99.2% of total user, 99.7% of total elapsed
+
