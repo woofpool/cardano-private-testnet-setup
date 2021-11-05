@@ -445,7 +445,7 @@ echo "====================================================================="
 mkdir -p run
 
 # Specify the RTS flags for capturing GHC runtime stats into a file when the program exits
-RTSFLAGS="-N --disable-delayed-os-memory-return -I0.3 -Iw600 -A16m -F1.5 -H2500M -t --machine-readable -Sghc-rts-"
+RTSFLAGS="-N8 --disable-delayed-os-memory-return -I0.3 -Iw600 -A16m -F1.5 -H2500M -T -t --machine-readable -Sghc-rts-"
 
 for NODE in ${BFT_NODES}; do
   (

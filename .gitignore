@@ -1,6 +1,8 @@
 example/
 .idea/
 .log
+.signed
+.tmp
 
 # generated test network (default value)
 private-testnet/
