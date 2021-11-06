@@ -39,12 +39,17 @@ For an additional overview of this project, please check out this [medium articl
 3. **Run scripts to set up & run private Cardano network and connect DB Sync process**
 
     * Run scripts to bootstrap the Cardano private network and attach the `cardano-db-sync` process to it to sync blockchain data to SQL database.
-    * Please refer to the [Run scripts guide](3-RUN_SCRIPTS.md) for instructions. 
+    * Please refer to the [Run network scripts guide](3-RUN_NETWORK_SCRIPTS.md) for instructions. 
 
-4. **Run simple transaction and query the db-sync database to see results**
+4. **Attach DB Sync process the network**
+
+    * Attach the `cardano-db-sync` process to the network, which syncs blockchain data to a `PostgreSQL` database.
+    * Please refer to the [Attach db-sync guide](4-ATTACH_DB_SYNC.md) for instructions.
+
+5. **Run simple transaction and query the db-sync database to see results**
 
     * Set up a new walllet for user2 and make a payment from user1 to user2. Query the database to confirm the transaction.
-    * Please refer to the [Run transaction guide](4-RUN_TRANSACTION.md) for instructions.
+    * Please refer to the [Run transaction guide](5-RUN_TRANSACTION.md) for instructions.
 
 ## Contributors
 
