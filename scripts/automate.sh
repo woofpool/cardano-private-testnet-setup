@@ -1,7 +1,9 @@
 #!/bin/sh
 
-ROOT=private-testnet
 SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+. "${SCRIPT_PATH}"/config-read.shlib; # load the config library functions
+
+ROOT="$(config_get ROOT)";
 
 export CARDANO_NODE_SOCKET_PATH=$ROOT/node-bft1/node.sock
 
@@ -165,5 +167,7 @@ echo
 current_era=$( cardano-cli query tip --testnet-magic 42 | jq '.era' )
 protocol_version=$( cardano-cli query protocol-parameters --testnet-magic 42 | jq '.protocolVersion.major' )
 echo "Nodes are running in era: $current_era, major protocol version: $protocol_version"
+echo
+echo "Congrats! Your network is ready for use!"
 
 wait
