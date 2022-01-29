@@ -1,6 +1,6 @@
 # Run simple transaction
 
-At this point, we have a private testnet running with db-sync process attached to it.
+At this point, we have a private testnet running. You may also have a db-sync process attached to it, if applicable.
 Let's run a simple payment transaction and see what the resulting data
 looks like in the `cardano-db-sync` schema.
 
@@ -104,7 +104,7 @@ looks like in the `cardano-db-sync` schema.
   
   ```
 
-## 3. Query the db-sync schema
+## 3. Query the db-sync schema (assuming you have set up db-sync)
 
 - open a psql prompt
   ```shell
