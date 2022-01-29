@@ -19,10 +19,10 @@ This guide covers installing `cardano-node`, `cardano-cli` and optionally `carda
   ```
 
 If you don't plan on using `cardano-db-sync`, you can continue to guide: [3. Run Network Scripts](./3-RUN_NETWORK_SCRIPTS.md).
-Otherwise, continue following the directions below
+Otherwise, continue following the directions below.
 
 ***
-**Note**: The remainder of this readme document covers building all the executables including the `cardano-db-sync` executables
+**Note**: The remainder of this guide covers how to build all the executables including the `cardano-db-sync` executables
 from Haskell sources. **You may skip the rest of this readme, if db-sync is not relevant to you.**
 ## Optional: Building executables including cardano-db-sync from Haskell sources using cabal and GHC
 

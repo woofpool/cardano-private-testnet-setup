@@ -151,3 +151,5 @@ looks like in the `cardano-db-sync` schema.
   14 |     9 |     1 | addr_test1qp6h5v5ysaa0uqmhsmmu3gr8nhsf4w3st95p0vvvp4ldzn7esqup0hdw7rsuuhcyk0qrrvfp2yr4vtxhh0276yrcpmqqanu7lp | 494000000
   (2 rows)
   ```
+
+Continue to next guide: [6. Run Plutus script transactions](6-RUN_PLUTUS_SCRIPT_TXS.md)
