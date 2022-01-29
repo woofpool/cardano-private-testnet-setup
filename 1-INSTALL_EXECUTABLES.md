@@ -1,8 +1,6 @@
 # Install Cardano Executables
 
-This guide covers installing `cardano-node`, `cardano-cli`, and `cardano-db-sync` into `$HOME/.local/bin`.
-If you don't plan on using `cardano-db-sync`, you can simply follow the instuctions on downloading executables
-and continue to guide: [3. Run Network Scripts](./3-RUN_NETWORK_SCRIPTS.md)
+This guide covers installing `cardano-node`, `cardano-cli` and optionally `cardano-db-sync` into `$HOME/.local/bin`.
 
 #### Assumptions
 - This guide assumes you are running a Debian/Ubuntu linux OS.
@@ -20,10 +18,13 @@ and continue to guide: [3. Run Network Scripts](./3-RUN_NETWORK_SCRIPTS.md)
   cp cardano-node $HOME/.local/bin/
   ```
 
-**As written above, the remainder of this readme covers building all the executables including the `cardano-db-sync` executables
+**The remainder of this readme document covers building all the executables including the `cardano-db-sync` executables
 from Haskell sources. You may skip the rest of this readme, if db-sync is not relevant to you.**
 
-## Building executables from Haskell sources using cabal and GHC
+If you don't plan on using `cardano-db-sync`, you can continue to guide: [3. Run Network Scripts](./3-RUN_NETWORK_SCRIPTS.md)
+Otherwise, continue following the directions below
+
+## Optional: Building executables including cardano-db-sync from Haskell sources using cabal and GHC
 
 ### 1. Install package dependencies and Haskell tooling
 
