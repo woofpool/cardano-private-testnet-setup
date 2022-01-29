@@ -10,9 +10,7 @@ License-files:       LICENSE
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Example.DeployParameterized
-                     , Example.DeployVesting
-                     , Example.Parameterized
+  exposed-modules:     Example.DeployVesting
                      , Example.Vesting
   build-depends:       aeson
                      , base ^>=4.14.1.0

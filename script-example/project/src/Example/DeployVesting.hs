@@ -18,9 +18,10 @@ import qualified Data.ByteString.Short as SBS
 import qualified PlutusTx
 import qualified Ledger
 import           Plutus.V1.Ledger.Api
-import           Data.ByteString.Internal
+import           Data.String
 
 import           Example.Vesting
+
 
 dataToScriptData :: Data -> ScriptData
 dataToScriptData (Constr n xs) = ScriptDataConstructor n $ dataToScriptData <$> xs
@@ -35,10 +36,10 @@ writeJSON file = LBS.writeFile file . encode . scriptDataToJson ScriptDataJsonDe
 writeValidator :: FilePath -> Ledger.Validator -> IO (Either (FileError ()) ())
 writeValidator file = writeFileTextEnvelope @(PlutusScript PlutusScriptV1) file Nothing . PlutusScriptSerialised . SBS.toShort . LBS.toStrict . serialise . Ledger.unValidatorScript
 
-writeVestingDatumJson :: FilePath -> Data.ByteString.Internal.ByteString -> Integer -> IO ()
+writeVestingDatumJson :: FilePath -> String -> Integer -> IO ()
 writeVestingDatumJson outFilePath beneficiaryPkh deadlineMillis = writeJSON outFilePath datum
     where datum = VestingDatum {
-                    beneficiary = Ledger.PaymentPubKeyHash (Ledger.PubKeyHash (getLedgerBytes (fromBytes beneficiaryPkh)))
+                    beneficiary = Ledger.PaymentPubKeyHash (fromString beneficiaryPkh)
                   , deadline    = Ledger.POSIXTime deadlineMillis
                   }
 

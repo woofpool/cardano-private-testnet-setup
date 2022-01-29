@@ -2,11 +2,11 @@
 
 In this guide, we run transactions to demonstrate a vesting contract.
 The Plutus validator contains the business logic to decide if a spending transaction may grab some ADA that is locked at the script.
-In particular, it ensures that only the intended beneficiary may grab the ADA and only after a specific deadline has been reached.
+In particular, it ensures that only the intended beneficiary may grab the ADA and only after a specific deadline has passed.
 The beneficiary public key hash and the deadline parameters are encoded as JSON in a Datum input file.
 
 The code for this example comes from the [Plutus Pioneer Program github repo-Week 3](https://github.com/input-output-hk/plutus-pioneer-program/tree/main/code/week03/src/Week03).
-The `DeployVesting.hs` code has been adapted from the Plutus-pioneer-program repo to allow parameter inputs to be passed in to the function for the datum json output.
+The `DeployVesting.hs` code has been adapted from the Plutus Pioneer program code to allow parameter inputs to be passed in to the function for the datum json output.
 
 Be sure to watch the [video from Lars Bruenjes](https://www.youtube.com/watch?v=ABtffZPoUqU&list=PLNEK_Ejlx3x2zxcfoVGARFExzOHwXFCCL&index=7) 
 that walks through the process of executing transactions with a plutus validator script.
@@ -14,26 +14,29 @@ This video provides important background information about how transactions are 
 That kind of background information is not covered by this guide.
 
 The instructions below do not mirror the instructions from the video, but have been adapted slightly to fit this project.
+For instance, in the example of the Plutus Pioneer program, Lars used a parameterized validator, whereas this guide is
+passing parameters using a Datum file.
 
 ## Obtain beneficiary and deadline values
 In order to generate the JSON datum file, we will need to pass arguments for the beneficiary public key hash and the deadline timestamp.
 This section shows how to get these argument values, so we can store them in a notes document to be used in a later step.
 
-### Obtain the public key hash of User2 wallet verification key, which will be the beneficiary of the gift from user1
+### Obtain the public key hash of user2 wallet verification key, which will be the beneficiary of the gift from user1
 **Note**: These directions assume the following:
 1. You are running a private cardano testnet, and it is fully initialized to the latest
    era and major protocol. If not, follow the directions in [3. Run network scripts](3-RUN_NETWORK_SCRIPTS.md).
 2. You have created the address keys for user2 already by following the directions in [5. Run transaction directions](5-RUN_TRANSACTION.md).
 
-Start a new terminal session and run the following
+Either use terminal session from the previous guide or start a new terminal session
 ```shell
 cd $HOME/src/cardano-private-testnet-setup
 
-# set a ROOT testnet home variable
+# set a ROOT testnet home variable if necessary and export the socket path
 ROOT=private-testnet
+export CARDANO_NODE_SOCKET_PATH=$ROOT/node-bft1/node.sock
 
 # generate a public-key-hash output file for user2
-cardano-cli address key-hash --payment-verification-key-file ${ROOT}/addresses/user2.vkey)
+cardano-cli address key-hash --payment-verification-key-file ${ROOT}/addresses/user2.vkey
 
 # copy the output value to a notes document for future reference
 ```
@@ -91,28 +94,31 @@ cabal repl
 writeUnit "out/redeemer.json"
 
 # verify a file called redeemer.json is produced with constructor 0 and empty list of fields
+# e.g., {"constructor":0,"fields":[]}
 
-# generate the datum JSON using the user2 pkh and UNIX epoch value we obtained above
-writeVestingDatumJson "out/datum.json" <user2-pkh-value> <UNIX-epoch-value>
+# generate the datum JSON using the user2 pkh and UNIX epoch value (copied to a notes file in earlier step)
+writeVestingDatumJson "out/datum.json" "<user2-pkh-value>" <UNIX-epoch-value>
 
 # verify a file called datum.json is produced with suitable constructor and fields
+# e.g., {"constructor":0,"fields":[{"bytes":"af330d93f0ca889a2220adca6ef2365d1a19b99dbb91d6f4cc13c649"},{"int":1643474471}]}
 
-# serialize the Plutus validator 
+# write the serialized form of the Plutus validator
 writeVestingValidator "out/vesting.plutus"
 
 # verify a vesting.plutus file is produced
 ```
 
-## Run transaction to lock ADA from User1 at the script address
-You can re-use the same terminal session you started earlier to obtain the public key hash of User2
+## Run transaction to lock ADA from user1 at the script address
+You can re-use the same terminal session you started earlier to obtain the public key hash of user2
 or you can start a new terminal session as desired.
 
 ```shell
 # change directory to root of the setup project if necessary
 cd $HOME/src/cardano-private-testnet-setup/
 
-# set a ROOT testnet home variable if necessary
+# set a ROOT testnet home variable if necessary and export the socket path
 ROOT=private-testnet
+export CARDANO_NODE_SOCKET_PATH=$ROOT/node-bft1/node.sock
 
 # copy the output files we generated in the previous step to the working directory 
 cp script-example/project/out/redeemer.json .
@@ -130,13 +136,15 @@ cardano-cli address build \
 --testnet-magic 42 \
 --out-file script.addr
 
-# set a variable to hold the tx_in UTXO value for User1
+# set a variable to hold the tx_in UTXO value for user1
+# query the utxo info for user1
 cardano-cli query utxo --address $(cat ${ROOT}/addresses/user1.addr) --testnet-magic 42
-# assign a UTXO to tx_in, 
-# e.g. tx_in=b0f91ee59eb208284467b1dec0adfa8c57eb1cf7587fb7eb0599e2b8c8e885c9#0
-tx_in=<TxHash>:<TxIndex>
 
-# Build a transaction to transfer 20 ADA from User1 to the script address and return any change to user1
+# choose a UTXO to assign to tx_in, 
+# e.g. tx_in=b0f91ee59eb208284467b1dec0adfa8c57eb1cf7587fb7eb0599e2b8c8e885c9#0
+tx_in=<TxHash>#<TxIndex>
+
+# Build a transaction to transfer 20 ADA from user1 to the script address and return any change to user1
 cardano-cli transaction build \
     --alonzo-era \
     --testnet-magic 42 \
@@ -146,7 +154,9 @@ cardano-cli transaction build \
     --tx-out-datum-hash-file datum.json \
     --out-file tx.body
 
-# sign the transaction with User1 signing key 
+# The output should be something like this: Estimated transaction fee: Lovelace 297
+
+# sign the transaction with user1 signing key 
 cardano-cli transaction sign \
     --tx-body-file tx.body \
     --signing-key-file $ROOT/addresses/user1.skey \
@@ -162,25 +172,29 @@ cardano-cli transaction submit \
 # query the UTXOs at the script address to make sure the transfer is successful
 cardano-cli query utxo --address $(cat script.addr) --testnet-magic 42
 
-# you should see a UTXO with 20 ADA in value    
+# you should see a UTXO with 20 ADA in value
 ```
 ## Run transaction for user2 (the beneficary) that grabs the ADA gift from user1
 We may continue using the same terminal session from the previous step 
 ```shell
 # set a variable to hold the UTXO value at the script address
+# query the UTXO information if necessary
 cardano-cli query utxo --address $(cat script.addr) --testnet-magic 42
-script_tx_in=<TxHash>:<TxIndex>
+
+script_tx_in=<TxHash>#<TxIndex>
 
 # set a variable to hold the UTXO value for User2, which will be used for collateral
+# query the UTXO information if necessary
 cardano-cli query utxo --address $(cat $ROOT/addresses/user2.addr) --testnet-magic 42
-collateral_tx_in=<TxHash>:<TxIndex>
+
+collateral_tx_in=<TxHash>#<TxIndex>
 
 # make sure the deadline you chose has passed in order to see the transaction work
 # get the current slot
 current_slot=$(cardano-cli query tip --testnet-magic 42 | jq '.slot')
 
 # set variable with the user2 public key hash from your notes document
-signer_pkh=<copy value>
+signer_pkh=<copy value from your notes>
 
 # build transaction to let user2 grab the UTXO at the script address
 # pass the serialized Plutus script, datum & redeemer inputs, and provide signer hash  
@@ -195,7 +209,7 @@ cardano-cli transaction build \
     --tx-in-collateral $collateral_tx_in \
     --required-signer-hash $signer_pkh \
     --invalid-before $current_slot \
-    --protocol-params-file protocol.json \
+    --protocol-params-file protocol-parameters.json \
     --out-file tx.body
 
 # sign the transaction with user2 signing key
@@ -214,5 +228,5 @@ cardano-cli transaction submit \
 # query the UTXOs at user2 address to make sure the grab is successful
 cardano-cli query utxo --address $(cat $ROOT/addresses/user2.addr) --testnet-magic 42
 
-# verify User2 now has a UTXO with slightly less than 20 ADA (reflects fee paid by user2 to grab) 
+# verify user2 now has a new UTXO.  It will be less than 20 ADA because of the fees 
 ```
