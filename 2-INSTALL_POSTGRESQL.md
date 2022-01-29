@@ -1,6 +1,8 @@
 # Install PostgreSQL and create user
 
-This document explains how to install PostgreSQL and create a Postgres user
+**Note**: If you have not installed `cardano-db-sync`, then you should skip this guide and continue to next guide: [3. Run scripts](3-RUN_NETWORK_SCRIPTS.md)
+
+This document explains how to install PostgreSQL and create a Postgres user.
 
 #### Assumptions
 - This guide assumes you are running a recent version of linux. 

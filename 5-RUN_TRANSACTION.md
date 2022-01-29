@@ -1,6 +1,6 @@
 # Run simple transaction
 
-At this point, we have a private testnet running with db-sync process attached to it.
+At this point, we have a private testnet running. You may also have a db-sync process attached to it, if applicable.
 Let's run a simple payment transaction and see what the resulting data
 looks like in the `cardano-db-sync` schema.
 
@@ -104,7 +104,7 @@ looks like in the `cardano-db-sync` schema.
   
   ```
 
-## 3. Query the db-sync schema
+## 3. Query the db-sync schema (assuming you have set up db-sync)
 
 - open a psql prompt
   ```shell
@@ -151,3 +151,5 @@ looks like in the `cardano-db-sync` schema.
   14 |     9 |     1 | addr_test1qp6h5v5ysaa0uqmhsmmu3gr8nhsf4w3st95p0vvvp4ldzn7esqup0hdw7rsuuhcyk0qrrvfp2yr4vtxhh0276yrcpmqqanu7lp | 494000000
   (2 rows)
   ```
+
+Continue to next guide: [6. Run Plutus script transactions](6-RUN_PLUTUS_SCRIPT_TXS.md)

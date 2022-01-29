@@ -1,5 +1,7 @@
 # Attach db-sync process to the private network
 
+**Note**: If you have not installed `cardano-db-sync`, then you should skip this guide and continue to next guide: [5. Run transaction](5-RUN_TRANSACTION.md)
+
 This guide covers attaching the `cardano-db-sync` process to the private testnet.  Doing so causes the blockchain data to
 be written to a highly normalized database schema in PostgresSQL database.  Then, it's possible to run SQL queries against the data
 for easy retrieval of information.

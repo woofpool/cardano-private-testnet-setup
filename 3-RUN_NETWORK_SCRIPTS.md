@@ -42,8 +42,30 @@ which means you can restart the nodes whenever you like, and your private testne
 
 #### Directions
 - Adjust the [config.cfg file](./scripts/config.cfg) as desired. By default, the ROOT directory is set to `private-network`
-- Choose **Option 1** to run the scripts manually or choose **Option 2** to run a single script that automates the whole process
-  #### Option 1: Run sequence of scripts manually
+- Choose **Option 1** to run a single script that automates the whole process or choose **Option 2** to run the scripts manually
+  #### Option 1: Run automated script
+    - In **terminal #1**, run the automate script. This script simply automates the process to run the sequence of steps described in Option 1.
+      It takes about 20-25 minutes to complete.
+      ```shell
+      # navigate to project root folder
+      cd $HOME/src/cardano-private-testnet-setup
+      ./scripts/automate.sh
+      
+      # if you receive an error about "running nodes found", you will need to kill cardano node processes
+      # and run the automate.sh script again
+      
+      # when the script completes successfully, it will show the current era and major protocol version
+      # the last command that runs in the script is `wait`
+      # If you kill the script, that will also kill the running nodes.
+      ```
+    - In **terminal #2**, you can tail the log to monitor the activity occurring in the nodes
+      ```shell
+      # navigate to project root folder
+      cd $HOME/src/cardano-private-testnet-setup
+      tail -f logs/privatenet.log
+      ```
+
+  #### Option 2: Run sequence of scripts manually
 
     - In **terminal #1**, run the `mkfiles` script to set up the network files
       ```shell
@@ -158,27 +180,6 @@ which means you can restart the nodes whenever you like, and your private testne
         - Repeat the same process as you did for `update-3` for each of `update-4`, `update-5`, and `update-6`
         to advance the protocol updates to Alonzo era and protocol V6. These are the current era and protocol
         at the time of this writing.
-  #### Option 2: Run automated script
-    - In **terminal #1**, run the automate script. This script simply automates the process to run the sequence of steps described in Option 1.
-      It takes about 20-25 minutes to complete.
-      ```shell
-      # navigate to project root folder
-      cd $HOME/src/cardano-private-testnet-setup
-      ./scripts/automate.sh
-      
-      # if you receive an error about "running nodes found", you will need to kill cardano node processes
-      # and run the automate.sh script again
-      
-      # when the script completes successfully, it will show the current era and major protocol version
-      # the last command that runs in the script is `wait`
-      # If you kill the script, that will also kill the running nodes.
-      ```
-    - In **terminal #2**, you can tail the log to monitor the activity occurring in the nodes
-      ```shell
-      # navigate to project root folder
-      cd $HOME/src/cardano-private-testnet-setup
-      tail -f logs/privatenet.log
-      ```
 ## 3. Verify the network state and wallet UTxO balances of user1
 
 - After completing the full set of updates, verify the era, major protocol version, and utxo balances of user1 address
@@ -214,4 +215,6 @@ which means you can restart the nodes whenever you like, and your private testne
     
 ---
 
-Continue to next guide: [4. Attach db-sync](4-ATTACH_DB_SYNC.md)
+If you are planning to use `cardano-db-sync`, continue to guide: [4. Attach db-sync](4-ATTACH_DB_SYNC.md)
+
+Otherwise, continue to guide: [5. Run transaction](5-RUN_TRANSACTION.md)

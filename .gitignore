@@ -6,3 +6,6 @@ private-testnet/
 
 # generated logs folder
 logs/
+
+script-example/project/dist-newstyle/
+script-example/project/out/
