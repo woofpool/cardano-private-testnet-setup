@@ -55,7 +55,7 @@ For an additional overview of this project, please check out this [medium articl
 
     * Build the project code for a simple vesting script, which sets User2 as the beneficiary with a vesting deadline
     * Set up transaction to give ADA from User1 to the script address and a transaction to grab ADA from the script by User2    
-    * Please refer to the [Run Plutus Script guide](6-RUN_PLUTUS_SCRIPT.md) for instructions.
+    * Please refer to the [Run Plutus Script transactions guide](6-RUN_PLUTUS_SCRIPT_TXS.md) for instructions.
 
 ## Contributors
 

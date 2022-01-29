@@ -1,35 +1,31 @@
-# Execute transactions for Vesting Contract example
+# Execute transactions for Plutus script example
 
-In [5. Run transaction directions](5-RUN_TRANSACTION.md), we used the `cardano-cli` to generate keys and a wallet address for User2.
-We also transferred some ADA from User1 to User2.
-
-In this readme, we will use the `cardano-cli` to run transactions that involve a Plutus validator script.
-This validator contains the business logic to decide if a spending transaction may grab the locked ADA from the script.
-In particular, it ensures that only the intended beneficiary and after a specific deadline has been reached may
-grab the ADA locked at the script address. 
-The beneficiary public key hash and the deadline, i.e. UNIX epoch time, are encoded as JSON in a Datum input file.
+In this guide, we run transactions to demonstrate a vesting contract.
+The Plutus validator contains the business logic to decide if a spending transaction may grab some ADA that is locked at the script.
+In particular, it ensures that only the intended beneficiary may grab the ADA and only after a specific deadline has been reached.
+The beneficiary public key hash and the deadline parameters are encoded as JSON in a Datum input file.
 
 The code for this example comes from the [Plutus Pioneer Program github repo-Week 3](https://github.com/input-output-hk/plutus-pioneer-program/tree/main/code/week03/src/Week03).
-The `DeployVesting.hs` code has been adapted from a similarly named file in the Plutus-pioneer-program repo to allow parameter inputs to be passed in to the function for the datum json output.
+The `DeployVesting.hs` code has been adapted from the Plutus-pioneer-program repo to allow parameter inputs to be passed in to the function for the datum json output.
 
 Be sure to watch the [video from Lars Bruenjes](https://www.youtube.com/watch?v=ABtffZPoUqU&list=PLNEK_Ejlx3x2zxcfoVGARFExzOHwXFCCL&index=7) 
 that walks through the process of executing transactions with a plutus validator script.
 This video provides important background information about how transactions are constructed.
-This information is not covered here.
+That kind of background information is not covered by this guide.
 
-**Note**: The instructions below do not mirror the instructions from the video, but have been adapted slightly to fit this project.
+The instructions below do not mirror the instructions from the video, but have been adapted slightly to fit this project.
 
 ## Obtain beneficiary and deadline values
 In order to generate the JSON datum file, we will need to pass arguments for the beneficiary public key hash and the deadline timestamp.
-We gather these argument values in this section.
+This section shows how to get these argument values, so we can store them in a notes document to be used in a later step.
 
 ### Obtain the public key hash of User2 wallet verification key, which will be the beneficiary of the gift from user1
 **Note**: These directions assume the following:
 1. You are running a private cardano testnet, and it is fully initialized to the latest
-   era and major protocol.
+   era and major protocol. If not, follow the directions in [3. Run network scripts](3-RUN_NETWORK_SCRIPTS.md).
 2. You have created the address keys for user2 already by following the directions in [5. Run transaction directions](5-RUN_TRANSACTION.md).
 
-Inside of a new terminal
+Start a new terminal session and run the following
 ```shell
 cd $HOME/src/cardano-private-testnet-setup
 
@@ -51,9 +47,9 @@ cardano-cli address key-hash --payment-verification-key-file ${ROOT}/addresses/u
 ## Compile the script-example project code
 We will run `cabal build` inside of `nix-shell` to take advantage of the prebuilt IOG binaries in their `nix` repo
 You will need to have `nix` installed to do this. Using `nix` saves a huge amount of time as
-compared to compiling all the IOG dependencies directly from Haskell sources using `GHC`.
+compared to compiling all the IOG dependencies directly from Haskell sources.
 
-### Setup Nix on your local machine if you haven't already
+### Setup Nix on your local machine if not installed already
 
 This [Plutus community guide](https://docs.plutus-community.com/docs/setup/Ubuntu.html) 
 has instructions to setup `nix` and configure the IOG binary caches in your nix configuration.
@@ -62,8 +58,10 @@ has instructions to setup `nix` and configure the IOG binary caches in your nix 
 
 ### Start a nix-shell from `plutus-apps` project in a new terminal
 ```shell
+# change to a working directory for your project sources
+cd $HOME/src
+
 # clone the IOG plutus-apps repo if you don't have it already
-cd $HOME/src/
 git clone https://github.com/input-output-hk/plutus-apps.git
 
 # if you already have plutus-apps repo, do a git pull to ensure you have latest tag data
@@ -74,30 +72,34 @@ git pull
 git checkout 4edc082309c882736e9dec0132a3c936fe63b4ea
 
 # From the root plutus-apps directory, run nix-shell to start a nix-shell session
-# This will also build plutus-apps project, so it takes quite a while the first time
+# This will also build plutus-apps project, so it takes quite a while the first time you build it
 nix-shell
 ```
-
 
 ## Generate the JSON files for datum and redeemer inputs and the serialized Plutus validator file
 ```shell
 # the following instructions assume you are inside of the nix-shell you started in plutus-apps repo
 cd $HOME/src/cardano-private-testnet-setup/script-example/project
+
 # run cabal build 
 cabal build
+
 # start a cabal repl session
 cabal repl
 
 # generate the redeemer JSON. The redeemer input is the Haskell unit type, i.e. ()
 writeUnit "out/redeemer.json"
+
 # verify a file called redeemer.json is produced with constructor 0 and empty list of fields
 
 # generate the datum JSON using the user2 pkh and UNIX epoch value we obtained above
 writeVestingDatumJson "out/datum.json" <user2-pkh-value> <UNIX-epoch-value>
+
 # verify a file called datum.json is produced with suitable constructor and fields
 
 # serialize the Plutus validator 
 writeVestingValidator "out/vesting.plutus"
+
 # verify a vesting.plutus file is produced
 ```
 
@@ -212,5 +214,5 @@ cardano-cli transaction submit \
 # query the UTXOs at user2 address to make sure the grab is successful
 cardano-cli query utxo --address $(cat $ROOT/addresses/user2.addr) --testnet-magic 42
 
-# you should see user2 includes a UTXO with slighly less than 20 ADA (reflects fee paid by user2 to grab) 
+# verify User2 now has a UTXO with slightly less than 20 ADA (reflects fee paid by user2 to grab) 
 ```
