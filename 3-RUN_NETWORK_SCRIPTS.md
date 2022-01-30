@@ -44,7 +44,7 @@ which means you can restart the nodes whenever you like, and your private testne
 - Adjust the [config.cfg file](./scripts/config.cfg) as desired. By default, the ROOT directory is set to `private-network`
 - Choose **Option 1** to run a single script that automates the whole process or choose **Option 2** to run the scripts manually
   #### Option 1: Run automated script
-    - In **terminal #1**, run the automate script. This script simply automates the process to run the sequence of steps described in Option 1.
+    - In **terminal #1**, run the automate script. This script simply automates the process to run the sequence of steps described in Option 2.
       It takes about 20-25 minutes to complete.
       ```shell
       # navigate to project root folder

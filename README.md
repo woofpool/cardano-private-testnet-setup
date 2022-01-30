@@ -11,6 +11,22 @@ In particular, running `cardano-db-sync` to sync to the private testnet required
 
 Hopefully, this documentation provides a lot of value for others. I welcome your feedback both good and bad!
 
+### Minimum system requirements
+- **Operating System** : documentation is based on Ubuntu (Debian) linux, but can be adapted to other flavors of linux, as well as Darwin MacOS
+    - The IOG scripts used to start node processes should be compatible with any linux variant and Darwin MacOS
+- **Processor** : In the [mkfiles script](scripts/mkfiles.sh), each `cardano-node` is configured to run 4 CPU cores in parallel.
+                  This configuration may be changed as necessary to fit your system constraints.
+                  Search for `cardano-node run` in `mkfiles.sh` to modify.
+- **RAM** : Each node is using about 1/3 GB of RAM, which gives 1 GB of RAM for 3 nodes total.
+- **Disk space** : The amount of disk space used to run the network will grow the longer you are running.
+               For the author, after running for a full day, each node used 1.8 GB of disk space, which gives 5.4 GB for 3 nodes total.
+               Depending on your system capacity, one could kill the node processes, delete the persisted state, and initialize a fresh network
+               as necessary.
+- **Recommended** : Overall, a 4 core CPU with 2+ GB of available RAM and 10 GB of disk space is sufficient
+                    and provides some excess capacity.
+                    
+  
+
 ### Why is this useful?
 - A private Cardano testnet provides a controlled environment to execute transactions
 - With `cardano-db-sync` connected to your private testnet, you can use SQL queries to view blockchain activity data.
