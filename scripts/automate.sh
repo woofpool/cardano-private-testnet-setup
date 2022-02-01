@@ -5,7 +5,10 @@ SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 ROOT="$(config_get ROOT)";
 
-export CARDANO_NODE_SOCKET_PATH=$ROOT/node-bft1/node.sock
+# export socket path if it hasn't already been defined
+if [[ -z "${CARDANO_NODE_SOCKET_PATH}" ]]; then
+  export CARDANO_NODE_SOCKET_PATH=$ROOT/node-bft1/node.sock
+fi
 
 wait_until_socket_detected()
 {
