@@ -30,11 +30,30 @@ FUNDS_PER_BYRON_ADDRESS=$((${FUNDS_PER_GENESIS_ADDRESS} - ${FEE}))
 NETWORK_MAGIC=42
 SECURITY_PARAM=10
 
-OS=$(uname -s) DATE=
-case $OS in
-  Darwin )       DATE="gdate";;
-  * )            DATE="date";;
+UNAME=$(uname -s) DATE=
+case $UNAME in
+  Darwin )      DATE="gdate";;
+  Linux )       DATE="date";;
+  MINGW64_NT* ) UNAME="Windows_NT"
+                DATE="date";;
 esac
+
+UNAME=$(uname -s) SED=
+case $UNAME in
+  Darwin )      SED="gsed";;
+  Linux )       SED="sed";;
+esac
+
+sprocket() {
+  if [ "$UNAME" == "Windows_NT" ]; then
+    # Named pipes names on Windows must have the structure: "\\.\pipe\PipeName"
+    # See https://docs.microsoft.com/en-us/windows/win32/ipc/pipe-names
+    echo -n '\\.\pipe\'
+    echo "$1" | sed 's|/|\\|g'
+  else
+    echo "$1"
+  fi
+}
 
 START_TIME="$(${DATE} -d "now + 30 seconds" +%s)"
 START_TIME_UTC=$(${DATE} -d @${START_TIME} --utc +%FT%TZ)
@@ -46,7 +65,7 @@ fi
 
 # copy and tweak the configuration
 cp "${SCRIPT_PATH}"/../templates/byron-node-config-template.yaml ${ROOT}/configuration.yaml
-sed -i ${ROOT}/configuration.yaml \
+$SED -i ${ROOT}/configuration.yaml \
     -e 's/Protocol: RealPBFT/Protocol: Cardano/' \
     -e '/Protocol/ aPBftSignatureThreshold: 0.6' \
     -e 's/minSeverity: Info/minSeverity: Debug/' \
@@ -183,16 +202,16 @@ for N in ${BFT_NODES_N}; do
     --secret byron/payment-keys.00$((${N} - 1)).key \
 
   cardano-cli byron key signing-key-address \
-    --testnet-magic 42 \
+    --testnet-magic ${NETWORK_MAGIC} \
     --secret byron/payment-keys.00$((${N} - 1)).key > byron/address-00$((${N} - 1))
 
   cardano-cli byron key signing-key-address \
-    --testnet-magic 42 \
+    --testnet-magic ${NETWORK_MAGIC} \
     --secret byron/genesis-keys.00$((${N} - 1)).key > byron/genesis-address-00$((${N} - 1))
 
   cardano-cli byron transaction issue-genesis-utxo-expenditure \
     --genesis-json byron/genesis.json \
-    --testnet-magic 42 \
+    --testnet-magic ${NETWORK_MAGIC} \
     --tx tx$((${N} - 1)).tx \
     --wallet-key byron/delegate-keys.00$((${N} - 1)).key \
     --rich-addr-from "$(head -n 1 byron/genesis-address-00$((${N} - 1)))" \
@@ -203,7 +222,7 @@ done
 # Update Proposal and votes
 cardano-cli byron governance create-update-proposal \
             --filepath update-proposal \
-            --testnet-magic 42 \
+            --testnet-magic ${NETWORK_MAGIC} \
             --signing-key byron/delegate-keys.000.key \
             --protocol-version-major 1 \
             --protocol-version-minor 0 \
@@ -216,7 +235,7 @@ cardano-cli byron governance create-update-proposal \
 for N in ${BFT_NODES_N}; do
     cardano-cli byron governance create-proposal-vote \
                 --proposal-filepath update-proposal \
-                --testnet-magic 42 \
+                --testnet-magic ${NETWORK_MAGIC} \
                 --signing-key byron/delegate-keys.00$((${N} - 1)).key \
                 --vote-yes \
                 --output-filepath update-vote.00$((${N} - 1))
@@ -224,7 +243,7 @@ done
 
 cardano-cli byron governance create-update-proposal \
             --filepath update-proposal-1 \
-            --testnet-magic 42 \
+            --testnet-magic ${NETWORK_MAGIC} \
             --signing-key byron/delegate-keys.000.key \
             --protocol-version-major 2 \
             --protocol-version-minor 0 \
@@ -237,7 +256,7 @@ cardano-cli byron governance create-update-proposal \
 for N in ${BFT_NODES_N}; do
     cardano-cli byron governance create-proposal-vote \
                 --proposal-filepath update-proposal-1 \
-                --testnet-magic 42 \
+                --testnet-magic ${NETWORK_MAGIC} \
                 --signing-key byron/delegate-keys.00$((${N} - 1)).key \
                 --vote-yes \
                 --output-filepath update-vote-1.00$((${N} - 1))
@@ -252,27 +271,35 @@ echo "====================================================================="
 
 # Set up our template
 mkdir shelley
-cardano-cli genesis create --testnet-magic 42 --start-time $START_TIME_UTC --genesis-dir shelley
+
+cardano-cli genesis create --testnet-magic ${NETWORK_MAGIC} --start-time $START_TIME_UTC --genesis-dir shelley
+
+# Copy the QA testnet alonzo genesis which is equivalent to the mainnet
+cp "${SCRIPT_PATH}"/../templates/shelley_qa-alonzo-genesis.json shelley/genesis.alonzo.spec.json
 
 # Then edit the genesis.spec.json ...
-
 # We're going to use really quick epochs (300 seconds), by using short slots 0.2s
 # and K=10, but we'll keep long KES periods so we don't have to bother
 # cycling KES keys
-sed -i shelley/genesis.spec.json \
+$SED -i shelley/genesis.spec.json \
     -e 's/"slotLength": 1/"slotLength": 0.2/' \
     -e 's/"activeSlotsCoeff": 5.0e-2/"activeSlotsCoeff": 0.1/' \
     -e 's/"securityParam": 2160/"securityParam": 10/' \
     -e 's/"epochLength": 432000/"epochLength": 1500/' \
     -e 's/"maxLovelaceSupply": 0/"maxLovelaceSupply": 1000000000000/' \
+    -e 's/"minFeeA": 1/"minFeeA": 44/' \
+    -e 's/"minFeeB": 0/"minFeeB": 155381/' \
+    -e 's/"minUTxOValue": 0/"minUTxOValue": 1000000/' \
     -e 's/"decentralisationParam": 1.0/"decentralisationParam": 0.7/' \
     -e 's/"major": 0/"major": 2/' \
+    -e 's/"rho": 0.0/"rho": 0.1/' \
+    -e 's/"tau": 0.0/"tau": 0.1/' \
     -e 's/"updateQuorum": 5/"updateQuorum": 2/'
 
 # Now generate for real:
 
 cardano-cli genesis create \
-    --testnet-magic 42 \
+    --testnet-magic ${NETWORK_MAGIC} \
     --start-time $START_TIME_UTC \
     --genesis-dir shelley/ \
     --gen-genesis-keys ${NUM_BFT_NODES} \
@@ -285,6 +312,18 @@ echo "ShelleyGenesisHash: $shelleyGenesisHash" >> configuration.yaml
 # compute the Shelly Alonzo genesis hash and add to configuration.yaml
 alonzoGenesisHash=$(cardano-cli genesis hash --genesis shelley/genesis.alonzo.json)
 echo "AlonzoGenesisHash: $alonzoGenesisHash" >> configuration.yaml
+
+cardano-cli stake-address key-gen \
+  --verification-key-file shelley/utxo-keys/utxo-stake.vkey \
+  --signing-key-file shelley/utxo-keys/utxo-stake.skey
+
+cardano-cli address key-gen \
+  --verification-key-file shelley/utxo-keys/utxo2.vkey \
+  --signing-key-file shelley/utxo-keys/utxo2.skey
+
+cardano-cli stake-address key-gen \
+  --verification-key-file shelley/utxo-keys/utxo2-stake.vkey \
+  --signing-key-file shelley/utxo-keys/utxo2-stake.skey
 
 echo "====================================================================="
 echo "Generated genesis keys and genesis files:"
@@ -379,13 +418,13 @@ for ADDR in ${ADDRS}; do
   cardano-cli address build \
       --payment-verification-key-file addresses/${ADDR}.vkey \
       --stake-verification-key-file addresses/${ADDR}-stake.vkey \
-      --testnet-magic 42 \
+      --testnet-magic ${NETWORK_MAGIC} \
       --out-file addresses/${ADDR}.addr
 
   # Stake addresses
   cardano-cli stake-address build \
       --stake-verification-key-file addresses/${ADDR}-stake.vkey \
-      --testnet-magic 42 \
+      --testnet-magic ${NETWORK_MAGIC} \
       --out-file addresses/${ADDR}-stake.addr
 
   # Stake addresses registration certs
@@ -412,7 +451,7 @@ for N in ${USER_POOL_N}; do
 done
 
 echo "Generated payment address keys, stake address keys,"
-echo "stake address regitration certs, and stake address delegatation certs"
+echo "stake address registration certs, and stake address delegation certs"
 echo
 ls -1 addresses/
 echo "====================================================================="
@@ -423,7 +462,7 @@ echo "====================================================================="
 for NODE in ${POOL_NODES}; do
 
   cardano-cli stake-pool registration-certificate \
-    --testnet-magic 42 \
+    --testnet-magic ${NETWORK_MAGIC} \
     --pool-pledge 0 --pool-cost 0 --pool-margin 0 \
     --cold-verification-key-file             ${NODE}/shelley/operator.vkey \
     --vrf-verification-key-file              ${NODE}/shelley/vrf.vkey \
@@ -442,11 +481,11 @@ for NODE in ${BFT_NODES}; do
   (
     echo "#!/usr/bin/env bash"
     echo ""
-    echo "cardano-node run +RTS -N4 -A64m -c -RTS \\"
+    echo "cardano-node run \\"
     echo "  --config                          ${ROOT}/configuration.yaml \\"
     echo "  --topology                        ${ROOT}/${NODE}/topology.json \\"
     echo "  --database-path                   ${ROOT}/${NODE}/db \\"
-    echo "  --socket-path                     ${ROOT}/${NODE}/node.sock \\"
+    echo "  --socket-path                     '$(sprocket "${ROOT}/${NODE}/node.sock")' \\"
     echo "  --shelley-kes-key                 ${ROOT}/${NODE}/shelley/kes.skey \\"
     echo "  --shelley-vrf-key                 ${ROOT}/${NODE}/shelley/vrf.skey \\"
     echo "  --shelley-operational-certificate ${ROOT}/${NODE}/shelley/node.cert \\"
@@ -465,11 +504,11 @@ for NODE in ${POOL_NODES}; do
   (
     echo "#!/usr/bin/env bash"
     echo ""
-    echo "cardano-node run +RTS -N4 -A64m -c -RTS \\"
+    echo "cardano-node run \\"
     echo "  --config                          ${ROOT}/configuration.yaml \\"
     echo "  --topology                        ${ROOT}/${NODE}/topology.json \\"
     echo "  --database-path                   ${ROOT}/${NODE}/db \\"
-    echo "  --socket-path                     ${ROOT}/${NODE}/node.sock \\"
+    echo "  --socket-path                     '$(sprocket "${ROOT}/${NODE}/node.sock")' \\"
     echo "  --shelley-kes-key                 ${ROOT}/${NODE}/shelley/kes.skey \\"
     echo "  --shelley-vrf-key                 ${ROOT}/${NODE}/shelley/vrf.skey \\"
     echo "  --shelley-operational-certificate ${ROOT}/${NODE}/shelley/node.cert \\"
