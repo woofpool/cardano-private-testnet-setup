@@ -44,7 +44,7 @@ looks like in the `cardano-db-sync` schema.
   ```
 
 ## 2. Make a payment transaction
-- get netowrk protocol parameters
+- get network protocol parameters
   ```shell
   cardano-cli query protocol-parameters \
   --testnet-magic 42 \
