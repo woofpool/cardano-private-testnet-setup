@@ -5,6 +5,14 @@
 This project provides instructions and shell scripts to bootstrap a private Cardano testnet and connect a `cardano-db-sync` process to it.
 If you don't want to bother with setting up `cardano-db-sync`, you can easily skip over the sections of this project that are not relevant.
 
+---
+**Note about cardano-db-sync:**
+
+There were some recent changes made to the `cardano-db-sync` sources that cause an issue when trying to attach the
+db-sync process to the private testnet.  The author has logged an issue for this: [issue](https://github.com/input-output-hk/cardano-db-sync/issues/1046).
+Please skip any guide instructions having to do with setting up/running `cardano-db-sync` until the issue is resolved.
+---
+
 The scripts used by this project to create the private Cardano testnet are taken from the IOHK `cardano-node` project and have been modified as needed.
 You may find the original script files in the IOHK git repository: [cardano-node scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts/byron-to-alonzo).
 In particular, running `cardano-db-sync` to sync to the private testnet required a few changes to the original scripts provided by IOHK.
