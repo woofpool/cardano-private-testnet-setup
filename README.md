@@ -1,5 +1,14 @@
 # cardano-private-testnet-setup
 
+## Quickstart
+
+```
+[clone the repo - or pull a stable dist]
+[instruction on how to start the devnet container]
+[basic interaction instructions]
+[references to full-on README bits with details]
+```
+
 ---
 
 This project provides instructions and shell scripts to bootstrap a private Cardano testnet and connect a `cardano-db-sync` process to it.
