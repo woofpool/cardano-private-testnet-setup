@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 . "${SCRIPT_PATH}"/config-read.shlib; # load the config library functions
 
@@ -11,7 +13,7 @@ wait_until_socket_detected()
 {
   echo "wait until socket is detected, socket: $CARDANO_NODE_SOCKET_PATH"
   while [ ! -S "$CARDANO_NODE_SOCKET_PATH" ]; do
-    echo "Sleep 10 secs"; sleep 10
+    echo "Sleep 5 secs"; sleep 5
   done
   echo "socket is detected"
 }
@@ -58,7 +60,7 @@ run_update_script()
   else
     "${SCRIPT_PATH}"/update-$1.sh $2
   fi
-  echo "Sleep 10 secs to ensure update votes are received"; sleep 10
+  echo "Sleep 5 secs to ensure update is received"; sleep 5
   echo "update-$1 script completed"
 }
 
@@ -88,79 +90,14 @@ fi
 rm -rf $ROOT
 
 # run script to create config
-"${SCRIPT_PATH}"/mkfiles.sh
+"${SCRIPT_PATH}"/mkfiles.sh alonzo
 
 echo
 restart_nodes_in_bg
 
 echo
 wait_until_socket_detected
-
-echo
-echo "starting protocol updates..."
-
-epoch_no=0
-
-echo
 run_update_script "1"
-query_tip
-
-echo
-wait_for_epoch_to_advance 1
-query_tip
-
-echo
-run_update_script "2"
-
-echo
-restart_nodes_in_bg
-query_tip
-
-wait_for_epoch_to_advance 1
-query_tip
-
-echo
-run_update_script "3" $epoch_no
-
-echo
-restart_nodes_in_bg
-query_tip
-
-echo
-wait_for_epoch_to_advance 1
-query_tip
-
-echo
-run_update_script "4" $epoch_no
-
-echo
-restart_nodes_in_bg
-query_tip
-
-echo
-wait_for_epoch_to_advance 1
-query_tip
-
-echo
-run_update_script "5" $epoch_no
-
-echo
-restart_nodes_in_bg
-query_tip
-
-echo
-wait_for_epoch_to_advance 1
-query_tip
-
-echo
-run_update_script "6" $epoch_no
-
-echo
-restart_nodes_in_bg
-query_tip
-
-echo
-wait_for_epoch_to_advance 1
 
 query_tip
 echo
