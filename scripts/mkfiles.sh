@@ -89,6 +89,7 @@ sprocket() {
 }
 
 START_TIME="$(${DATE} -d "now + 30 seconds" +%s)"
+START_TIME_UTC=$(${DATE} -d @${START_TIME} --utc +%FT%TZ)
 
 if ! mkdir "${ROOT}"; then
   echo "The ${ROOT} directory already exists, please move or remove it"
@@ -226,6 +227,9 @@ cardano-cli byron genesis genesis \
   --genesis-output-dir byron
 mv byron.genesis.spec.json byron/genesis.spec.json
 
+# compute the ByronGenesisHash and add to configuration.yaml
+byronGenesisHash=$(cardano-cli byron genesis print-genesis-hash --genesis-json byron/genesis.json)
+echo "ByronGenesisHash: $byronGenesisHash" >> configuration.yaml
 
 # Symlink the BFT operator keys from the genesis delegates, for uniformity
 for N in ${BFT_NODES_N}; do
@@ -263,7 +267,7 @@ done
 # Update Proposal and votes
 cardano-cli byron governance create-update-proposal \
             --filepath update-proposal \
-            --testnet-magic "${NETWORK_MAGIC}" \
+            --testnet-magic ${NETWORK_MAGIC} \
             --signing-key byron/delegate-keys.000.key \
             --protocol-version-major 1 \
             --protocol-version-minor 0 \
@@ -315,7 +319,7 @@ mkdir shelley
 
 # Copy the QA testnet alonzo genesis which is equivalent to the mainnet
 
-cardano-cli genesis create --testnet-magic ${NETWORK_MAGIC} --genesis-dir shelley
+cardano-cli genesis create --testnet-magic ${NETWORK_MAGIC} --start-time $START_TIME_UTC --genesis-dir shelley
 
 # Then edit the genesis.spec.json ...
 cp ../configuration/cardano/shelley_qa-alonzo-genesis.json shelley/genesis.alonzo.spec.json
@@ -341,9 +345,18 @@ $SED -i shelley/genesis.spec.json \
 
 cardano-cli genesis create \
     --testnet-magic ${NETWORK_MAGIC} \
+    --start-time $START_TIME_UTC \
     --genesis-dir shelley/ \
     --gen-genesis-keys ${NUM_BFT_NODES} \
     --gen-utxo-keys 1
+
+# compute the Shelly genesis hash and add to configuration.yaml
+shelleyGenesisHash=$(cardano-cli genesis hash --genesis shelley/genesis.json)
+echo "ShelleyGenesisHash: $shelleyGenesisHash" >> configuration.yaml
+
+# compute the Shelly Alonzo genesis hash and add to configuration.yaml
+alonzoGenesisHash=$(cardano-cli genesis hash --genesis shelley/genesis.alonzo.json)
+echo "AlonzoGenesisHash: $alonzoGenesisHash" >> configuration.yaml
 
 cardano-cli stake-address key-gen \
   --verification-key-file shelley/utxo-keys/utxo-stake.vkey \
