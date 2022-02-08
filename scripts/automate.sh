@@ -36,7 +36,7 @@ kill_running_nodes() {
 
 start_all_nodes() {
   echo "start all the nodes in bg"
-  $ROOT/run/all.sh > /dev/null 2>&1 &
+  nohup $ROOT/run/all.sh > /dev/null 2>&1 &
   wait_until_count_of_running_nodes 3
   echo
   echo "PIDs of started nodes:"
@@ -106,5 +106,3 @@ protocol_version=$( cardano-cli query protocol-parameters --testnet-magic 42 | j
 echo "Nodes are running in era: $current_era, major protocol version: $protocol_version"
 echo
 echo "Congrats! Your network is ready for use!"
-
-wait
