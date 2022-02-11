@@ -27,7 +27,7 @@ cardano-cli query utxo --address $(~/cardano_devnet/private-testnet/addresses/us
 # a killed devnet1 blockchain can be revived with
 podman start devnet1
 
-# create as many devnetX container, tweak, adjust to taste and prosper 
+# create as many devnetX containers as you need, tweak, adjust to taste and prosper 
 ```
 
 ---
