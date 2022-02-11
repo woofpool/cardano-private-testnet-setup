@@ -86,6 +86,10 @@ if [ $running_nodes_cnt -gt 0 ]; then
   exit
 fi
 
+# delete root folder to get clean slate only if we didn't ask it not to do that
+# invoke as `./automate 1` to effectively stop flushing the underlying private blockchain
+[[ $2 != "1" ]] && rm -rf $ROOT
+
 # run script to create config
 "${SCRIPT_PATH}"/mkfiles.sh alonzo
 
