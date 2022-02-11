@@ -9,12 +9,8 @@
 podman run --name devnet1 ghcr.io/grzegorznowak/cardano-devnet:1.33.0
 
 # wait for "Congrats! Your network is ready for use!"
-# your devnet is now running in the devnet1 container
 
 # === in A NEW TERMINAL ===
-# confirm the container process is running 
-podman ps list
-
 # interact with the blockchain from the shell
 podman exec devnet1 cardano-cli query utxo --whole-utxo --testnet-magic 42
 
