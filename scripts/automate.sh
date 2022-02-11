@@ -86,24 +86,18 @@ if [ $running_nodes_cnt -gt 0 ]; then
   exit
 fi
 
-# delete root folder to get clean slate only if we didn't ask it not to do that
-# invoke as `./automate 1` to effectively stop flushing the underlying private blockchain
-[[ $2 != "1" ]] && rm -rf $ROOT
+# delete root folder to get clean slate
+rm -rf $ROOT
 
 # run script to create config
 "${SCRIPT_PATH}"/mkfiles.sh alonzo
 
+echo
 restart_nodes_in_bg
+
 echo
 wait_until_socket_detected
-
-if [ -d $ROOT ]; then
-  echo "existing blockchain data found, skipping the update script"
-else
-  echo "bootstrapping into the pristine state; consuming the genesis utxo"
-  run_update_script "1"
-fi
-
+run_update_script "1"
 
 query_tip
 echo
