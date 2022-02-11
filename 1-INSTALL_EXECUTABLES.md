@@ -140,9 +140,9 @@ Continue to guide: [3. Run Network Scripts](./3-RUN_NETWORK_SCRIPTS.md)
 
 [comment]: <> (  ```shell)
 
-[comment]: <> (  cp -p $&#40;find dist-newstyle/build -type f -name "cardano-db-sync"&#41; $HOME/.local/bin/cardano-db-sync)
+  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync") $HOME/.local/bin/cardano-db-sync
 
-[comment]: <> (  cp -p $&#40;find dist-newstyle/build -type f -name "cardano-db-sync-extended"&#41; $HOME/.local/bin/cardano-db-sync-extended  )
+  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync-extended") $HOME/.local/bin/cardano-db-sync-extended  
 
 [comment]: <> (  ```)
 
