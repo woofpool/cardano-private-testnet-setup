@@ -19,7 +19,7 @@ podman exec -it devnet1 bash
 
 # and operate on it directly from within
 cardano-cli query utxo \
---address $(~/cardano_devnet/private-testnet/addresses/user1.addr) \
+--address $(cat ~/cardano_devnet/private-testnet/addresses/user1.addr) \
 --testnet-magic 42
 
 # a killed devnet1 blockchain can be revived with
