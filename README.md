@@ -1,12 +1,33 @@
 # cardano-private-testnet-setup
 
-## Quickstart
+## Quickstart using containers
 
 ```
-[clone the repo - or pull a stable dist]
-[instruction on how to start the devnet container]
-[basic interaction instructions]
-[references to full-on README bits with details]
+# install podman https://podman.io/getting-started/installation
+
+# then execute
+podman run --name devnet1 ghcr.io/grzegorznowak/cardano-devnet:1.33.0
+
+# wait for "Congrats! Your network is ready for use!"
+# your devnet is now running in the devnet1 container
+
+# === in A NEW TERMINAL ===
+# confirm the container process is running 
+podman ps list
+
+# interact with the blockchain from the shell
+podman exec devnet1 cardano-cli query utxo --whole-utxo --testnet-magic 42
+
+# or just own the devnet1's bash 
+podman exec -it devnet1 bash
+
+# and operate on it directly from within
+cardano-cli query utxo --address $(~/cardano_devnet/private-testnet/addresses/user1.addr) --testnet-magic 42
+
+# a killed devnet1 blockchain can be revived with
+podman start devnet1
+
+# create as many devnetX container, tweak, adjust to taste and prosper 
 ```
 
 ---
