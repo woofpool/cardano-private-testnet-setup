@@ -1,4 +1,4 @@
-# cardano-private-testnet-setup
+# Cardano Private-Testnet / Devnet Setup
 
 ---
 
