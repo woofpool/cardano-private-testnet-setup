@@ -101,10 +101,10 @@ restart_nodes_in_bg
 echo
 wait_until_socket_detected
 
-if [ -d $ROOT ]; then
-  echo "existing blockchain data found, skipping the update script"
+if [ -f $ROOT/ready.flag ]; then
+  echo "ready.flag already set, no need to consume the genesis utxo"
 else
-  echo "bootstrapping into the pristine state; consuming the genesis utxo"
+  echo "we're booting from a pristine state; consuming the genesis utxo"
   run_update_script "1"
 fi
 
