@@ -1,5 +1,7 @@
 # Cardano Private-Testnet / Devnet Setup
 
+![Ansible Lint](https://github.com/woofpool/cardano-private-testnet-setup/actions/workflows/ci.test.yml/badge.svg)
+
 ---
 
 This project provides instructions and shell scripts to bootstrap a private Cardano testnet and connect a `cardano-db-sync` process to it.

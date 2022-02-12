@@ -86,9 +86,17 @@ if [ $running_nodes_cnt -gt 0 ]; then
   exit
 fi
 
+# rerunning the script should always result in restarting nodes
+# this way we can at least control this a bit more, compared to if users where to do it manually
+kill_running_nodes
+
 # delete root folder to get clean slate only if we didn't ask it not to do that
 # invoke as `./automate 1` to effectively stop flushing the underlying private blockchain
-[[ $2 != "1" ]] && rm -rf $ROOT
+if [ "$1" = "1" ]; then
+  echo "We opted to not remove the existing state of the blockchain, skipping the removal"
+else
+  rm -rf $ROOT
+fi
 
 # run script to create config
 "${SCRIPT_PATH}"/mkfiles.sh alonzo
@@ -97,10 +105,10 @@ restart_nodes_in_bg
 echo
 wait_until_socket_detected
 
-if [ -d $ROOT ]; then
-  echo "existing blockchain data found, skipping the update script"
+if [ -f $ROOT/ready.flag ]; then
+  echo "ready.flag already set, no need to consume the genesis utxo"
 else
-  echo "bootstrapping into the pristine state; consuming the genesis utxo"
+  echo "we're booting from a pristine state; consuming the genesis utxo"
   run_update_script "1"
 fi
 
@@ -113,4 +121,6 @@ echo "Nodes are running in era: $current_era, major protocol version: $protocol_
 echo
 echo "Congrats! Your network is ready for use!"
 
+# the simplest possible state-keeping registry. An alternative would be sqlite, but even that is probably an overkill
+touch $ROOT/ready.flag
 wait
