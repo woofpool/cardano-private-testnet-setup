@@ -35,5 +35,6 @@ jobs:
           export PATH="/root/bin:${PATH}"
           nohup scripts/automate.sh &
           while [ ! -f ${DEVNET_PATH}/${DEVNET_READY_FLAG} ]; do sleep 5; done
-          CARDANO_NODE_SOCKET_PATH=/root/cardano_devnet/private-testnet/node-bft1/node.sock
-          /root/bin/cardano-cli query utxo --whole-utxo --testnet-magic 42
+          
+          export CARDANO_NODE_SOCKET_PATH=/root/cardano_devnet/private-testnet/node-bft1/node.sock
+          test/user1_has_funds.sh          
