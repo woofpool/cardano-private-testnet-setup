@@ -1,0 +1,24 @@
+---
+
+name: CI | Test
+
+on:
+  push:
+    branches: [ '**' ]
+    paths:
+      - 'scripts/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'scripts/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/grzegorznowak/cardano-node:1.33.0
+    steps:
+      - run: |
+          echo "Running in container"
+          cardano-cli query utxo --whole-utxo --testnet-magic 42
