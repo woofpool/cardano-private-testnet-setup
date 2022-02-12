@@ -16,9 +16,9 @@ jobs:
   test:
     runs-on: ubuntu-20.04
     timeout-minutes: 5 # this should not take longer thant that (for now)
-
-    container:
-      image: ghcr.io/grzegorznowak/cardano-node:1.33.0
+#
+#    container:
+#      image: ghcr.io/grzegorznowak/cardano-node:1.33.0
     steps:
 
       - name: Checkout
