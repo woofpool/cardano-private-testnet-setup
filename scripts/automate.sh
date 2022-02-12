@@ -86,9 +86,13 @@ if [ $running_nodes_cnt -gt 0 ]; then
   exit
 fi
 
+# rerunning the script should always result in restarting nodes
+# this way we can at least control this a bit more, compared to if users where to do it manually
+kill_running_nodes
+
 # delete root folder to get clean slate only if we didn't ask it not to do that
 # invoke as `./automate 1` to effectively stop flushing the underlying private blockchain
-if [ "$2" != "1" ]; then
+if [ "$1" = "1" ]; then
   echo "We opted to not remove the existing state of the blockchain, skipping the removal"
 else
   rm -rf $ROOT
@@ -105,7 +109,7 @@ if [ -f $ROOT/ready.flag ]; then
   echo "ready.flag already set, no need to consume the genesis utxo"
 else
   echo "we're booting from a pristine state; consuming the genesis utxo"
-#  run_update_script "1"
+  run_update_script "1"
 fi
 
 

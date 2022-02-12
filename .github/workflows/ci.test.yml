@@ -26,8 +26,14 @@ jobs:
         with:
           fetch-depth: '0'
 
-      - name: Test restarting the devnet without the keepflag on
+      - name: Test the ephemeral devnet
         run: |-
           export PATH="/root/bin:${PATH}"
           export CARDANO_NODE_SOCKET_PATH=private-testnet/node-bft1/node.sock
           test/test_ephemeral_devnet.sh
+
+      - name: Test the persistent devnet
+        run: |-
+          export PATH="/root/bin:${PATH}"
+          export CARDANO_NODE_SOCKET_PATH=private-testnet/node-bft1/node.sock
+          test/test_persistent_devnet.sh
