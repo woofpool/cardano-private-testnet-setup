@@ -13,7 +13,9 @@ pid=$!
 # let the script remove things it needs to remove
 sleep 5
 
+# wait for the READY flag to be given
 while [ ! -f ${DEVNET_PATH}/${DEVNET_READY_FLAG} ]; do sleep 5; done
+
 user1_lovelace=$(get_address_biggest_lovelace $(cat ${DEVNET_PATH}/addresses/user1.addr))
 echo $user1_lovelace
 # user should have some lovelace there
@@ -27,7 +29,8 @@ user1_tx_1=$(get_address_biggest_tx $(cat ${DEVNET_PATH}/addresses/user1.addr))
 pkill cardano-node
 pkill $pid
 
-sleep 5
+# random wait just in case processes are slow to kill
+sleep 3
 
 echo "followup bootstrap with the KEEP flag on"
 nohup scripts/automate.sh 1 &
@@ -36,6 +39,7 @@ pid=$!
 # let the script remove things it needs to remove
 sleep 5
 
+# wait for the READY flag to be given
 while [ ! -f ${DEVNET_PATH}/${DEVNET_READY_FLAG} ]; do sleep 5; done
 echo $pid
 
@@ -53,8 +57,6 @@ user1_tx_2=$(get_address_biggest_tx $(cat ${DEVNET_PATH}/addresses/user1.addr))
 pkill cardano-node
 pkill $pid
 
-echo $user1_tx_1
-echo $user1_tx_2
 if [ $user1_tx_1 != $user1_tx_2 ]; then
   echo "persistent devnet didn't reuse addresses from the first run, that's wrong"
   exti 1

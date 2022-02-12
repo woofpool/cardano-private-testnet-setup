@@ -4,18 +4,24 @@ name: CI | Test
 
 on:
   push:
-    branches: [ '**' ]
-#    paths:
-#      - 'scripts/**'
+    branches: [ main ]
+    paths:
+      - 'scripts/**'
+      - test
+      - configuration
+      - templates
   pull_request:
     branches: [ main ]
-#    paths:
-#      - 'scripts/**'
+    paths:
+      - 'scripts/**'
+      - test
+      - configuration
+      - templates
 
 jobs:
   test:
     runs-on: ubuntu-20.04
-    timeout-minutes: 5 # this should not take longer thant that (for now)
+    timeout-minutes: 10 # this should not take longer thant that (for now)
 
     container:
       image: ghcr.io/grzegorznowak/cardano-node:1.33.0
