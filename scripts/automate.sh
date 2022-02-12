@@ -88,7 +88,7 @@ fi
 
 # delete root folder to get clean slate only if we didn't ask it not to do that
 # invoke as `./automate 1` to effectively stop flushing the underlying private blockchain
-if [ $2 != "1" ]; then
+if [ "$2" != "1" ]; then
   echo "We opted to not remove the existing state of the blockchain, skipping the removal"
 else
   rm -rf $ROOT
