@@ -21,8 +21,8 @@ jobs:
     runs-on: ubuntu-20.04
     timeout-minutes: 5 # this should not take longer thant that (for now)
 
-    container:
-      image: ghcr.io/grzegorznowak/cardano-node:1.33.0
+#    container:
+#      image: ghcr.io/grzegorznowak/cardano-node:1.33.0
     steps:
 
       - name: Checkout
@@ -32,9 +32,10 @@ jobs:
 
       - name: Acceptance Test
         run: |-
-          export PATH="/root/bin:${PATH}"
-          nohup scripts/automate.sh &
-          while [ ! -f ${DEVNET_PATH}/${DEVNET_READY_FLAG} ]; do sleep 5; done
-          
-          export CARDANO_NODE_SOCKET_PATH=/root/cardano_devnet/private-testnet/node-bft1/node.sock
-          test/user1_has_funds.sh          
+          ls -alhtr
+#          export PATH="/root/bin:${PATH}"
+#          nohup scripts/automate.sh &
+#          while [ ! -f ${DEVNET_PATH}/${DEVNET_READY_FLAG} ]; do sleep 5; done
+#
+#          export CARDANO_NODE_SOCKET_PATH=/root/cardano_devnet/private-testnet/node-bft1/node.sock
+#          test/user1_has_funds.sh
