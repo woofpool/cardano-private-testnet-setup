@@ -19,6 +19,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-20.04
+    timeout-minutes: 5 # this should not take longer thant that (for now)
 
     container:
       image: ghcr.io/grzegorznowak/cardano-node:1.33.0
@@ -29,13 +30,10 @@ jobs:
         with:
           fetch-depth: '0'
 
-      - name: Bootstrap the devnet
+      - name: Acceptance Test
         run: |-
           export PATH="/root/bin:${PATH}"
           nohup scripts/automate.sh &
           while [ ! -f ${DEVNET_PATH}/${DEVNET_READY_FLAG} ]; do sleep 5; done
-
-      - name: Debugging output
-        run: >-
           CARDANO_NODE_SOCKET_PATH=/root/cardano_devnet/private-testnet/node-bft1/node.sock
           /root/bin/cardano-cli query utxo --whole-utxo --testnet-magic 42
