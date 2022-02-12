@@ -17,6 +17,7 @@ echo $user1_lovelace
 # user should have some lovelace there
 if [ $user1_lovelace == ""]; then
   exit 1
+fi
 
 user1_tx_1=$(get_address_biggest_tx $(cat private-testnet/addresses/user1.addr))
 kill -9 $pid
@@ -32,9 +33,12 @@ echo $user1_lovelace
 # user should have some lovelace there
 if [ $user1_lovelace == ""]; then
   exit 1
+fi
+
 user1_tx_2=$(get_address_biggest_tx $(cat private-testnet/addresses/user1.addr))
 kill -9 $pid
 
 if [ $user1_tx_1 = $user1_tx_2 ]; then
-  echo "ephemeral devnet attempted to reuse the old ledger"
+  echo "ephemeral devnet attempted to reuse the old ledger, and that's not what we expected"
   exti 1
+fi
