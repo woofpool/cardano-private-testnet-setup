@@ -2,6 +2,9 @@
 
 boostrap_the_devnet_with_pid()
 {
+  DEVNET_PATH=private-testnet
+  DEVNET_READY_FLAG=ready.flag
+
   nohup scripts/automate.sh &
   PID=$!
   while [ ! -f ${DEVNET_PATH}/${DEVNET_READY_FLAG} ]; do sleep 5; done

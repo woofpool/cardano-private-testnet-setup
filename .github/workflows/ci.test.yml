@@ -12,10 +12,6 @@ on:
 #    paths:
 #      - 'scripts/**'
 
-env:
-  DEVNET_PATH: private-testnet
-  DEVNET_READY_FLAG: ready.flag
-
 jobs:
   test:
     runs-on: ubuntu-20.04
