@@ -31,8 +31,7 @@ jobs:
 
       - name: Bootstrap the devnet
         run: |-
-          echo "Running in container"
-          ls -alhtr
+          export PATH="/root/bin:${PATH}"
           nohup scripts/automate.sh &
           while [ ! -f ${DEVNET_PATH}/${DEVNET_READY_FLAG} ]; do sleep 5; done
 
