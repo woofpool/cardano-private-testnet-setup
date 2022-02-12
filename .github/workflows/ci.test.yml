@@ -32,7 +32,6 @@ jobs:
 
       - name: Test restarting the devnet without the keepflag on
         run: |-
-          . test/_helpers.sh
           export PATH="/root/bin:${PATH}"
           export CARDANO_NODE_SOCKET_PATH=private-testnet/node-bft1/node.sock
           test/test_ephemeral_devnet.sh

@@ -2,6 +2,8 @@
 
 set -e
 
+. test/_helpers.sh
+
 echo "fresh bootstrap should give the user1 some funds"
 pid=$(boostrap_the_devnet_with_pid)
 test/assert_user1_has_funds.sh
