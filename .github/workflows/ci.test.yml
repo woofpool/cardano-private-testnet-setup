@@ -30,12 +30,9 @@ jobs:
         with:
           fetch-depth: '0'
 
-      - name: Acceptance Test
+      - name: Test restarting the devnet without the keepflag on
         run: |-
-          ls -alhtr
+          . test/_helpers.sh
           export PATH="/root/bin:${PATH}"
-          nohup scripts/automate.sh &
-          while [ ! -f ${DEVNET_PATH}/${DEVNET_READY_FLAG} ]; do sleep 5; done
-          
           export CARDANO_NODE_SOCKET_PATH=private-testnet/node-bft1/node.sock
-          test/user1_has_funds.sh          
+          test/test_ephemeral_devnet.sh

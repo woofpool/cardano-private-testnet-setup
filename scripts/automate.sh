@@ -105,7 +105,7 @@ if [ -f $ROOT/ready.flag ]; then
   echo "ready.flag already set, no need to consume the genesis utxo"
 else
   echo "we're booting from a pristine state; consuming the genesis utxo"
-  run_update_script "1"
+#  run_update_script "1"
 fi
 
 
@@ -117,5 +117,6 @@ echo "Nodes are running in era: $current_era, major protocol version: $protocol_
 echo
 echo "Congrats! Your network is ready for use!"
 
+# the simplest possible state-keeping registry. An alternative would be sqlite, but even that is probably an overkill
 touch $ROOT/ready.flag
 wait
