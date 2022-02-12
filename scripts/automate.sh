@@ -113,4 +113,5 @@ echo "Nodes are running in era: $current_era, major protocol version: $protocol_
 echo
 echo "Congrats! Your network is ready for use!"
 
+touch $ROOT/ready.flag
 wait
