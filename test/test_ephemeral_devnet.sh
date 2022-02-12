@@ -24,6 +24,9 @@ fi
 user1_tx_1=$(get_address_biggest_tx $(cat ${DEVNET_PATH}/addresses/user1.addr))
 echo $user1_tx_1
 
+pkill cardano-node
+pkill $pid
+
 sleep 5
 
 echo "followup bootstrap should flush the state give the (new) user1 some funds"
@@ -54,5 +57,5 @@ echo $user1_tx_1
 echo $user1_tx_2
 if [ $user1_tx_1 = $user1_tx_2 ]; then
   echo "ephemeral devnet attempted to reuse the old ledger, and that's not what we expected"
-  exti 1
+  exit 1
 fi

@@ -24,6 +24,9 @@ fi
 
 user1_tx_1=$(get_address_biggest_tx $(cat ${DEVNET_PATH}/addresses/user1.addr))
 
+pkill cardano-node
+pkill $pid
+
 sleep 5
 
 echo "followup bootstrap with the KEEP flag on"
