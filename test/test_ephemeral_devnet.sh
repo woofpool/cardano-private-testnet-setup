@@ -12,6 +12,8 @@ nohup scripts/automate.sh &
 pid=$!
 while [ ! -f ${DEVNET_PATH}/${DEVNET_READY_FLAG} ]; do sleep 5; done
 
+cardano-cli query utxo --address $(cat private-testnet/addresses/user1.addr) --testnet-magic 42
+
 user1_lovelace=$(get_address_biggest_lovelace $(cat private-testnet/addresses/user1.addr))
 echo $user1_lovelace
 # user should have some lovelace there
