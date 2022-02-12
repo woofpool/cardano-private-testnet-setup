@@ -5,12 +5,12 @@ name: CI | Test
 on:
   push:
     branches: [ '**' ]
-    paths:
-      - 'scripts/**'
+#    paths:
+#      - 'scripts/**'
   pull_request:
     branches: [ main ]
-    paths:
-      - 'scripts/**'
+#    paths:
+#      - 'scripts/**'
 
 jobs:
   test:
@@ -19,6 +19,13 @@ jobs:
     container:
       image: ghcr.io/grzegorznowak/cardano-node:1.33.0
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+
       - run: |
           echo "Running in container"
+          ls -alhtr
           cardano-cli query utxo --whole-utxo --testnet-magic 42
