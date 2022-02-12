@@ -1,16 +1,5 @@
 #!/bin/sh
 
-boostrap_the_devnet_with_pid()
-{
-  DEVNET_PATH=private-testnet
-  DEVNET_READY_FLAG=ready.flag
-
-  scripts/automate.sh
-  PID=$!
-  while [ ! -f ${DEVNET_PATH}/${DEVNET_READY_FLAG} ]; do sleep 5; done
-
-  echo $PID
-}
 
 # retrieve the biggest (in amount of lovelace stored) tx for the given address
 # $1 - address to lookup
