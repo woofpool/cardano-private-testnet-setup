@@ -48,10 +48,25 @@ jobs:
         with:
           fetch-depth: '0'
 
-      - name: Create the db
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+          repository: https://github.com/input-output-hk/cardano-db-sync.git
+          ref: 12.0.2
+          path: cardano-db-sync
+
+      - name: WIP Battlegrounds | Test the cardano-db-sync
         run: |-
           apt install -y postgresql-client
           createdb -h postgres -p 5432 -U postgres privatenet
+          git cherry-pick -n bff6e182cf41f6f7a9ff3d08bb1fc9984e2d0f66 \
+          --git-dir=cardano-db-sync
+          git cherry-pick -n 132f569bcd297ce73bca407a52acee513aa75389 \
+          --git-dir=cardano-db-sync
+          cd cardano-db-sync
+          cabal build all
+          ls -alhtr
         env:
           PGPASSWORD: postgres
 
