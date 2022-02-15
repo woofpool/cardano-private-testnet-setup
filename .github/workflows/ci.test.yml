@@ -50,7 +50,7 @@ jobs:
 
       - name: Create the db
         run: |-
-          apt install postgresql-client
+          apt install -y postgresql-client
           createdb -h postgres -p 5432 -U postgres privatenet
         env:
           PGPASSWORD: postgres
