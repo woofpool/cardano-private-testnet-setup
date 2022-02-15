@@ -25,6 +25,22 @@ jobs:
 
     container:
       image: ghcr.io/grzegorznowak/cardano-node:1.33.0
+
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
 
       - name: Checkout
@@ -43,3 +59,9 @@ jobs:
           export PATH="/root/bin:${PATH}"
           export CARDANO_NODE_SOCKET_PATH=private-testnet/node-bft1/node.sock
           test/test_persistent_devnet.sh
+
+      - name: Create the db
+        run: |-
+          createdb -h postgres -p 5432 -U postgres privatenet
+        env:
+          PGPASSWORD: postgres
