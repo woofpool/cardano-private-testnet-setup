@@ -4,12 +4,12 @@ name: CI | Test
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - 'scripts/**'
-      - test
-      - configuration
-      - templates
+    branches: [ '**' ]
+#    paths:
+#      - 'scripts/**'
+#      - test
+#      - configuration
+#      - templates
   pull_request:
     branches: [ main ]
     paths:
