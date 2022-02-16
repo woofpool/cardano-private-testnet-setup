@@ -1,4 +1,6 @@
-# cardano-private-testnet-setup
+# Cardano Private-Testnet / Devnet Setup
+
+![Ansible Lint](https://github.com/woofpool/cardano-private-testnet-setup/actions/workflows/ci.test.yml/badge.svg)
 
 ---
 
