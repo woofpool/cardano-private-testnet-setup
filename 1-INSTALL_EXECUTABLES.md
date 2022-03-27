@@ -20,144 +20,153 @@ This guide covers installing `cardano-node`, `cardano-cli` and optionally `carda
 Continue to guide: [3. Run Network Scripts](./3-RUN_NETWORK_SCRIPTS.md)
 
 
-[comment]: <> (If you don't plan on using `cardano-db-sync`, you can continue to guide: [3. Run Network Scripts]&#40;./3-RUN_NETWORK_SCRIPTS.md&#41;.)
+If you don't plan on using `cardano-db-sync`, you can continue to guide: [3. Run Network Scripts](./3-RUN_NETWORK_SCRIPTS.md).
 
-[comment]: <> (Otherwise, continue following the directions below.)
+Otherwise, continue following the directions below.
 
-[comment]: <> (***)
+***
 
-[comment]: <> (**Note**: The remainder of this guide covers how to build all the executables including the `cardano-db-sync` executables)
+**Note**: The remainder of this guide covers how to build all the executables including the `cardano-db-sync` executables
 
-[comment]: <> (from Haskell sources. **You may skip the rest of this readme, if db-sync is not relevant to you.**)
+from Haskell sources. **You may skip the rest of this readme, if db-sync is not relevant to you.**
 
-[comment]: <> (## Optional: Building cardano-db-sync from Haskell sources using cabal and GHC)
+## Optional: Building cardano-db-sync from Haskell sources using cabal and GHC
 
-[comment]: <> (### 1. Install package dependencies and Haskell tooling)
+### 1. Install package dependencies and Haskell tooling
 
-[comment]: <> (- Install package dependencies of tools)
+- Install package dependencies of tools
 
-[comment]: <> (  ```shell)
+  ```shell
 
-[comment]: <> (  # update/upgrade your package indexes)
+  # update/upgrade your package indexes
 
-[comment]: <> (  sudo apt-get update)
+  sudo apt-get update
 
-[comment]: <> (  sudo apt-get upgrade  )
+  sudo apt-get upgrade  
 
-[comment]: <> (  # reboot as necessary)
+  # reboot as necessary
     
-[comment]: <> (  sudo apt-get install automake build-essential pkg-config libffi-dev libgmp-dev libssl-dev libtinfo-dev libsystemd-dev zlib1g-dev make g++ tmux git jq wget libncursesw5 libtool autoconf -y  )
+  sudo apt-get install automake build-essential pkg-config libffi-dev libgmp-dev libssl-dev libtinfo-dev libsystemd-dev zlib1g-dev make g++ tmux git jq wget libncursesw5 libtool autoconf -y  
 
-[comment]: <> (  ```)
+  ```
 
-[comment]: <> (- Install Cabal and GHC using [GHCUp - Haskell language installer]&#40;https://www.haskell.org/ghcup/&#41;)
+- Install Cabal and GHC using [GHCUp - Haskell language installer](https://www.haskell.org/ghcup/)
 
-[comment]: <> (  ```shell)
+  ```shell
 
-[comment]: <> (  # download and run get-ghcup script)
+  # download and run get-ghcup script
 
-[comment]: <> (  curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh)
+  curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 
-[comment]: <> (  # During questions, I chose to &#40;A&#41;ppend the path to ghc to .bashrc)
+  # During questions, I chose to (A)ppend the path to ghc to .bashrc
 
-[comment]: <> (  # and did not choose to install Haskell Language Server &#40;HLS&#41; or stack)
+  # and did not choose to install Haskell Language Server (HLS) or stack
 
-[comment]: <> (  # source the bash start script to apply updates to PATH)
+  # source the bash start script to apply updates to PATH
 
-[comment]: <> (  cd $HOME)
+  cd $HOME
 
-[comment]: <> (  source .bashrc)
+  source .bashrc
   
-[comment]: <> (  # get the latest updates to GHCUp tool)
+  # get the latest updates to GHCUp tool
 
-[comment]: <> (  ghcup upgrade)
+  ghcup upgrade
 
-[comment]: <> (  # install cabal with GHCUp )
+  # install cabal with GHCUp 
 
-[comment]: <> (  ghcup install cabal 3.4.0.0)
+  ghcup install cabal 3.6.2.0
 
-[comment]: <> (  ghcup set cabal 3.4.0.0)
+  ghcup set cabal 3.6.2.0
 
-[comment]: <> (  # install GHC with GHCUp)
+  # install GHC with GHCUp
 
-[comment]: <> (  ghcup install ghc 8.10.4)
+  ghcup install ghc 8.10.7
 
-[comment]: <> (  ghcup set ghc 8.10.4)
+  ghcup set ghc 8.10.7
   
-[comment]: <> (  # Update cabal and verify the correct versions were installed successfully.)
+  # Update cabal and verify the correct versions were installed successfully.
 
-[comment]: <> (  cabal update)
+  cabal update
 
-[comment]: <> (  cabal --version)
+  cabal --version
 
-[comment]: <> (  ghc --version)
+  ghc --version
 
-[comment]: <> (  ```)
+  ```
 
-[comment]: <> (### 2. Install latest release tags of Cardano db-sync executables )
+### 2. Install latest release tags of Cardano db-sync executables including some patches necessary to make things work in private testnet  
 
-[comment]: <> (**Note**: The author could not find pre-built binaries for cardano-db-sync from IOHK, so the directions below)
+**Note**: The author could not find pre-built binaries for cardano-db-sync from IOHK, so the directions below
+are to build them from Haskell sources using cabal and GHC.  If you want to explore other options to build
+or deploy, e.g. using `nix-build` or `docker`,
+please see the [IOHK cardano-db-sync README](https://github.com/input-output-hk/cardano-db-sync#readme) for more info.
 
-[comment]: <> (are to build them from Haskell sources using cabal and GHC.  If you want to explore other options to build)
+**Note2**: The directions below include applying some cherry-pick commits, which are necessary to allow `cardano-db-sync`
+to work with a private testnet.  If you want to understand the issue, please visit: [issue](https://github.com/input-output-hk/cardano-db-sync/issues/1046). 
 
-[comment]: <> (or deploy, e.g. using `nix-build` or `docker`, )
+- Clone the IOHK cardano-db-sync repo
 
-[comment]: <> (please see the [IOHK cardano-db-sync README]&#40;https://github.com/input-output-hk/cardano-db-sync#readme&#41; for more info.)
+  ```shell
 
-[comment]: <> (- Clone the IOHK cardano-db-sync repo)
+  cd $HOME/src
 
-[comment]: <> (  ```shell)
+  git clone https://github.com/input-output-hk/cardano-db-sync
 
-[comment]: <> (  cd $HOME/src)
+  cd cardano-db-sync  
 
-[comment]: <> (  git clone https://github.com/input-output-hk/cardano-db-sync)
+  # fetch the list of tags and check out the latest release tag name  
 
-[comment]: <> (  cd cardano-db-sync  )
+  git fetch --tags --all
 
-[comment]: <> (  # fetch the list of tags and check out the latest release tag name  )
+  # checkout the latest release (currently 12.0.2 as of 3/27/22) of db-sync
+  git checkout $(curl -s https://api.github.com/repos/input-output-hk/cardano-db-sync/releases/latest | jq -r .tag_name)
 
-[comment]: <> (  git fetch --tags --all)
+  # cherry pick the following 2 commits (using -n to avoid auto committing into local git repo)
 
-[comment]: <> (  git checkout $&#40;curl -s https://api.github.com/repos/input-output-hk/cardano-db-sync/releases/latest | jq -r .tag_name&#41;)
+  # cherry-pick #1 - change to Genesis.hs
+  git cherry-pick -n bff6e182cf41f6f7a9ff3d08bb1fc9984e2d0f66
 
-[comment]: <> (  ```)
+  # cherry-pick #2 - change to Block.hs
+  git cherry-pick -n 132f569bcd297ce73bca407a52acee513aa75389
 
-[comment]: <> (- Fetch postgres `libpq-dev` package, update dependencies and build the cardano-db-sync project.  This can take 20 minutes+)
+  ```
+
+- Fetch postgres `libpq-dev` package, update dependencies and build the cardano-db-sync project.  This can take 20 minutes+
   
-[comment]: <> (  **Note**: Building `cardano-db-sync` project from source, depends on finding the postgres `libpq-dev` package on the host OS.)
+  **Note**: Building `cardano-db-sync` project from source, depends on finding the postgres `libpq-dev` package on the host OS.
 
-[comment]: <> (  ```shell)
+  ```shell
 
-[comment]: <> (  sudo apt-get install libpq-dev)
+  sudo apt-get install libpq-dev
 
-[comment]: <> (  cabal update)
+  cabal update
 
-[comment]: <> (  cabal build all)
+  cabal build all
 
-[comment]: <> (  ```)
+  ```
 
-[comment]: <> (- Copy db-sync executables to local user default path location)
+- Copy db-sync executables to local user default path location
 
-[comment]: <> (  ```shell)
+  ```shell
 
-[comment]: <> (  cp -p $&#40;find dist-newstyle/build -type f -name "cardano-db-sync"&#41; $HOME/.local/bin/cardano-db-sync)
+  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync") $HOME/.local/bin/cardano-db-sync
 
-[comment]: <> (  cp -p $&#40;find dist-newstyle/build -type f -name "cardano-db-sync-extended"&#41; $HOME/.local/bin/cardano-db-sync-extended  )
+  cp -p $(find dist-newstyle/build -type f -name "cardano-db-sync-extended") $HOME/.local/bin/cardano-db-sync-extended  
 
-[comment]: <> (  ```)
+  ```
 
-[comment]: <> (- Verify the versions of the db-sync executables)
+- Verify the versions of the db-sync executables
 
-[comment]: <> (  ```shell)
+  ```shell
 
-[comment]: <> (  cardano-db-sync --version)
+  cardano-db-sync --version
 
-[comment]: <> (  cardano-db-sync-extended --version)
+  cardano-db-sync-extended --version
   
-[comment]: <> (  # when this document was written, the current version for each is 12.0.0 on linux-x86_64)
+  # when this document was written, the current version for each is 12.0.2 on linux-x86_64
 
-[comment]: <> (  ```)
+  ```
 
-[comment]: <> (---)
+---
 
-[comment]: <> (Continue to next guide: [2. Install PostgreSQL instructions]&#40;./2-INSTALL_POSTGRESQL.md&#41;)
+Continue to next guide: [2. Install PostgreSQL instructions](./2-INSTALL_POSTGRESQL.md)

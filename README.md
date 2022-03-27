@@ -7,14 +7,6 @@
 This project provides instructions and shell scripts to bootstrap a private Cardano testnet and connect a `cardano-db-sync` process to it.
 If you don't want to bother with setting up `cardano-db-sync`, you can easily skip over the sections of this project that are not relevant.
 
----
-**Note about cardano-db-sync:**
-
-There were some recent changes made to the `cardano-db-sync` sources that cause an issue when trying to attach the
-db-sync process to the private testnet.  The author has logged an issue for this: [issue](https://github.com/input-output-hk/cardano-db-sync/issues/1046).
-Please skip any guide instructions having to do with setting up/running `cardano-db-sync` until the issue is resolved.
----
-
 The scripts used by this project to create the private Cardano testnet are taken from the IOHK `cardano-node` project and have been modified as needed.
 You may find the original script files in the IOHK git repository: [cardano-node scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts/byron-to-alonzo).
 In particular, running `cardano-db-sync` to sync to the private testnet required a few changes to the original scripts provided by IOHK.
@@ -64,9 +56,9 @@ For an additional overview of this project, please check out this [medium articl
     * The `cardano-db-sync` process uses a connection to a PostgreSQL database.
     * Please refer to the [Install posgreSQL](2-INSTALL_POSTGRESQL.md) for instructions to set up.
 
-3. **Run scripts to set up & run private Cardano network and optionally connect DB Sync process**
+3. **Run scripts to set up & run private Cardano network**
 
-    * Run scripts to bootstrap the Cardano private network and attach the `cardano-db-sync` process to it to sync blockchain data to SQL database.
+    * Run scripts to bootstrap the Cardano private network
     * Please refer to the [Run network scripts guide](3-RUN_NETWORK_SCRIPTS.md) for instructions. 
 
 4. **Optional: Attach DB Sync process the network**
@@ -76,7 +68,7 @@ For an additional overview of this project, please check out this [medium articl
 
 5. **Run simple transaction and optionally query the db-sync database to see results**
 
-    * Set up a new walllet for user2 and make a payment from user1 to user2. Query the database to confirm the transaction.
+    * Set up a new wallet for user2 and make a payment from user1 to user2. Query the database to confirm the transaction.
     * Please refer to the [Run transaction guide](5-RUN_TRANSACTION.md) for instructions.
 
 6. **Run Plutus script transactions**
