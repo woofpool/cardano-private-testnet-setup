@@ -24,7 +24,7 @@ After creating the configuration data, the script starts up the nodes and fires 
 genesis funds to the user1 wallet address.
 
 Once you have completed this step, the `private-testnet` will be running in the `alonzo` era and the user1 wallet address
-has some `utxos` to use for doing transactions.
+has some `UTxOs` to use for doing transactions.
 
 #### Directions
 - Adjust the [config.cfg file](./scripts/config.cfg) as desired. By default, the ROOT directory is set to `private-network`

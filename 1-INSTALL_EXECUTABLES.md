@@ -26,8 +26,7 @@ Otherwise, continue following the directions below.
 
 ***
 
-**Note**: The remainder of this guide covers how to build all the executables including the `cardano-db-sync` executables
-
+**Note**: The remainder of this guide covers how to build the `cardano-db-sync` executables
 from Haskell sources. **You may skip the rest of this readme, if db-sync is not relevant to you.**
 
 ## Optional: Building cardano-db-sync from Haskell sources using cabal and GHC
@@ -71,13 +70,12 @@ from Haskell sources. **You may skip the rest of this readme, if db-sync is not 
 
 ### 2. Install latest release tags of Cardano db-sync executables including some patches necessary to make things work in private testnet  
 
-**Note**: The author could not find pre-built binaries for cardano-db-sync from IOHK, so the directions below
-are to build them from Haskell sources using cabal and GHC.  If you want to explore other options to build
+**Note**: The directions below are to build `cardano-db-sync` from Haskell sources using cabal and GHC.  If you want to explore other options to build
 or deploy, e.g. using `nix-build` or `docker`,
 please see the [IOHK cardano-db-sync README](https://github.com/input-output-hk/cardano-db-sync#readme) for more info.
 
 **Note2**: The directions below include applying some cherry-pick commits, which are necessary to allow `cardano-db-sync`
-to work with a private testnet.  If you want to understand the issue, please visit: [issue](https://github.com/input-output-hk/cardano-db-sync/issues/1046). 
+to work with a private testnet. If you want to understand the issue, please visit: [issue](https://github.com/input-output-hk/cardano-db-sync/issues/1046). 
 
 - Clone the IOHK cardano-db-sync repo
   ```shell
