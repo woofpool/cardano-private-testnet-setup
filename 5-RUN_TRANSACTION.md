@@ -48,7 +48,7 @@ looks like in the `cardano-db-sync` schema.
   ```shell
   cardano-cli query protocol-parameters \
   --testnet-magic 42 \
-  --out-file "protocol-parameters.json"
+  --out-file protocol-parameters.json
   ```
 - set `TXIN` variable with first utxo from user1.addr
   ```shell
@@ -107,80 +107,44 @@ looks like in the `cardano-db-sync` schema.
   
   ```
 
-[comment]: <> (## 3. Query the db-sync schema &#40;assuming you have set up db-sync&#41;)
+## 3. Query the db-sync schema (assuming you have set up db-sync)
 
-[comment]: <> (- open a psql prompt)
-
-[comment]: <> (  ```shell)
-
-[comment]: <> (  # set the postgres env. variable)
-
-[comment]: <> (  export PGPASSFILE=postgres-conn/pgpass-privatenet)
-  
-[comment]: <> (  # log-in to the privatenet database with our linux account)
-
-[comment]: <> (  psql -d privatenet)
-  
-[comment]: <> (  # sample output)
-
-[comment]: <> (  psql &#40;13.4 &#40;Ubuntu 13.4-0ubuntu0.21.04.1&#41;&#41;)
-
-[comment]: <> (  Type "help" for help.)
-
-[comment]: <> (  privatenet=#)
-
-[comment]: <> (  ```)
-
-[comment]: <> (- run queries in the psql editor)
-
-[comment]: <> (  ```shell)
-
-[comment]: <> (  # query transaction table and find id of the transaction we submitted above, i.e. one with max block_id)
-
-[comment]: <> (  select tx.id from tx where tx.block_id = &#40;select max &#40;tx.block_id&#41; from tx&#41;;)
-  
-[comment]: <> (  # sample output  )
-
-[comment]: <> (  id)
-
-[comment]: <> (  ----)
-
-[comment]: <> (  9)
-
-[comment]: <> (  &#40;1 row&#41;)
-
-[comment]: <> (  # query the fee amount for the transaction)
-
-[comment]: <> (  select tx.fee from tx where tx.id = 9;)
-  
-[comment]: <> (  # sample output)
-
-[comment]: <> (  fee   )
-
-[comment]: <> (  ---------)
-
-[comment]: <> (  1000000)
-
-[comment]: <> (  &#40;1 row&#41;)
-  
-[comment]: <> (  # query the transaction outputs related to the transaction)
-
-[comment]: <> (  select tx_out.id, tx_out.tx_id, tx_out.index, tx_out.address, tx_out.value )
-
-[comment]: <> (    from tx_out inner join tx on tx_out.tx_id = tx.id where tx.id = 9;)
-  
-[comment]: <> (  # sample output)
-
-[comment]: <> (  id | tx_id | index |                                                   address                                                    |   value   )
-
-[comment]: <> (  ----+-------+-------+--------------------------------------------------------------------------------------------------------------+-----------)
-
-[comment]: <> (  13 |     9 |     0 | addr_test1qzj7xja5rrly33z570ukrq7ayd3amf24k77v4dhu96fyal0vsegs7g7vwzwnrspq4eysyr66sc0wcv2xdtpau68m5qvqxhnvc5 |   5000000)
-
-[comment]: <> (  14 |     9 |     1 | addr_test1qp6h5v5ysaa0uqmhsmmu3gr8nhsf4w3st95p0vvvp4ldzn7esqup0hdw7rsuuhcyk0qrrvfp2yr4vtxhh0276yrcpmqqanu7lp | 494000000)
-
-[comment]: <> (  &#40;2 rows&#41;)
-
-[comment]: <> (  ```)
+- open a psql prompt
+  ```shell
+  # set the postgres env. variable
+  export PGPASSFILE=postgres-conn/pgpass-privatenet
+  # log-in to the privatenet database with our linux account
+  psql -d privatenet
+  # sample output
+  psql (13.4 (Ubuntu 13.4-0ubuntu0.21.04.1))
+  Type "help" for help.
+  privatenet=#
+  ```
+- run queries in the psql editor
+  ```shell
+  # query transaction table and find id of the transaction we submitted above, i.e. one with max block_id
+  select tx.id from tx where tx.block_id = (select max (tx.block_id) from tx);
+  # sample output  
+  id
+  ----
+  9
+  (1 row)
+  # query the fee amount for the transaction
+  select tx.fee from tx where tx.id = 9;
+  # sample output
+  fee   
+  ---------
+  1000000
+  (1 row)
+  # query the transaction outputs related to the transaction
+  select tx_out.id, tx_out.tx_id, tx_out.index, tx_out.address, tx_out.value 
+    from tx_out inner join tx on tx_out.tx_id = tx.id where tx.id = 9;
+  # sample output
+  id | tx_id | index |                                                   address                                                    |   value   
+  ----+-------+-------+--------------------------------------------------------------------------------------------------------------+-----------
+  13 |     9 |     0 | addr_test1qzj7xja5rrly33z570ukrq7ayd3amf24k77v4dhu96fyal0vsegs7g7vwzwnrspq4eysyr66sc0wcv2xdtpau68m5qvqxhnvc5 |   5000000
+  14 |     9 |     1 | addr_test1qp6h5v5ysaa0uqmhsmmu3gr8nhsf4w3st95p0vvvp4ldzn7esqup0hdw7rsuuhcyk0qrrvfp2yr4vtxhh0276yrcpmqqanu7lp | 494000000
+  (2 rows)
+  ```
 
 Continue to next guide: [6. Run Plutus script transactions](6-RUN_PLUTUS_SCRIPT_TXS.md)
