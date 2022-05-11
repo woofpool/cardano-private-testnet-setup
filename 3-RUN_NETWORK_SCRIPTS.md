@@ -46,7 +46,7 @@ has some `UTxOs` to use for doing transactions.
   ```shell
   # navigate to project root folder
   cd $HOME/src/cardano-private-testnet-setup
-  tail -f logs/privatenet.log
+  tail -f logs/mainnet.log
   ```
 
 ## 3. Verify the network state and wallet UTxO balances of user1
