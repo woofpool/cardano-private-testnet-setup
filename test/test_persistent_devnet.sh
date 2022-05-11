@@ -2,7 +2,7 @@
 
 DEVNET_PATH=private-testnet
 DEVNET_READY_FLAG=ready.flag
-
+WANTED_MAJOR_VERSION="6"
 
 . test/_helpers.sh
 
@@ -15,6 +15,13 @@ sleep 5
 
 # wait for the READY flag to be given
 while [ ! -f ${DEVNET_PATH}/${DEVNET_READY_FLAG} ]; do sleep 5; done
+
+CURRENT_MAJOR_VERSION=$(get_major_version)
+
+if [ $WANTED_MAJOR_VERSION != $CURRENT_MAJOR_VERSION ]; then
+  echo "Major version is ${$CURRENT_MAJOR_VERSION} but should be ${$WANTED_MAJOR_VERSION}"
+  exit 1
+fi
 
 user1_lovelace=$(get_address_biggest_lovelace $(cat ${DEVNET_PATH}/addresses/user1.addr))
 echo $user1_lovelace
@@ -59,5 +66,5 @@ pkill $pid
 
 if [ $user1_tx_1 != $user1_tx_2 ]; then
   echo "persistent devnet didn't reuse addresses from the first run, that's wrong"
-  exti 1
+  exit 1
 fi
