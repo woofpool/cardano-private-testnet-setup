@@ -336,10 +336,10 @@ $SED -i shelley/genesis.spec.json \
     -e 's/"minFeeB": 0/"minFeeB": 155381/' \
     -e 's/"minUTxOValue": 0/"minUTxOValue": 1000000/' \
     -e 's/"decentralisationParam": 1.0/"decentralisationParam": 0.7/' \
-    -e 's/"major": 0/"major": 5/' \
+    -e 's/"major": 0/"major": 6/' \
     -e 's/"rho": 0.0/"rho": 0.1/' \
     -e 's/"tau": 0.0/"tau": 0.1/' \
-    -e 's/"updateQuorum": 5/"updateQuorum": 2/'
+    -e 's/"updateQuorum": 6/"updateQuorum": 2/'
 
 # Now generate for real:
 
@@ -658,7 +658,7 @@ if [ "$1" = "alonzo" ]; then
   echo "TestEnableDevelopmentNetworkProtocols: True" >> ${ROOT}/configuration.yaml
 
   $SED -i ${ROOT}/configuration.yaml \
-      -e 's/LastKnownBlockVersion-Major: 1/LastKnownBlockVersion-Major: 5/'
+      -e 's/LastKnownBlockVersion-Major: 1/LastKnownBlockVersion-Major: 6/'
 
   # Copy the cost model
   echo "Nodes will start in Alonzo era from epoch 0"

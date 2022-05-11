@@ -22,3 +22,8 @@ get_address_biggest_lovelace()
   COINS_IN_INPUT=$(echo ${GREATEST_INPUT} | awk '{print $2}')
   echo $COINS_IN_INPUT
 }
+
+get_major_version() {
+  MAJOR_VERSION=$(cardano-cli query protocol-parameters --testnet-magic 42 | jq '.protocolVersion.major')
+  echo $MAJOR_VERSION
+}
