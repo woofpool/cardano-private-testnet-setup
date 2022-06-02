@@ -318,11 +318,12 @@ echo "====================================================================="
 mkdir shelley
 
 # Copy the QA testnet alonzo genesis which is equivalent to the mainnet
+cp ../configuration/cardano/shelley_qa-alonzo-genesis.json shelley/genesis.alonzo.spec.json
 
 cardano-cli genesis create --testnet-magic ${NETWORK_MAGIC} --start-time $START_TIME_UTC --genesis-dir shelley
 
 # Then edit the genesis.spec.json ...
-cp ../configuration/cardano/shelley_qa-alonzo-genesis.json shelley/genesis.alonzo.spec.json
+#
 # We're going to use really quick epochs (300 seconds), by using short slots 0.2s
 # and K=10, but we'll keep long KES periods so we don't have to bother
 # cycling KES keys
