@@ -84,7 +84,7 @@ These directions are based on the script code found here: [Cardano-db-sync scrip
   
   # apply configuration scripts and make project
   ./autogen.sh
-  ./configure $PREFIX --enable-module-schnorrsig --enable-experimental
+  ./configure --prefix=/usr --enable-module-schnorrsig --enable-experimental
   make
   make check
 
