@@ -7,6 +7,9 @@
 This project provides instructions and shell scripts to bootstrap a private Cardano testnet and connect a `cardano-db-sync` process to it.
 If you don't want to bother with setting up `cardano-db-sync`, you can easily skip over the sections of this project that are not relevant.
 
+**Note: If you want to run a private testnet in the `babbage` era, you can check out the [babbage branch](https://github.com/woofpool/cardano-private-testnet-setup/tree/babbage) and follow these instructions instead.** 
+**The babbage instructions do not include instructions for running smart contract transactions yet, but the network will support the new Plutus V2.**
+
 The scripts used by this project to create the private Cardano testnet are taken from the IOHK `cardano-node` project and have been modified as needed.
 You may find the original script files in the IOHK git repository: [cardano-node scripts](https://github.com/input-output-hk/cardano-node/tree/master/scripts/byron-to-alonzo).
 In particular, running `cardano-db-sync` to sync to the private testnet required a few changes to the original scripts provided by IOHK.
