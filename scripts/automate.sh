@@ -50,6 +50,19 @@ restart_nodes_in_bg()
   echo "Nodes restarted"
 }
 
+run_update_script()
+{
+  echo "request to run update-$1 script"
+  if [ -z "$2" ]
+  then
+    "${SCRIPT_PATH}"/update-$1.sh
+  else
+    "${SCRIPT_PATH}"/update-$1.sh $2
+  fi
+  echo "Sleep 5 secs to ensure update is received"; sleep 5
+  echo "update-$1 script completed"
+}
+
 query_tip()
 {
   cardano-cli query tip --testnet-magic 42
@@ -67,6 +80,8 @@ rm -rf $ROOT
 restart_nodes_in_bg
 echo
 wait_until_socket_detected
+
+run_update_script "1"
 
 #query_tip
 cli_version=$(cardano-cli version)

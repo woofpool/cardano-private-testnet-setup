@@ -35,10 +35,12 @@ for easy retrieval of information.
   # open psql command prompt as sudo user
   sudo -u postgres psql
   
-  # list database
+  # list databases
   \l
   
-  # verify privatenet database has been created  
+  # verify privatenet database is listed
+  # quit psql 
+  \q    
   ```
 - Start the db sync process.  This will install the database schema in the privatenet database and sync blockchain data to the Postgres database.
   ```shell
