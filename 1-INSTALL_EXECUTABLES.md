@@ -68,7 +68,27 @@ from Haskell sources. **You may skip the rest of this readme, if db-sync is not 
   ghc --version
   ```
 
-### 2. Install secp256k1 library as pre-requisite for building cardano-db-sync
+### 2. Install Libsodium library as pre-requisite for building cardano-db-sync
+
+```shell
+  # Clone the secp256k1 source
+  cd $HOME/src
+  git clone https://github.com/input-output-hk/libsodium
+  
+  # change directory
+  cd libsodium
+  
+  # checkout specific branch    
+  git checkout 66f017f1
+  
+  # apply configuration scripts and make project
+  ./autogen.sh
+  ./configure
+  make
+  sudo make install
+```
+
+### 3. Install secp256k1 library as pre-requisite for building cardano-db-sync
 These directions are based on the script code found here: [Cardano-db-sync script file to setup secp256k1](https://github.com/input-output-hk/cardano-db-sync/blob/master/scripts/secp256k1-setup.sh)
 
   ```shell
@@ -91,7 +111,7 @@ These directions are based on the script code found here: [Cardano-db-sync scrip
   # install library
   sudo make install
   ```
-### 3. Install latest release tags of Cardano db-sync executables  
+### 4. Install latest release tags of Cardano db-sync executables  
 
 **Note**: The directions below are to build `cardano-db-sync` from Haskell sources using cabal and GHC.  If you want to explore other options to build
 or deploy, e.g. using `nix-build` or `docker`,
