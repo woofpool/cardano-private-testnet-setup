@@ -17,6 +17,15 @@ wait_until_socket_detected()
   echo "socket is detected"
 }
 
+start_all_nodes() {
+  echo "start all the nodes in bg"
+  $ROOT/run/all.sh > /dev/null 2>&1 &
+  wait_until_count_of_running_nodes 3
+  echo
+  echo "PIDs of started nodes:"
+  for PID in `ps -ef | grep 'cardano-node' | grep -v grep |  awk '{print $2}'`;do echo "PID: $PID"; done
+}
+
 wait_until_count_of_running_nodes() {
   echo "wait until running node count is $1"
   running_nodes_cnt=$( ps -ef | grep 'cardano-node' | grep -v grep | wc -l )
@@ -31,15 +40,6 @@ kill_running_nodes() {
   echo "send kill signal for each running node PID"
   for PID in `ps -ef | grep 'cardano-node' | grep -v grep |  awk '{print $2}'`;do kill -TERM $PID 2> /dev/null; done
   wait_until_count_of_running_nodes 0
-}
-
-start_all_nodes() {
-  echo "start all the nodes in bg"
-  $ROOT/run/all.sh > /dev/null 2>&1 &
-  wait_until_count_of_running_nodes 3
-  echo
-  echo "PIDs of started nodes:"
-  for PID in `ps -ef | grep 'cardano-node' | grep -v grep |  awk '{print $2}'`;do echo "PID: $PID"; done
 }
 
 restart_nodes_in_bg()
@@ -70,9 +70,7 @@ query_tip()
 
 # rerunning the script should always result in restarting nodes
 # this way we can at least control this a bit more, compared to if users where to do it manually
-kill_running_nodes
-
-rm -rf $ROOT
+"${SCRIPT_PATH}"/kill-processes-and-remove-private-testnet.sh
 
 # run script to create config
 "${SCRIPT_PATH}"/mkfiles.sh
@@ -81,7 +79,7 @@ restart_nodes_in_bg
 echo
 wait_until_socket_detected
 
-run_update_script "1"
+#run_update_script "1"
 
 #query_tip
 cli_version=$(cardano-cli version)

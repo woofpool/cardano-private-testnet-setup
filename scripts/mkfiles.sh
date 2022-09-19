@@ -152,7 +152,7 @@ rm "${ROOT}/genesis/byron/genesis-wrong.json"
 
 cp "${ROOT}/genesis/shelley/genesis.json" "${ROOT}/genesis/shelley/copy-genesis.json"
 
-jq -M '. + {slotLength:0.1, securityParam:10, activeSlotsCoeff:0.1, securityParam:10, epochLength:500, maxLovelaceSupply:1000000000000, updateQuorum:2}' "${ROOT}/genesis/shelley/copy-genesis.json" > "${ROOT}/genesis/shelley/copy2-genesis.json"
+jq -M '. + {slotLength:0.1, securityParam:10, activeSlotsCoeff:0.1, securityParam:10, epochLength:500, maxLovelaceSupply:10000000000000, updateQuorum:2}' "${ROOT}/genesis/shelley/copy-genesis.json" > "${ROOT}/genesis/shelley/copy2-genesis.json"
 jq --raw-output '.protocolParams.protocolVersion.major = 7 | .protocolParams.minFeeA = 44 | .protocolParams.minFeeB = 155381 | .protocolParams.minUTxOValue = 1000000 | .protocolParams.decentralisationParam = 0.7 | .protocolParams.rho = 0.1 | .protocolParams.tau = 0.1' "${ROOT}/genesis/shelley/copy2-genesis.json" > "${ROOT}/genesis/shelley/genesis.json"
 
 rm "${ROOT}/genesis/shelley/copy2-genesis.json"
@@ -179,6 +179,35 @@ mv "${ROOT}/byron-gen-command/delegate-keys.002.key" "${ROOT}/node-spo3/byron-de
 mv "${ROOT}/byron-gen-command/delegation-cert.000.json" "${ROOT}/node-spo1/byron-delegation.cert"
 mv "${ROOT}/byron-gen-command/delegation-cert.001.json" "${ROOT}/node-spo2/byron-delegation.cert"
 mv "${ROOT}/byron-gen-command/delegation-cert.002.json" "${ROOT}/node-spo3/byron-delegation.cert"
+
+mkdir -p "${ROOT}/addresses"
+
+ADDRESS_NUMBERS="1 2 3"
+for N in ${ADDRESS_NUMBERS}; do
+  # Payment addresses
+  cardano-cli address build \
+        --payment-verification-key-file ${ROOT}/stake-delegator-keys/payment${N}.vkey \
+        --stake-verification-key-file ${ROOT}/stake-delegator-keys/staking${N}.vkey \
+        --testnet-magic ${NETWORK_MAGIC} \
+        --out-file ${ROOT}/addresses/payment${N}.addr
+
+  # Stake addresses
+  cardano-cli stake-address build \
+        --stake-verification-key-file ${ROOT}/stake-delegator-keys/staking${N}.vkey \
+        --testnet-magic ${NETWORK_MAGIC} \
+        --out-file ${ROOT}/addresses/staking${N}.addr
+
+  # Stake addresses registration certs
+  cardano-cli stake-address registration-certificate \
+        --stake-verification-key-file ${ROOT}/stake-delegator-keys/staking${N}.vkey \
+        --out-file ${ROOT}/addresses/staking${N}.reg.cert
+
+  cardano-cli stake-address delegation-certificate \
+      --stake-verification-key-file ${ROOT}/stake-delegator-keys/staking${N}.vkey \
+      --cold-verification-key-file  ${ROOT}/pools/cold${N}.vkey \
+      --out-file ${ROOT}/addresses/staking${N}.deleg.cert
+
+done
 
 # compute the ByronGenesisHash and add to configuration.yaml
 byronGenesisHash=$(cardano-cli byron genesis print-genesis-hash --genesis-json "${ROOT}/genesis/byron/genesis.json")
