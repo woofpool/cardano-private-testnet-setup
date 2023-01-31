@@ -17,8 +17,6 @@ This guide covers installing `cardano-node`, `cardano-cli` and optionally `secp2
   cp cardano-cli $HOME/.local/bin/
   cp cardano-node $HOME/.local/bin/
   ```
-Continue to guide: [3. Run Network Scripts](./3-RUN_NETWORK_SCRIPTS.md)
-
 
 If you don't plan on using `cardano-db-sync`, you can continue to guide: [3. Run Network Scripts](./3-RUN_NETWORK_SCRIPTS.md).
 
